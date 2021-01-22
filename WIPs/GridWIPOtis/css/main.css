@@ -1,0 +1,15 @@
+.gridContainer {
+	width: 95%;
+	margin: 0 auto;
+}
+
+.image-row {
+	width: 100%;
+	white-space:nowrap;
+	line-height: 0;
+}
+
+.image-row img {
+	margin-right:5px;
+	margin-bottom:5px;
+}
