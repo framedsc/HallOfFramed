@@ -275,7 +275,13 @@
 			return width;
 		};
 
+		this.resize = function() {
+			this.initialize(images, container, rowTargetHeight, borderOffset);
+		}
+
 		// Initializes the object.
 		this.initialize(images, container, rowTargetHeight, borderOffset);
+
+		window.onresize = () => this.resize();
 	};
 }(window.BH = window.BH || {}, window, document));
