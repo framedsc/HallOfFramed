@@ -18,7 +18,7 @@ const ImageNav = ({filters, updateFilter, updateType, updateSearch}) => {
 
     const handleSearchChange = event => {
         setSearchTerm(event.target.value);
-        updateSearch(event.target.value);
+        updateSearch(event.target.value.toLowerCase());
       };
 
     const types = ['All', 'Wide', 'Portrait'];
