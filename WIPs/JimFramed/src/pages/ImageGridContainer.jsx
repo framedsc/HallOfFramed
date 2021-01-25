@@ -5,33 +5,32 @@ import ImageNav from '../components/ImageNav';
 import ImageViewer from '../components/ImageViewer';
 
 const ImageGridContainer = ({data}) => {
+    const sortOptions = [
+        {
+            label: 'Date',
+            key: 'date',
+        },
+        {
+            label: 'Reactions',
+            key: 'score',
+        }
+    ]
+
     const [imageData, setImageData] = useState([]);
-    const [filterIndex, setFilterIndex] = useState(0);
+    const [sortOption, setSortOption] = useState(sortOptions[0]);
     const [type, setType] = useState('all');
     const [searchTerm, setSearchTerm] = useState('');
     const [showViewer, setShowViewer] = useState(false);
     const [viewerSrc, setViewerSrc] = useState({})
-    const [viewerIndex, setViewerIndex] = useState(0);
+    const [isReverse, setIsReverse] = useState(false);
 
-    const filters = [
-        {
-            label: 'Home',
-            value: 0    
-        },
-        {
-            label: 'Top 50',
-            value: 1,
-            key: 'score'
-        },
-        {
-            label: 'Latest 50',
-            value: 2,
-            key: 'date'
+    const handleSortChange = (option) => {
+        if (option.key === sortOption.key) {
+            setIsReverse((current) => !current);
+        } else {
+            setIsReverse(false);
+            setSortOption(option)
         }
-    ]
-
-    const handleFilterChange = (filter) => {
-        setFilterIndex(filter.value);
     }
 
     const handleTypeChange = (type) => {
@@ -43,15 +42,12 @@ const ImageGridContainer = ({data}) => {
     }
 
     const handleImageClick = (image) => {
-        const matchesIndex = (element) => element.id === image.id;
-        const index = imageData.findIndex(matchesIndex)
-
         setViewerSrc(image);
         setShowViewer(true);
-        setViewerIndex(index);
     }
 
     const handleClose = () => {
+        setViewerSrc({});
         setShowViewer(false);
     }
 
@@ -62,7 +58,7 @@ const ImageGridContainer = ({data}) => {
 
         const results = data.filter((obj) => {
             return Object.keys(obj).reduce((acc, curr) => {
-                return acc || obj[curr].toString().toLowerCase().includes(searchTerm);
+                return acc || obj[curr].toString().toLowerCase().includes(searchTerm.toLowerCase());
             }, false);
         });
 
@@ -70,17 +66,14 @@ const ImageGridContainer = ({data}) => {
     }
 
     const filterImages = (images) => {
-        let results;
+        let results = images;
+        const key = sortOption.key;
 
-        const key = filters[filterIndex].key;
-        const sortMethod = (a,b) => (a[key] < b[key]) ? 1 : ((b[key] < a[key]) ? -1 : 0)
-
-        // apply filters
-        if (filterIndex === 0) {
-            results = images;
-        } else {
-            results = images.sort(sortMethod).slice(0, 50);
+        let sortMethod = (a,b) => (a[key] < b[key]) ? 1 : ((b[key] < a[key]) ? -1 : 0)
+        if (isReverse) {
+            sortMethod = (a,b) => (a[key] > b[key]) ? 1 : ((b[key] > a[key]) ? -1 : 0)
         } 
+        results = images.sort(sortMethod);
 
         if (type === 'Wide') {
             results = results.filter(item => item.width >= item.height);
@@ -93,31 +86,57 @@ const ImageGridContainer = ({data}) => {
         return searchData(results);
     }
 
+    const selectPreviousImage = (event) => {
+        event.stopPropagation();
+        const index = imageData.findIndex((e) => e.id === viewerSrc.id);
+        if (index - 1 >= 0) {
+            setViewerSrc(imageData[index-1]);
+        }
+    }
+
+    const selectNextImage = (event) => {
+        event.stopPropagation();
+        const index = imageData.findIndex((e) => e.id === viewerSrc.id);
+        if (index + 1 <= imageData.length) {
+            setViewerSrc(imageData[index+1]);
+        }
+    }
+
     useEffect(() => {
         if (data.length) {
             const images = filterImages(data.slice());
 
             setImageData(images)
         }
-    }, [data, filterIndex, type, searchTerm])
+    }, [data, sortOption, type, searchTerm, isReverse])
 
     const container = document.querySelector('.image-grid');
 
     return (
         <div style={{ margin: '0 auto'}} className="home">
             <ImageNav 
-                filters={filters}
-                updateFilter={handleFilterChange} 
+                className={showViewer ? 'hidden' : ''}
+                options={sortOptions}
+                reverseSort={isReverse}
+                updateSort={handleSortChange} 
                 updateType={handleTypeChange}
                 updateSearch={handleSearchChange}
             />
             {imageData && container && (
-                <ImageGrid images={imageData} rowTargetHeight={300} container={container} onClick={handleImageClick}/>
+                <ImageGrid 
+                    images={imageData} 
+                    rowTargetHeight={300} 
+                    container={container} 
+                    onClick={handleImageClick}
+                />
             )}
             <ImageViewer 
                 image={viewerSrc} 
                 show={showViewer} 
                 onClose={handleClose} 
+                data={imageData}
+                onPrev={selectPreviousImage}
+                onNext={selectNextImage}
             />
         </div>
     );

@@ -125,6 +125,7 @@ const ImageGrid = ({
                         {row.map((image, imageIndex) => {
                             return (
                                 <img 
+                                    alt={image.gameName}
                                     key={imageIndex} 
                                     src={image.thumbnailUrl} 
                                     style={{
