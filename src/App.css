@@ -310,21 +310,24 @@ body {
 }
 @keyframes fadeIn {
   0% {
-    background: #111111dd url('https://cdn.discordapp.com/emojis/575642684006334464.png?v=1') no-repeat fixed center;
+    background: #111111dd url('https://cdn.discordapp.com/emojis/575642684006334464.png?v=1') no-repeat fixed 50% 34%;
   }
   80% {
-    background: #111111dd url('https://cdn.discordapp.com/emojis/575642684006334464.png?v=1') no-repeat fixed center;
+    background: #111111dd url('https://cdn.discordapp.com/emojis/575642684006334464.png?v=1') no-repeat fixed 50% 34%;
   }
   100% {
-    background: #111111dd no-repeat fixed center;
+    background: #111111dd no-repeat fixed 50% 34%;
   }
 }
 @-webkit-keyframes fadeIn {
   0% {
-    opacity: 0;
+    background: #111111dd url('https://cdn.discordapp.com/emojis/575642684006334464.png?v=1') no-repeat fixed 50% 34%;
+  }
+  80% {
+    background: #111111dd url('https://cdn.discordapp.com/emojis/575642684006334464.png?v=1') no-repeat fixed 50% 34%;
   }
   100% {
-    opacity: 1;
+    background: #111111dd no-repeat fixed 50% 34%;
   }
 }
 
@@ -333,5 +336,27 @@ body {
 @media only screen and (max-width: 760px) {
   .search {
     display: none;
+  }
+  @keyframes fadeIn {
+    0% {
+      background: #111111dd url('https://cdn.discordapp.com/emojis/575642684006334464.png?v=1') no-repeat fixed 50% 19%;
+    }
+    80% {
+      background: #111111dd url('https://cdn.discordapp.com/emojis/575642684006334464.png?v=1') no-repeat fixed 50% 19%;
+    }
+    100% {
+      background: #111111dd no-repeat fixed 50% 19%;
+    }
+  }
+  @-webkit-keyframes fadeIn {
+    0% {
+      background: #111111dd url('https://cdn.discordapp.com/emojis/575642684006334464.png?v=1') no-repeat fixed 50% 19%;
+    }
+    80% {
+      background: #111111dd url('https://cdn.discordapp.com/emojis/575642684006334464.png?v=1') no-repeat fixed 50% 19%;
+    }
+    100% {
+      background: #111111dd no-repeat fixed 50% 19%;
+    }
   }
 }
