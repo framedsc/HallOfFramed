@@ -284,28 +284,34 @@ body {
   0% {
     opacity: 0;
     background: #333 url('https://cdn.discordapp.com/attachments/552552070876758032/802277763263627267/hof.png') no-repeat fixed center;
+    background-size: 700px;
   }
   80% {
     opacity: 0;
     background: #333 url('https://cdn.discordapp.com/attachments/552552070876758032/802277763263627267/hof.png') no-repeat fixed center;
+    background-size: 700px;
   }
   100% {
     opacity: 1;
     background: #333 no-repeat fixed center;
+    background-size: 700px;
   }
 }
 @-webkit-keyframes splashScreen {
   0% {
     opacity: 0;
     background: #333 url('https://cdn.discordapp.com/attachments/552552070876758032/802277763263627267/hof.png') no-repeat fixed center;
+    background-size: 700px;
   }
   80% {
     opacity: 0;
     background: #333 url('https://cdn.discordapp.com/attachments/552552070876758032/802277763263627267/hof.png') no-repeat fixed center;
+    background-size: 700px;
   }
   100% {
     opacity: 1;
     background: #333 no-repeat fixed center;
+    background-size: 700px;
   }
 }
 @keyframes fadeIn {
@@ -336,6 +342,40 @@ body {
 @media only screen and (max-width: 760px) {
   .search {
     display: none;
+  }
+  @keyframes splashScreen {
+    0% {
+      opacity: 0;
+      background: #333 url('https://cdn.discordapp.com/attachments/552552070876758032/802277763263627267/hof.png') no-repeat fixed center;
+      background-size: 450px;
+    }
+    80% {
+      opacity: 0;
+      background: #333 url('https://cdn.discordapp.com/attachments/552552070876758032/802277763263627267/hof.png') no-repeat fixed center;
+      background-size: 450px;
+    }
+    100% {
+      opacity: 1;
+      background: #333 no-repeat fixed center;
+      background-size: 450px;
+    }
+  }
+  @-webkit-keyframes splashScreen {
+    0% {
+      opacity: 0;
+      background: #333 url('https://cdn.discordapp.com/attachments/552552070876758032/802277763263627267/hof.png') no-repeat fixed center;
+      background-size: 450px;
+    }
+    80% {
+      opacity: 0;
+      background: #333 url('https://cdn.discordapp.com/attachments/552552070876758032/802277763263627267/hof.png') no-repeat fixed center;
+      background-size: 450px;
+    }
+    100% {
+      opacity: 1;
+      background: #333 no-repeat fixed center;
+      background-size: 450px;
+    }
   }
   @keyframes fadeIn {
     0% {
