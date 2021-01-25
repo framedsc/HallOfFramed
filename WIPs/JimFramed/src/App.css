@@ -47,6 +47,7 @@ body {
   background-color: #333;
   font-size: 14px;
   padding: 0 20px;
+  animation: splashScreen 2s forwards;
 }
 
 /* Image Nav and Filters */
@@ -175,7 +176,7 @@ body {
   height: 100%;
   text-align: center;
   background-color: #111111dd;
-  animation: fadeIn 1000ms forwards;
+  animation: fadeIn 3000ms forwards;
   cursor: zoom-out;
 }
 
@@ -274,6 +275,57 @@ body {
 
 .image-viewer-content .close:hover {
   opacity: 1;
+}
+
+/* KEYFRAMES */
+
+
+@keyframes splashScreen {
+  0% {
+    opacity: 0;
+    background: #333 url('https://cdn.discordapp.com/attachments/552552070876758032/802277763263627267/hof.png') no-repeat fixed center;
+  }
+  80% {
+    opacity: 0;
+    background: #333 url('https://cdn.discordapp.com/attachments/552552070876758032/802277763263627267/hof.png') no-repeat fixed center;
+  }
+  100% {
+    opacity: 1;
+    background: #333 no-repeat fixed center;
+  }
+}
+@-webkit-keyframes splashScreen {
+  0% {
+    opacity: 0;
+    background: #333 url('https://cdn.discordapp.com/attachments/552552070876758032/802277763263627267/hof.png') no-repeat fixed center;
+  }
+  80% {
+    opacity: 0;
+    background: #333 url('https://cdn.discordapp.com/attachments/552552070876758032/802277763263627267/hof.png') no-repeat fixed center;
+  }
+  100% {
+    opacity: 1;
+    background: #333 no-repeat fixed center;
+  }
+}
+@keyframes fadeIn {
+  0% {
+    background: #111111dd url('https://cdn.discordapp.com/emojis/575642684006334464.png?v=1') no-repeat fixed center;
+  }
+  80% {
+    background: #111111dd url('https://cdn.discordapp.com/emojis/575642684006334464.png?v=1') no-repeat fixed center;
+  }
+  100% {
+    background: #111111dd no-repeat fixed center;
+  }
+}
+@-webkit-keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 /* BREAKPOINTS */
