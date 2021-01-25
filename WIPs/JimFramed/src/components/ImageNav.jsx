@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import classNames from 'classnames';
+import { SortUp, SortDown } from '../assets/svgIcons';
 
-const ImageNav = ({filters, updateFilter, updateType, updateSearch}) => {
-    const [active, setActive] = useState(0);
+const ImageNav = ({className, options, reverseSort, updateSort, updateType, updateSearch}) => {
+    const [active, setActive] = useState(options[0]);
     const [type, setType] = useState('All')
     const [searchTerm, setSearchTerm] = useState('');
 
-    const handleFilterChange = (selection) => {
-        setActive(selection.value);
-        updateFilter(selection);
+    const handleOptionChange = (selection) => {
+        setActive(selection);
+        updateSort(selection);
     }
 
     const handleTypeChange = (value) => {
@@ -22,21 +23,26 @@ const ImageNav = ({filters, updateFilter, updateType, updateSearch}) => {
       };
 
     const types = ['All', 'Wide', 'Portrait'];
+    const icon = reverseSort ? <SortUp /> : <SortDown />;
 
     return (
-        <div className="image-nav">
+        <div className={`image-nav ${className}`}>
             <ul className="filters">
-            {filters.map(item => {
-                const buttonClass = active === item.value ? 'is-active' : undefined;
+            {options.map((item, index) => {
+                const isActive = active.key === item.key;
+                const buttonClass = isActive ? 'is-active' : undefined;
 
                 return (
-                    <li>
+                    <li key={index}>
                         <button
-                        className={classNames('filter', buttonClass)}
-                            onClick={() => handleFilterChange(item)}
+                            className={classNames('filter', buttonClass)}
+                            onClick={() => handleOptionChange(item)}
                             key={item.label}
                         >
-                        {item.label}
+                        <>
+                            {item.label}
+                            {isActive && icon}
+                        </>
                         </button>
                     </li>
                 );
@@ -53,8 +59,9 @@ const ImageNav = ({filters, updateFilter, updateType, updateSearch}) => {
                                 type="radio" 
                                 value={item} 
                                 name="type" 
-                                key={item}
-                            /> <label htmlFor={`${item}-label`}>{item}</label>
+                                key={`${item}-input`}
+                            /> 
+                            <label key={`${item}-label`} htmlFor={`${item}-label`}>{item}</label>
                         </>
                     )
                 })}
