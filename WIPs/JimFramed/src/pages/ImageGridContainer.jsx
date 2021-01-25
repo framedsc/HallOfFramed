@@ -86,7 +86,7 @@ const ImageGridContainer = ({data}) => {
         return searchData(results);
     }
 
-    const prev = (event) => {
+    const selectPreviousImage = (event) => {
         event.stopPropagation();
         const index = imageData.findIndex((e) => e.id === viewerSrc.id);
         if (index - 1 >= 0) {
@@ -94,7 +94,7 @@ const ImageGridContainer = ({data}) => {
         }
     }
 
-    const next = (event) => {
+    const selectNextImage = (event) => {
         event.stopPropagation();
         const index = imageData.findIndex((e) => e.id === viewerSrc.id);
         if (index + 1 <= imageData.length) {
@@ -135,8 +135,8 @@ const ImageGridContainer = ({data}) => {
                 show={showViewer} 
                 onClose={handleClose} 
                 data={imageData}
-                onPrev={prev}
-                onNext={next}
+                onPrev={selectPreviousImage}
+                onNext={selectNextImage}
             />
         </div>
     );
