@@ -10,6 +10,8 @@
 *.userosscache
 *.sln.docstates
 
+WIPs/JimFramed/.eslintcache
+
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
@@ -348,6 +350,7 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+WIPs/JimFramed/.eslintcache
 WIPs/JimFramed/.eslintcache
 WIPs/JimFramed/.eslintcache
 WIPs/JimFramed/.eslintcache

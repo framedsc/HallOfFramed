@@ -1,4 +1,4 @@
-const APIURL = 'https://raw.githubusercontent.com/originalnicodrgitbot/test-git-python/main/shotsdb.json';
+const APIURL = 'https://raw.githubusercontent.com/originalnicodrgitbot/hall-of-framed-db/main/shotsdb.json';
 const axios = require('axios');
 
 
