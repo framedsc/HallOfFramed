@@ -5,8 +5,8 @@ const ImageViewer = ({image = {}, show, onClose, data, onPrev, onNext}) => {
 
     const visibleClass = show ? 'is-visible' : undefined;
 
-    const prevDisabled = data.findIndex((e) => e.id === image.id) <= 0 ? true : false;
-    const nextDisabled = data.findIndex((e) => e.id === image.id) >= data.length ? true : false;
+    const prevDisabled = data.findIndex((e) => e.id === image.id) <= 0;
+    const nextDisabled = data.findIndex((e) => e.id === image.id) >= (data.length-1);
 
     return (
         <div className={classNames('image-viewer', visibleClass)} onClick={onClose}> 
