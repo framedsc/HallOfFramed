@@ -69,21 +69,6 @@ body {
   padding: 0;
 }
 
-.image-nav .filters .filter {
-  font-size: 14px;
-  text-transform: capitalize;
-  background-color: transparent;
-  height: 100%;
-  border: 0;
-  cursor: pointer;
-  color: #efefef;
-  padding: 8px 35px 8px 12px;
-  border-radius: 0;
-  outline: 0;
-  position: relative;
-  cursor: pointer;
-}
-
 .image-nav .filters .sort-icon {
   vertical-align: middle;
   display: inline-block;
@@ -95,6 +80,22 @@ body {
   display: block;
 }
 
+.image-nav .filters .filter {
+  position: relative;
+  font-size: 14px;
+  text-transform: capitalize;
+  background-color: transparent;
+  height: 100%;
+  border: 0;
+  cursor: pointer;
+  color: #efefef;
+  padding: 8px 35px 8px 12px;
+  border-radius: 0;
+  outline: 0;
+  transition: border-bottom 50ms linear,
+              background-color 50ms linear;
+}
+
 .image-nav .filters li {
   float: left;
   vertical-align: middle;
@@ -103,24 +104,55 @@ body {
 
 .image-nav .filter.is-active {
   background: #222;
-  color: #fff;
+  border-bottom: 4px solid grey;
+  padding-bottom: 4px;
 }
 
 .image-nav .image-types {
+  padding: 4px;
+  padding-bottom: 5px;
+  border: 4px solid grey;
   margin-right: 40px;
   display: flex;
   align-items: center;
 }
 
+.image-nav .image-types [type="radio"] {
+  display: none;
+}
+
+.image-nav .image-types [type="radio"]:checked + label {
+  background-color: grey;
+  padding: 0 5px;
+  border-radius: 10px;
+  transition: background-color 100ms linear;
+}
+
 .image-nav .image-types label {
   color: #efefef;
-  margin: 0 15px 0 4px;
+  margin: 0 10px 0 4px;
+  padding: 0 5px;
   vertical-align: top;
   align-self: flex-end;
 }
 
 .image-nav .search {
   font-size: 15px;
+}
+
+.image-nav .search .search-input {
+  padding: 3px;
+  border: 4px solid grey;
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.527);
+  background-color: #333;
+  transition: background-color 100ms linear;
+  outline: 0;
+}
+
+.image-nav .search .search-input:focus {
+  background-color: grey;
+  color: rgba(255, 255, 255, 0.829);
 }
 
 /* Image Grid */
