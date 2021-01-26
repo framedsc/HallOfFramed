@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import classNames from 'classnames';
-import { SortUp, SortDown } from '../assets/svgIcons';
+import { SortUp, SortDown, FramedIcon } from '../assets/svgIcons';
 
 const ImageNav = ({className, options, reverseSort, updateSort, updateType, updateSearch}) => {
     const [active, setActive] = useState(options[0]);
@@ -27,6 +27,7 @@ const ImageNav = ({className, options, reverseSort, updateSort, updateType, upda
 
     return (
         <div className={`image-nav ${className}`}>
+            <FramedIcon/>
             <ul className="filters">
             {options.map((item, index) => {
                 const isActive = active.key === item.key;

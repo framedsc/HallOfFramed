@@ -58,6 +58,12 @@ body {
   color: #efefef;
 }
 
+.image-nav .framed-icon svg {
+  display: block;
+  height: 37px;
+  padding: 3px 15px 3px 3px;
+}
+
 .image-nav.hidden {
   visibility: hidden;
 }
