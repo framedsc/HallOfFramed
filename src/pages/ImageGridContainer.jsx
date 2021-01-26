@@ -124,6 +124,7 @@ const ImageGridContainer = ({data}) => {
             />
             {imageData && container && (
                 <ImageGrid 
+                    className={'image-rows'}
                     images={imageData} 
                     rowTargetHeight={300} 
                     container={container} 
