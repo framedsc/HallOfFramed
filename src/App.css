@@ -192,7 +192,7 @@ body {
   height: 100%;
   text-align: center;
   background-color: #111111dd;
-  animation: fadeIn 3000ms forwards;
+  /* animation: fadeIn 3000ms forwards; */
   cursor: zoom-out;
 }
 
@@ -245,10 +245,11 @@ body {
   display: inline-block;
   text-align: left;
   margin-top: 50px;
+  position: relative;
 }
 
 .image-viewer-content img {
-  max-width: 90vw;
+  max-width: 95vw;
   max-height: calc(98vh - 130px);
   margin: auto auto;
   cursor: auto;

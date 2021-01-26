@@ -1,4 +1,5 @@
 import './App.css';
+import './components/Spinner/Spinner.css';
 import React, { useState, useEffect } from 'react';
 import { getImages } from './api/request'
 import ImageGridContainer from '../src/pages/ImageGridContainer'

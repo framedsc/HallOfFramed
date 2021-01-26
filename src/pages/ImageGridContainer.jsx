@@ -11,7 +11,7 @@ const ImageGridContainer = ({data}) => {
             key: 'date',
         },
         {
-            label: 'Reactions',
+            label: 'Popularity',
             key: 'score',
         }
     ]
@@ -86,16 +86,14 @@ const ImageGridContainer = ({data}) => {
         return searchData(results);
     }
 
-    const selectPreviousImage = (event) => {
-        event.stopPropagation();
+    const selectPreviousImage = () => {
         const index = imageData.findIndex((e) => e.id === viewerSrc.id);
         if (index - 1 >= 0) {
             setViewerSrc(imageData[index-1]);
         }
     }
 
-    const selectNextImage = (event) => {
-        event.stopPropagation();
+    const selectNextImage = () => {
         const index = imageData.findIndex((e) => e.id === viewerSrc.id);
         if (index + 1 <= imageData.length) {
             setViewerSrc(imageData[index+1]);
@@ -124,9 +122,9 @@ const ImageGridContainer = ({data}) => {
             />
             {imageData && container && (
                 <ImageGrid 
-                    className={'image-rows'}
+                    className='image-rows'
                     images={imageData} 
-                    rowTargetHeight={300} 
+                    rowTargetHeight={400} 
                     container={container} 
                     onClick={handleImageClick}
                 />
