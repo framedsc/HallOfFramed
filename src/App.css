@@ -259,6 +259,14 @@ body {
   width: 115px;
 }
 
+.mobile-menu .mobile-menu-content .image-types [type="radio"]:checked + label {
+  padding: 0 5px 2px 5px;
+}
+
+.mobile-menu .mobile-menu-content .image-types label {
+  padding: 0 5px 2px 5px;
+}
+
 /* Image Grid */
 
 .image-rows {
