@@ -168,6 +168,31 @@ body {
   color: rgba(255, 255, 255, 0.829);
 }
 
+.image-nav--mobile {
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mobile-menu {
+  margin-right: 40px;
+}
+
+.mobile-menu .menu-button {
+  padding: 0;
+  background: none;
+  border: 0;
+  outline: 0;
+}
+
+.mobile-menu .mobile-menu-content {
+  position: absolute;
+  right: 43px;
+  top: 43px;
+  padding: 20px;
+  background: #444;
+  box-shadow: 0px 5px 5px #00000078;
+}
+
 /* Image Grid */
 
 .image-rows {
@@ -359,8 +384,9 @@ body {
 
 @media only screen and (max-width: 760px) {
   .search {
-    display: none;
+    display: inherit;
   }
+
   @keyframes splashScreen {
     0% {
       opacity: 0;

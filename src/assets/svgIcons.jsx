@@ -56,3 +56,13 @@ export const FramedIcon = () => {
 	</div>
 	);
 }
+
+export const Menu = () => {
+    return (
+      <svg viewBox="0 0 80 80" width="40" height="30" fill="#fff">
+        <rect y="15" width="80" height="10"></rect>
+        <rect y="35" width="80" height="10"></rect>
+        <rect y="55" width="80" height="10"></rect>
+      </svg>
+    );
+  };

@@ -1,24 +1,39 @@
 import { useState, useEffect } from 'react';
 
-function getWindowDimensions(container) {
-  const maxWidth = container.clientWidth;
-  
-  return {
-    maxWidth
-  };
-}
-
-export default function useWindowDimensions(container) {
-  const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions(container));
+export const useViewport = () => {
+  const [width, setWidth] = useState(window.innerWidth);
 
   useEffect(() => {
-    function handleResize() {
-      setWindowDimensions(getWindowDimensions(container));
-    }
-
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    const handleWindowResize = () => setWidth(window.innerWidth);
+    window.addEventListener("resize", handleWindowResize);
+    return () => window.removeEventListener("resize", handleWindowResize);
   }, []);
 
-  return windowDimensions;
+  // Return the width so we can use it in our components
+  return { width };
+}
+
+export const useOutsideAlerter = (ref, onClickOutside) => {
+  useEffect(() => {
+      /**
+       * Alert if clicked on outside of element
+       */
+      function handleClickOutside(event) {
+          if (ref.current && !ref.current.contains(event.target)) {
+            onClickOutside();
+          }
+      }
+
+      // Bind the event listener
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => {
+          // Unbind the event listener on clean up
+          document.removeEventListener("mousedown", handleClickOutside);
+      };
+  }, [ref]);
+}
+
+
+export const breakpoints = {
+  mobile: 760
 }

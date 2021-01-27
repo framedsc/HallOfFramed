@@ -1,15 +1,16 @@
-import useWindowDimensions from '../utils/utils';
+import { useViewport}  from '../utils/utils';
 
 const ImageGrid = ({
         className, 
         images, 
         rowTargetHeight = 400, 
         borderOffset = 5, 
-        container,
-        onClick
+        onClick,
+        outerPadding = 60
     }) => {
 
-    let { maxWidth } = useWindowDimensions(container);
+    const { width } = useViewport();
+    const maxWidth = width - outerPadding;
 
     const processImages = () => {
         const processedImages = [];
