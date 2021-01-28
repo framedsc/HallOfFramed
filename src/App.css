@@ -75,7 +75,7 @@ body {
 }
 
 .image-nav .filters {
-  margin-right: 40px;
+  margin-right: 25px;
   background-color: #333;
   height: 50px;
   overflow: hidden;
@@ -86,7 +86,8 @@ body {
   vertical-align: middle;
   display: inline-block;
   position: absolute;
-  right: 15px;
+  right: 10px;
+  top: 16px
 }
 
 .image-nav .filters .sort-icon svg {
@@ -105,8 +106,23 @@ body {
   padding: 8px 35px 8px 12px;
   border-radius: 0;
   outline: 0;
-  transition: border-bottom 50ms linear,
-              background-color 50ms linear;
+  transition: border-bottom 90ms cubic-bezier(.77,0,.18,1)
+}
+
+.image-nav .filters li:first-child {
+  margin-right: 10px;
+}
+
+#Date {
+  background: url("./assets/date.png") no-repeat 20% 60%;
+  background-size: 40px;
+  width: 76px;
+}
+
+#Popularity {
+  background: url("./assets/reactions.png") no-repeat 20% 60%;
+  background-size: 75px;
+  width: 108px;
 }
 
 .image-nav .filters li {
@@ -135,10 +151,10 @@ body {
 }
 
 .image-nav .image-types [type="radio"]:checked + label {
-  background-color: grey;
+  background-color: rgb(97, 97, 97);
   padding: 0 5px;
   border-radius: 10px;
-  transition: background-color 100ms linear;
+  transition: background-color 200ms cubic-bezier(.77,0,.18,1);
 }
 
 .image-nav .image-types label {
@@ -154,6 +170,8 @@ body {
 }
 
 .image-nav .search .search-input {
+  background: url("./assets/search.png") no-repeat 5% 60%;
+  background-size: 70px;
   padding: 3px;
   border: 4px solid grey;
   font-size: 1rem;
@@ -164,6 +182,7 @@ body {
 }
 
 .image-nav .search .search-input:focus {
+  background-image: none;
   background-color: grey;
   color: rgba(255, 255, 255, 0.829);
 }
@@ -189,8 +208,63 @@ body {
   right: 43px;
   top: 43px;
   padding: 20px;
-  background: #444;
+  background: #3c3c3c;
   box-shadow: 0px 5px 5px #00000078;
+  display: flex;
+  flex-flow: column;
+  height: 20vh;
+  justify-content: space-between;
+  min-height: 117px;
+  max-height: 150px;
+}
+
+.mobile-menu .mobile-menu-content .filters,
+.mobile-menu .mobile-menu-content .image-types {
+  margin-right: 0px !important;
+}
+
+.mobile-menu .mobile-menu-content .search .search-input {
+  background-color: unset;
+  width: 100%;
+}
+
+.mobile-menu .mobile-menu-content .search .search-input:focus {
+  background-color: grey;
+}
+
+.mobile-menu .mobile-menu-content .filters {
+  background-color: unset;
+  display: flex;
+  justify-content: space-between;
+}
+
+.mobile-menu .mobile-menu-content .filters .filter.is-active {
+  border: 4px solid grey;
+  padding: 8px 35px 8px 12px;
+  background-color: unset;
+  transition: none;
+}
+
+.mobile-menu .mobile-menu-content .filters .sort-icon {
+  top: 11px;
+}
+
+.mobile-menu .mobile-menu-content .filters #Date {
+  background-position-y: 55%;
+  width: 100px;
+}
+
+.mobile-menu .mobile-menu-content .filters #Popularity {
+  background-position-y: 55%;
+  width: 115px;
+}
+
+.mobile-menu .mobile-menu-content .image-types [type="radio"]:checked + label {
+  padding: 0 5px 2px 5px;
+}
+
+.mobile-menu .mobile-menu-content .image-types label {
+  padding: 0 5px 2px 5px;
 }
 
 /* Image Grid */
