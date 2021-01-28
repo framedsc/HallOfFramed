@@ -9,9 +9,9 @@ const reducer = ( state, action) => {
         case "initialize": 
             return { ... state, initialized: true };
         case "close":
-            return { initialized: false, loadedState: false };
+            return { initialized: false, loadedState: false, showImage: false };
         case "loadImage":
-            return { initialized: true, loadedState: true };
+            return { initialized: true, loadedState: true, showImage: true };
         case "changeImage":
             return { ...state, loadedState: false}
         default:
@@ -20,9 +20,10 @@ const reducer = ( state, action) => {
 }
 
 const ImageViewer = ({image = {}, show, onClose, data, onPrev, onNext}) => {
-    const [{ initialized, loadedState}, dispatch] = useReducer(reducer, {
+    const [{ initialized, loadedState, showImage}, dispatch] = useReducer(reducer, {
         initialized: false,
-        loadedState: false
+        loadedState: false,
+        showImage: false
     })
 
     const visibleClass = show ? 'is-visible' : undefined;
@@ -97,6 +98,7 @@ const ImageViewer = ({image = {}, show, onClose, data, onPrev, onNext}) => {
 
     const modifier = !initialized ? 'global' : '';
     const fullscreenClass = isFullscreen ? 'fullscreen' : false;
+    const loadedClass = showImage ? 'loaded' : 'hidden';
 
     return (
         <div className={classNames('image-viewer', visibleClass)} onClick={handleClose}> 
@@ -105,7 +107,10 @@ const ImageViewer = ({image = {}, show, onClose, data, onPrev, onNext}) => {
                 <button className="image-nav-button right" disabled={nextDisabled} onClick={handleNext}>[ Next ]</button>
             </div>
 
-                <div ref={maximizableElement} className={classNames('image-viewer-content', fullscreenClass)}>
+                <div 
+                    ref={maximizableElement} 
+                    className={classNames('image-viewer-content', fullscreenClass)}
+                >
                     {image && (
                         <>
                             <img 
@@ -113,6 +118,7 @@ const ImageViewer = ({image = {}, show, onClose, data, onPrev, onNext}) => {
                                 src={image.shotUrl} 
                                 onClick={(event) => {event.stopPropagation();}}
                                 onLoad={handleLoad}
+                                className={loadedClass}
                             />
                             {initialized && !isFullscreen && (<div className="author" onClick={(event) => {event.stopPropagation();}}>
                                 {/* <img src={image.authorsAvatarUrl} alt="avatar" /> */}
