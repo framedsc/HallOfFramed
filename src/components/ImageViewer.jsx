@@ -35,44 +35,56 @@ const ImageViewer = ({image = {}, show, onClose, data, onPrev, onNext}) => {
     
     const handleExitFullscreen = () => document.exitFullscreen();
 
-    const handlePrev = (event) => {
+    const handlePrev = React.useCallback((event) => {
         event?.stopPropagation();
         dispatch({ type: 'changeImage'});
         onPrev();
-    }
+    }, [onPrev])
 
-    const handleNext = (event) => {
-        event?.stopPropagation();
+    const handleNext = React.useCallback((event) => {
+        event.stopPropagation();
         dispatch({ type: 'changeImage'});
         onNext();
-    }
+    }, [onNext])
 
-    const handleClose = () => {
+    const handleClose = React.useCallback(() => {
         if (isFullscreen) {
             document.exitFullscreen();
         } else {
             dispatch({ type: 'close'});
             onClose();
         }
-    }
+    }, [isFullscreen, onClose])
 
     const handleLoad = () => {
         dispatch({ type: 'loadImage'});
     }
 
-    const handleKeyboard = (event) => {
+    const handleKeyboard = React.useCallback((event) => {
         const { key } = event;
 
-        if (loadedState){ 
-            if (key === 'ArrowRight' && !nextDisabled) {
-                handleNext(event);
-            } else if (key === 'ArrowLeft' && !prevDisabled) {
-                handlePrev(event);
-            } 
-        }
-
-        return false;
-    }
+        switch (key) {
+            case 'ArrowRight':
+                if (nextDisabled) {
+                    return false;
+                }
+                return handleNext(event);
+            case 'ArrowLeft':
+                if (prevDisabled) {
+                    return false;
+                }
+                return handlePrev(event);
+            case 'Escape':
+                if (isFullscreen) {
+                    return false;
+                }
+              return handleClose()
+            case 'f':
+                return setIsFullscreen();
+            default:
+              return false;
+          }
+    }, [isFullscreen, handleClose, handleNext, handlePrev, nextDisabled, prevDisabled, setIsFullscreen])
 
     useEffect(() => {
         window.addEventListener("keyup", handleKeyboard);
