@@ -32,9 +32,9 @@ const ImageNav = ({className, options, reverseSort, updateSort, updateType, upda
                 type="search"
                 name="search"
                 className="search-input"
-                placeholder={'Search'}
                 value={searchTerm}
                 onChange={handleSearchChange}
+                placeholder='Search'
             />
         </div>
     );
@@ -49,14 +49,13 @@ const ImageNav = ({className, options, reverseSort, updateSort, updateType, upda
             return (
                 <li key={index}>
                     <button
+                        id={item.label}
                         className={classNames('filter', buttonClass)}
                         onClick={() => handleOptionChange(item)}
                         key={item.label}
                     >
-                    <>
                         {item.label}
                         {isActive && icon}
-                    </>
                     </button>
                 </li>
             );
@@ -78,7 +77,9 @@ const ImageNav = ({className, options, reverseSort, updateSort, updateType, upda
                             name="type" 
                             key={`${item}-input`}
                         /> 
-                        <label key={`${item}-label`} htmlFor={`${item}-label`}>{item}</label>
+                        <label key={`${item}-label`} htmlFor={`${item}-label`}>
+                        {item}   
+                        </label>
                     </>
                 )
             })}

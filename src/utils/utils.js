@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useLayoutEffect } from 'react';
 
 export const useViewport = () => {
   const [width, setWidth] = useState(window.innerWidth);
@@ -33,7 +33,48 @@ export const useOutsideAlerter = (ref, onClickOutside) => {
   }, [ref]);
 }
 
-
 export const breakpoints = {
   mobile: 760
+}
+
+function getBrowserFullscreenElementProp() {
+  if (typeof document.fullscreenElement !== "undefined") {
+    return "fullscreenElement";
+  } else if (typeof document.mozFullScreenElement !== "undefined") {
+    return "mozFullScreenElement";
+  } else if (typeof document.msFullscreenElement !== "undefined") {
+    return "msFullscreenElement";
+  } else if (typeof document.webkitFullscreenElement !== "undefined") {
+    return "webkitFullscreenElement";
+  } else {
+    throw new Error("fullscreenElement is not supported by this browser");
+  }
+}
+
+export const useFullscreenStatus = (elRef) => {
+  const [isFullscreen, setIsFullscreen] = useState(
+    document[getBrowserFullscreenElementProp()] != null
+  );
+
+  const setFullscreen = () => {
+    if (elRef.current == null) return;
+
+    elRef.current
+      .requestFullscreen()
+      .then(() => {
+        setIsFullscreen(document[getBrowserFullscreenElementProp()] != null);
+      })
+      .catch(() => {
+        setIsFullscreen(false);
+      });
+  };
+
+  useLayoutEffect(() => {
+    document.onfullscreenchange = () =>
+      setIsFullscreen(document[getBrowserFullscreenElementProp()] != null);
+
+    return () => (document.onfullscreenchange = undefined);
+  });
+
+  return [isFullscreen, setFullscreen];
 }
