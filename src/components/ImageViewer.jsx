@@ -33,7 +33,6 @@ const ImageViewer = ({image = {}, show, onClose, data, onPrev, onNext}) => {
     const maximizableElement = React.useRef(null);
     let [isFullscreen, setIsFullscreen] = useFullscreenStatus(maximizableElement);
     
-
     const handleExitFullscreen = () => document.exitFullscreen();
 
     const handlePrev = (event) => {
@@ -66,9 +65,9 @@ const ImageViewer = ({image = {}, show, onClose, data, onPrev, onNext}) => {
 
         if (loadedState){ 
             if (key === 'ArrowRight' && !nextDisabled) {
-                return handleNext();
+                handleNext(event);
             } else if (key === 'ArrowLeft' && !prevDisabled) {
-                return handlePrev();
+                handlePrev(event);
             } 
         }
 
@@ -82,7 +81,7 @@ const ImageViewer = ({image = {}, show, onClose, data, onPrev, onNext}) => {
         return () => {
             window.removeEventListener("keyup", handleKeyboard);
         };
-    }, [initialized]);
+    }, [initialized, handleKeyboard]);
 
     const modifier = !initialized ? 'global' : '';
     const fullscreenClass = isFullscreen ? 'fullscreen' : false;
