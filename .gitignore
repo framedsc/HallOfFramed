@@ -10,8 +10,6 @@
 *.userosscache
 *.sln.docstates
 
-WIPs/JimFramed/.eslintcache
-
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
@@ -19,6 +17,7 @@ WIPs/JimFramed/.eslintcache
 mono_crash.*
 
 # Build results
+[Bb]uild/
 [Dd]ebug/
 [Dd]ebugPublic/
 [Rr]elease/
