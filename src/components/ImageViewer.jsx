@@ -1,6 +1,8 @@
 import React, { useReducer, useEffect } from 'react';
 import classNames from 'classnames';
 import Spinner from '../components/Spinner/Spinner';
+import { Cancel, Fullscreen, ExitFullscreen } from '../assets/svgIcons';
+import { useFullscreenStatus } from "../utils/utils";
 
 const reducer = ( state, action) => {
     switch (action.type) {
@@ -28,6 +30,12 @@ const ImageViewer = ({image = {}, show, onClose, data, onPrev, onNext}) => {
     const prevDisabled = data.findIndex((e) => e.id === image.id) === 0 || !loadedState;
     const nextDisabled = data.findIndex((e) => e.id === image.id) === data.length - 1 || !loadedState;
 
+    const maximizableElement = React.useRef(null);
+    let [isFullscreen, setIsFullscreen] = useFullscreenStatus(maximizableElement);
+    
+
+    const handleExitFullscreen = () => document.exitFullscreen();
+
     const handlePrev = (event) => {
         event?.stopPropagation();
         dispatch({ type: 'changeImage'});
@@ -41,8 +49,12 @@ const ImageViewer = ({image = {}, show, onClose, data, onPrev, onNext}) => {
     }
 
     const handleClose = () => {
-        dispatch({ type: 'close'});
-        onClose();
+        if (isFullscreen) {
+            document.exitFullscreen();
+        } else {
+            dispatch({ type: 'close'});
+            onClose();
+        }
     }
 
     const handleLoad = () => {
@@ -73,6 +85,7 @@ const ImageViewer = ({image = {}, show, onClose, data, onPrev, onNext}) => {
     }, [initialized]);
 
     const modifier = !initialized ? 'global' : '';
+    const fullscreenClass = isFullscreen ? 'fullscreen' : false;
 
     return (
         <div className={classNames('image-viewer', visibleClass)} onClick={handleClose}> 
@@ -80,25 +93,33 @@ const ImageViewer = ({image = {}, show, onClose, data, onPrev, onNext}) => {
                 <button className="image-nav-button left" disabled={prevDisabled} onClick={handlePrev}>[ Prev ]</button>
                 <button className="image-nav-button right" disabled={nextDisabled} onClick={handleNext}>[ Next ]</button>
             </div>
-            <div className="image-viewer-content">
-                {image && (
-                    <>
-                        <img 
-                            alt={image.gameName} 
-                            src={image.shotUrl} 
-                            onClick={(event) => {event.stopPropagation();}}
-                            onLoad={handleLoad}
-                        />
-                        {initialized && (<div className="author" onClick={(event) => {event.stopPropagation();}}>
-                            {/* <img src={image.authorsAvatarUrl} alt="avatar" /> */}
-                            <div><span>by</span> <strong>{image.author}</strong></div>
-                            <div className="title">{image.gameName}</div>
-                        </div>)}
-                    </>
-                )}
-                <Spinner modifier={modifier} show={!loadedState} />
-                <button className="close" onClick={handleClose}></button>
-            </div>
+
+                <div ref={maximizableElement} className={classNames('image-viewer-content', fullscreenClass)}>
+                    {image && (
+                        <>
+                            <img 
+                                alt={image.gameName} 
+                                src={image.shotUrl} 
+                                onClick={(event) => {event.stopPropagation();}}
+                                onLoad={handleLoad}
+                            />
+                            {initialized && !isFullscreen && (<div className="author" onClick={(event) => {event.stopPropagation();}}>
+                                {/* <img src={image.authorsAvatarUrl} alt="avatar" /> */}
+                                <div><span>by</span> <strong>{image.author}</strong></div>
+                                <div className="title">{image.gameName}</div>
+                                {!isFullscreen && (
+                                    <button className="fullscreen-button" onClick={setIsFullscreen}><Fullscreen/></button>
+                                )}
+                            </div>)}
+                            {isFullscreen ? (
+                                <button className="close" onClick={handleExitFullscreen}><ExitFullscreen/></button>
+                            ) : (
+                                <button className="close" onClick={handleClose}><Cancel/></button>
+                            )}
+                        </>
+                    )}
+                    <Spinner modifier={modifier} show={!loadedState} />
+                </div>
         </div>
     )
 }

@@ -2,9 +2,6 @@ import React, { useState, useRef, useEffect } from 'react';
 import classNames from 'classnames';
 import { SortUp, SortDown, FramedIcon, Menu } from '../assets/svgIcons';
 import { useViewport, breakpoints, useOutsideAlerter } from '../utils/utils';
-import All from '../assets/All.png';
-import Wide from '../assets/Wide.png';
-import Portrait from '../assets/Portrait.png';
 
 const ImageNav = ({className, options, reverseSort, updateSort, updateType, updateSearch}) => {
     const [active, setActive] = useState(options[0]);
@@ -26,22 +23,6 @@ const ImageNav = ({className, options, reverseSort, updateSort, updateType, upda
         updateSearch(event.target.value.toLowerCase());
       };
 
-    const handleFiltersImages = (item) => {
-      switch (item) {
-          case 'All':
-              return (<img src={All} alt={item} height="10px"/>)
-              break;
-          case 'Wide':
-              return (<img src={Wide} alt={item} height="10px"/>)
-              break;
-          case 'Portrait':
-              return (<img src={Portrait} alt={item} height="10px"/>)
-              break;
-          default:
-              break;
-      }
-    }
-
     const types = ['All', 'Wide', 'Portrait'];
     const icon = reverseSort ? <SortUp /> : <SortDown />;
 
@@ -53,6 +34,7 @@ const ImageNav = ({className, options, reverseSort, updateSort, updateType, upda
                 className="search-input"
                 value={searchTerm}
                 onChange={handleSearchChange}
+                placeholder='Search'
             />
         </div>
     );
@@ -72,9 +54,8 @@ const ImageNav = ({className, options, reverseSort, updateSort, updateType, upda
                         onClick={() => handleOptionChange(item)}
                         key={item.label}
                     >
-                    <>
+                        {item.label}
                         {isActive && icon}
-                    </>
                     </button>
                 </li>
             );
@@ -97,7 +78,7 @@ const ImageNav = ({className, options, reverseSort, updateSort, updateType, upda
                             key={`${item}-input`}
                         /> 
                         <label key={`${item}-label`} htmlFor={`${item}-label`}>
-                        {handleFiltersImages(item)}   
+                        {item}   
                         </label>
                     </>
                 )

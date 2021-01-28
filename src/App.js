@@ -1,4 +1,4 @@
-import './App.css';
+import './styles/App.css';
 import './components/Spinner/Spinner.css';
 import React, { useState, useEffect } from 'react';
 import { getImages } from './api/request'
