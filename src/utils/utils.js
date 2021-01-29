@@ -30,11 +30,11 @@ export const useOutsideAlerter = (ref, onClickOutside) => {
           // Unbind the event listener on clean up
           document.removeEventListener("mousedown", handleClickOutside);
       };
-  }, [ref]);
+  }, [ref, onClickOutside]);
 }
 
 export const breakpoints = {
-  mobile: 760
+  mobile: 800
 }
 
 function getBrowserFullscreenElementProp() {

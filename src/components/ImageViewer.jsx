@@ -19,7 +19,7 @@ const reducer = ( state, action) => {
     }
 }
 
-const ImageViewer = ({image = {}, show, onClose, data, onPrev, onNext}) => {
+const ImageViewer = ({image = {}, show, onClose, data, onPrev, onNext, setBgImage}) => {
     const [{ initialized, loadedState, showImage}, dispatch] = useReducer(reducer, {
         initialized: false,
         loadedState: false,
@@ -59,6 +59,7 @@ const ImageViewer = ({image = {}, show, onClose, data, onPrev, onNext}) => {
 
     const handleLoad = () => {
         dispatch({ type: 'loadImage'});
+        setBgImage(image);
     }
 
     const handleKeyboard = React.useCallback((event) => {

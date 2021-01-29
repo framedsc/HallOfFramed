@@ -4,7 +4,7 @@ import ImageGrid from '../components/ImageGrid';
 import ImageNav from '../components/ImageNav';
 import ImageViewer from '../components/ImageViewer';
 
-const ImageGridContainer = ({data}) => {
+const ImageGridContainer = ({data, setBgImage}) => {
     const sortOptions = [
         {
             label: 'Date',
@@ -136,6 +136,7 @@ const ImageGridContainer = ({data}) => {
                 data={imageData}
                 onPrev={selectPreviousImage}
                 onNext={selectNextImage}
+                setBgImage={setBgImage}
             />
         </div>
     );
