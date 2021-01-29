@@ -125,19 +125,26 @@ const ImageGrid = ({
                     >
                         {row.map((image, imageIndex) => {
                             return (
-                                <img 
-                                    alt={image.gameName}
-                                    key={imageIndex} 
-                                    src={image.thumbnailUrl} 
-                                    style={{
-                                        marginRight: borderOffset,
-                                        marginBottom: borderOffset,
-                                        width: Math.ceil(image.width), 
-                                        height:image.height,
-                                        cursor: 'pointer'
-                                    }}
-                                    onClick={() => onClick(image, imageIndex)} 
-                                />
+                                <div className="thumbnail-container" style={{
+                                    marginRight: borderOffset,
+                                    marginBottom: borderOffset
+                                }}>
+                                    <img 
+                                        alt={image.gameName}
+                                        key={imageIndex} 
+                                        src={image.thumbnailUrl} 
+                                        style={{
+    
+                                            width: Math.ceil(image.width), 
+                                            height:image.height,
+                                            cursor: 'pointer'
+                                        }}
+                                        onClick={() => onClick(image, imageIndex)} 
+                                    />
+                                    <div className="image-info">
+                                        <span className="by">by</span> <span className="author">{image.author}</span>
+                                    </div>
+                                </div>
                             )
                         })}
                     </div>

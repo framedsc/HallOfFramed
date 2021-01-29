@@ -137,6 +137,7 @@ body::before {
   position: fixed;
   text-shadow: 0 1px 8px hsla(0,0%,0%,0.5), 0 1px 0px hsla(0,0%,0%,0.6);
   width: 100%;
+  z-index: 5;
 }
 
 .image-nav .filter, 
@@ -395,12 +396,41 @@ body::before {
 
 .image-rows {
   padding-top: 55px;
+  z-index: 1;
 }
 
 .image-row {
   width: 100%;
   white-space: nowrap;
   line-height: 0;
+}
+
+.image-row .thumbnail-container {
+  display: inline-block;
+  position: relative;
+  overflow: hidden;
+}
+
+
+.image-row .image-info {
+  width: 100%;
+  background: #000000aa;
+  text-align: center;
+  line-height: 30px;
+  height: 0px;
+  color: #fff;
+  position: absolute;
+  bottom: 0;
+  transition: height 100ms linear;
+}
+
+.image-row .thumbnail-container:hover .image-info {
+  height: 30px;
+}
+
+.image-row .image-info .author {
+  font-weight: 500;
+  color: #fff;
 }
 
 .image-viewer {
@@ -607,6 +637,14 @@ body::before {
 @media only screen and (max-width: 760px) {
   .search {
     display: inherit;
+  }
+
+  .image-row .image-info .author {
+    font-size: 12px;
+  }
+
+  .image-row .image-info .by {
+    display: none;
   }
 
   body::before {
