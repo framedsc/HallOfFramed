@@ -6,7 +6,7 @@ const ImageGrid = ({
         rowTargetHeight = 400, 
         borderOffset = 5, 
         onClick,
-        outerPadding = 60
+        outerPadding = 45
     }) => {
 
     const { width } = useViewport();

@@ -26,13 +26,20 @@ const ImageViewer = ({image = {}, show, onClose, data, onPrev, onNext, setBgImag
         showImage: false
     })
 
-    const visibleClass = show ? 'is-visible' : undefined;
+    let isFullscreen, setIsFullscreen;
+    const maximizableElement = React.useRef(null);
+    let fullScreenError;
+    try {
+        [isFullscreen, setIsFullscreen] = useFullscreenStatus(maximizableElement)
+      } catch (e) {
+        fullScreenError = "Fullscreen not supported"
+        isFullscreen = false
+        setIsFullscreen = undefined
+      }
 
+    const visibleClass = show ? 'is-visible' : undefined;
     const prevDisabled = data.findIndex((e) => e.id === image.id) === 0 || !loadedState;
     const nextDisabled = data.findIndex((e) => e.id === image.id) === data.length - 1 || !loadedState;
-
-    const maximizableElement = React.useRef(null);
-    let [isFullscreen, setIsFullscreen] = useFullscreenStatus(maximizableElement);
     
     const handleExitFullscreen = () => document.exitFullscreen();
 
@@ -82,6 +89,9 @@ const ImageViewer = ({image = {}, show, onClose, data, onPrev, onNext, setBgImag
                 }
               return handleClose()
             case 'f':
+                if (fullScreenError) {
+                    return false;
+                }
                 return setIsFullscreen();
             default:
               return false;
@@ -121,11 +131,13 @@ const ImageViewer = ({image = {}, show, onClose, data, onPrev, onNext, setBgImag
                                 onLoad={handleLoad}
                                 className={loadedClass}
                             />
-                            {initialized && !isFullscreen && (<div className="author" onClick={(event) => {event.stopPropagation();}}>
+                            {initialized && !isFullscreen && (<div className="shot-info" onClick={(event) => {event.stopPropagation();}}>
                                 {/* <img src={image.authorsAvatarUrl} alt="avatar" /> */}
-                                <div><span>by</span> <strong>{image.author}</strong></div>
-                                <div className="title">{image.gameName}</div>
-                                {!isFullscreen && (
+                                <div className="info">
+                                    <span class="by">by</span> <span className="author">{image.author}</span>
+                                    <span className="title">{image.gameName}</span>
+                                </div>
+                                {!isFullscreen && !fullScreenError && (
                                     <button className="fullscreen-button" onClick={setIsFullscreen}><Fullscreen/></button>
                                 )}
                             </div>)}

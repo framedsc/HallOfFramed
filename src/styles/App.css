@@ -506,7 +506,6 @@ body::before {
 .image-viewer-content img {
   max-width: 95vw;
   max-height: calc(98vh - 130px);
-  margin: auto auto;
   cursor: auto;
   z-index: 15;
   border-bottom: 1px solid #888;
@@ -516,12 +515,32 @@ body::before {
   display: none;
 }
 
-.image-viewer-content .author {
+.image-viewer-content .shot-info .info{
+  width: 95%;
+}
+
+.image-viewer-content .shot-info {
   padding: 8px 10px;
   background-color: #000;
   color: #fff;
   font-size: 15px;
   position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.image-viewer-content .shot-info .by {
+  color: #ddd;
+}
+
+.image-viewer-content .shot-info .author {
+  font-weight: 500;
+}
+
+.image-viewer-content .shot-info .title {
+  margin-top: 3px;
+  display: block
 }
 
 .image-viewer-content .author .title {
@@ -555,9 +574,11 @@ body::before {
   height: 30px;
   width: 30px;
   fill: #fff;
-  position: absolute;
-  right: 5px;
-  top: 10px;
+  cursor: pointer;
+}
+
+.image-viewer-content .fullscreen-button svg {
+  vertical-align: middle;
 }
 
 .image-viewer-content .close:hover {
@@ -635,10 +656,6 @@ body::before {
 }
 
 @media only screen and (max-width: 760px) {
-  .search {
-    display: inherit;
-  }
-
   .image-row .image-info .author {
     font-size: 12px;
   }
