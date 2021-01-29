@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import classNames from 'classnames';
-import { SortUp, SortDown, FramedIcon, Menu } from '../assets/svgIcons';
+import { SortUp, SortDown, FramedIcon, Menu, About } from '../assets/svgIcons';
 import { useViewport, breakpoints, useOutsideAlerter } from '../utils/utils';
 
 const ImageNav = ({className, options, reverseSort, updateSort, updateType, updateSearch}) => {
@@ -85,6 +85,24 @@ const ImageNav = ({className, options, reverseSort, updateSort, updateType, upda
             })}
         </div>
     );
+
+    const renderAbout = () => (
+        <div className="about">
+            <button className="about-icon" onClick={() => setShowAbout((current) => !current)}>
+                <About />
+            </button>
+            {showAbout && (
+                <div className="about-modal">
+                    <div className="about-modal-content" ref={aboutModalRef}>
+                        <div className="framed-icon">
+                            <FramedIcon />
+                        </div>
+                        Hall-of-framed website which contains various galleries with screenshots made by the members of the community
+                    </div>
+                </div>
+            )}
+        </div>
+    )
     
     const renderDesktop = () => {
        return (
@@ -92,6 +110,7 @@ const ImageNav = ({className, options, reverseSort, updateSort, updateType, upda
             {renderSort}
             {renderFilters}
             {renderSearch}
+            {renderAbout()}
            </>
        )
     }
@@ -118,13 +137,20 @@ const ImageNav = ({className, options, reverseSort, updateSort, updateType, upda
         setShowMenu(false);
     }
 
+    const handleClickOutsideAboutModal = () => {
+        setShowAbout(false);
+    }
+
     const [showMenu, setShowMenu] = useState(false);
+    const [showAbout, setShowAbout] = useState(false);
     const { width } = useViewport();
     const isMobile = width <= breakpoints.mobile;
     const viewportClass = isMobile ? 'image-nav--mobile' : 'image-nav--desktop';
 
     const mobileMenuRef = useRef(null);
+    const aboutModalRef = useRef(null);
     useOutsideAlerter(mobileMenuRef, handleClickOutside);
+    useOutsideAlerter(aboutModalRef, handleClickOutsideAboutModal);
 
     useEffect(() => {
         if (!isMobile) {
@@ -134,7 +160,9 @@ const ImageNav = ({className, options, reverseSort, updateSort, updateType, upda
     
     return (
         <div className={`image-nav ${viewportClass} ${className}`}>
-            <FramedIcon/>
+            <div className="framed-icon">
+                <FramedIcon/>
+            </div>
             {!isMobile && renderDesktop()}
             {isMobile && renderMobile()}
         </div>

@@ -318,7 +318,7 @@ body::before {
 }
 
 .mobile-menu .mobile-menu-content {
-  animation: mobileMenuContent 500ms forwards;
+  animation: mobileMenuContent 300ms forwards;
   background: none;
   box-shadow: none;
   display: flex;
@@ -577,6 +577,44 @@ body::before {
   border: 0;
 }
 
+button.about-icon {
+  position: absolute;
+  top: 5px;
+  right: 0;
+}
+
+.about-icon svg {
+  height: 40px;
+  fill: var(--active-bg);
+  padding: 0;
+}
+
+.about-modal {
+  position: fixed;
+  background: #00000078;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.about-modal-content {
+  border-radius: 4px;
+  position: relative;
+  width: 500px;
+  max-width: 90%;
+  background: #333;
+  padding: 1em 2em;
+  display: flex;
+  justify-content: space-between;
+}
+
+.about-modal .about-modal-content > .framed-icon svg {
+  height: 100px;
+}
 
 /* ----------------------------- Animations ----------------------------- */
 
@@ -615,12 +653,12 @@ body::before {
 }
 
 @keyframes mobileMenuContent {
-  0%   { opacity: 0; }
-  100% { opacity: 1; }
+  0%   { opacity: 0; margin-top: -100px; }
+  100% { opacity: 1; margin-top: 0px; }
 }
 @-webkit-keyframes mobileMenuContent {
-  0%   { opacity: 0; }
-  100% { opacity: 1; }
+  0%   { opacity: 0; margin-top: -100px; }
+  100% { opacity: 1; margin-top: 0px; }
 }
 
 /* ---------------------------- Breakpoints ---------------------------- */
