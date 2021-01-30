@@ -78,6 +78,10 @@ const ImageViewer = ({ image = {}, show, onClose, data, onPrev, onNext, setBgIma
     (event) => {
       const { key } = event;
 
+      if (!show) {
+          return false;
+      }
+      
       switch (key) {
         case 'ArrowRight':
           if (nextDisabled) {
