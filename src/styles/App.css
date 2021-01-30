@@ -1,72 +1,22 @@
-/* ------------------------------- Resets ------------------------------- */
-
-html, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
-del, dfn, em, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var,
-b, u, i, center,
-dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed, 
-figure, figcaption, footer, header, hgroup, 
-menu, nav, output, ruby, section, summary,
-time, mark, audio, video {
-	margin: 0;
-	padding: 0;
-	border: 0;
-	font-size: 100%;
-	vertical-align: baseline;
-}
-/* HTML5 display-role reset for older browsers */
-article, aside, details, figcaption, figure, 
-footer, header, hgroup, menu, nav, section {
-	display: block;
-}
-body {
-	line-height: 1;
-}
-ol, ul {
-	list-style: none;
-}
-blockquote, q {
-	quotes: none;
-}
-blockquote:before, blockquote:after,
-q:before, q:after {
-	content: '';
-	content: none;
-}
-table {
-	border-collapse: collapse;
-	border-spacing: 0;
-}
-button {
-  border: 0;
-  outline: 0;
-  background: transparent;
-}
-
 /* ------------------------------- Global ------------------------------- */
 
 /* Variables */
 :root {
-  --active-bg: hsla(0,0%,80%,1);
-  --active-fg: hsla(0,0%,10%,1);
-  --active-hover-bg: hsla(0,0%,90%,1);
+  --active-bg: hsla(0, 0%, 80%, 1);
+  --active-fg: hsla(0, 0%, 10%, 1);
+  --active-hover-bg: hsla(0, 0%, 90%, 1);
   --blur-bg: blur(19px);
   --blur-viewer-bg: blur(10px);
   --border-radius: 30px;
-  --box-shadow-subtle: 0 5px 10px rgba(0,0,0,.2);
+  --box-shadow-subtle: 0 5px 10px rgba(0, 0, 0, 0.2);
   --header-height: 50px;
   --header-transition: background-color 100ms linear;
-  --inactive-hover-bg: hsla(0,0%,100%,0.1);
-  --mobile-header-margin-sides: 25px;
-  --search-bg: hsla(0,0%,100%,0.1);
+  --inactive-hover-bg: hsla(0, 0%, 100%, 0.1);
+  --mobile-header-margin-sides: 15px;
+  --search-bg: hsla(0, 0%, 100%, 0.1);
   --text-main: #efefef;
-  --translucent-bg: hsla(0,0%,18%,0.6);
-  --translucent-bg-fallback: hsla(0,0%,28%,0.95);
+  --translucent-bg: hsla(0, 0%, 18%, 0.6);
+  --translucent-bg-fallback: hsla(0, 0%, 28%, 0.95);
 }
 
 * {
@@ -76,7 +26,6 @@ button {
 body {
   background: grey no-repeat fixed center;
   font-size: 14px;
-  padding: 0 20px;
 }
 
 /* Splash screen */
@@ -89,7 +38,9 @@ body::before {
   right: 0;
   bottom: 0;
   left: 0;
-  background: #333 url('https://cdn.discordapp.com/attachments/552552070876758032/802277763263627267/hof.png') no-repeat fixed center;
+  background: #333
+    url('https://cdn.discordapp.com/attachments/552552070876758032/802277763263627267/hof.png')
+    no-repeat fixed center;
   background-size: 700px;
   z-index: 99;
 }
@@ -104,7 +55,7 @@ body::before {
   bottom: 0;
   left: 0;
   z-index: -1;
-  }
+}
 
 .bg-blur {
   background-position: center;
@@ -120,9 +71,13 @@ body::before {
   transform: scale(1.05);
   transition: background-image 500ms;
   z-index: -1;
-  }
+}
 
 /* ----------------- Main Header, Image Nav and Filters ----------------- */
+
+button > svg {
+  cursor: pointer;
+}
 
 .image-nav {
   align-items: center;
@@ -131,16 +86,15 @@ body::before {
   color: var(--text-main);
   display: flex;
   font-weight: 700;
-  margin-left: -20px;
   min-height: var(--header-height);
-  padding-left: 20px;
   position: fixed;
-  text-shadow: 0 1px 8px hsla(0,0%,0%,0.5), 0 1px 0px hsla(0,0%,0%,0.6);
+  text-shadow: 0 1px 8px hsla(0, 0%, 0%, 0.5), 0 1px 0px hsla(0, 0%, 0%, 0.6);
   width: 100%;
   z-index: 5;
+  padding-left: 10px;
 }
 
-.image-nav .filter, 
+.image-nav .filter,
 .image-nav .image-types label,
 .image-nav .search .search-input {
   font-weight: 600;
@@ -163,6 +117,17 @@ body::before {
   padding: 0;
 }
 
+.image-nav .info-button {
+  margin-left: auto;
+  margin-right: 10px;
+}
+
+.image-nav .info-button svg {
+  height: 30px;
+  width: 30px;
+  fill: #fff;
+}
+
 .image-nav .filters {
   height: var(--header-height);
   margin-right: 40px;
@@ -183,7 +148,7 @@ body::before {
 }
 
 /* Active sort icon */
-.image-nav .filter .sort-icon svg[fill="#fff"] {
+.image-nav .filter .sort-icon svg[fill='#fff'] {
   fill: var(--active-fg);
 }
 
@@ -231,11 +196,11 @@ body::before {
   padding: 0;
 }
 
-.image-nav .image-types [type="radio"] {
+.image-nav .image-types [type='radio'] {
   display: none;
 }
 
-.image-nav .image-types [type="radio"]:checked + label {
+.image-nav .image-types [type='radio']:checked + label {
   background-color: var(--active-bg);
   border-radius: var(--border-radius);
   color: var(--active-fg);
@@ -243,7 +208,7 @@ body::before {
   text-shadow: none;
 }
 
-.image-nav .image-types [type=radio]:checked+label:hover {
+.image-nav .image-types [type='radio']:checked + label:hover {
   background: var(--active-hover-bg);
 }
 
@@ -265,14 +230,15 @@ body::before {
 }
 
 .image-nav .search .search-input {
-  background: var(--search-bg); 
+  background: var(--search-bg);
   border-radius: var(--border-radius);
-  color: hsla(0,0%,100%,0.4);
+  color: hsla(0, 0%, 100%, 0.4);
   font-size: inherit;
   outline: 0;
   padding: 5px 10px;
   transition: var(--header-transition);
   border: 0;
+  -webkit-appearance: none;
 }
 
 /* Targets field's placeholder text */
@@ -283,7 +249,7 @@ body::before {
 
 .image-nav .search .search-input:focus,
 .mobile-menu .mobile-menu-content .search .search-input:focus {
-  background-color: hsla(0,0%,100%,0.3);
+  background-color: hsla(0, 0%, 100%, 0.3);
   color: inherit;
 }
 
@@ -332,7 +298,7 @@ body::before {
   padding: 0;
   position: static;
   top: var(--header-height);
-  right: 0 ;
+  right: 0;
 }
 
 .mobile-menu .mobile-menu-content .search {
@@ -341,7 +307,7 @@ body::before {
 }
 
 .mobile-menu .mobile-menu-content .search .search-input {
-  background: var(--search-bg); 
+  background: var(--search-bg);
   width: 100%;
 }
 
@@ -369,7 +335,7 @@ body::before {
 
 .mobile-menu .mobile-menu-content .search .search-input,
 .mobile-menu .mobile-menu-content .image-types label,
-.mobile-menu .mobile-menu-content .image-types [type=radio]:checked+label {
+.mobile-menu .mobile-menu-content .image-types [type='radio']:checked + label {
   border-radius: 0;
 }
 
@@ -377,8 +343,8 @@ body::before {
 .mobile-menu .mobile-menu-content .filters .filter.is-active,
 .mobile-menu .mobile-menu-content .search .search-input,
 .mobile-menu .mobile-menu-content .image-types label,
-.mobile-menu .mobile-menu-content .image-types [type=radio]:checked+label {
-  padding: 15px var(--mobile-header-margin-sides);
+.mobile-menu .mobile-menu-content .image-types [type='radio']:checked + label {
+  padding: 15px calc(var(--mobile-header-margin-sides) + 10px);
   margin: 0;
 }
 
@@ -395,7 +361,7 @@ body::before {
 /* ------------------------- Image Grid/Viewer ------------------------- */
 
 .image-rows {
-  padding-top: 55px;
+  padding: 55px 0 0 5px;
   z-index: 1;
 }
 
@@ -410,7 +376,6 @@ body::before {
   position: relative;
   overflow: hidden;
 }
-
 
 .image-row .image-info {
   width: 100%;
@@ -448,7 +413,7 @@ body::before {
 
 /* Blurs image grid while viewer is open using Firefox-compatible property */
 .image-nav.hidden + .image-rows {
-    filter: var(--blur-viewer-bg);
+  filter: var(--blur-viewer-bg);
 }
 
 .image-viewer.is-visible {
@@ -500,13 +465,14 @@ body::before {
   display: inline-block;
   text-align: left;
   margin-top: 50px;
+  max-width: min-content;
+  max-width: -webkit-min-content;
   position: relative;
 }
 
 .image-viewer-content img {
   max-width: 95vw;
   max-height: calc(98vh - 130px);
-  margin: auto auto;
   cursor: auto;
   z-index: 15;
   border-bottom: 1px solid #888;
@@ -516,12 +482,32 @@ body::before {
   display: none;
 }
 
-.image-viewer-content .author {
+.image-viewer-content .shot-info .info {
+  width: 95%;
+}
+
+.image-viewer-content .shot-info {
   padding: 8px 10px;
   background-color: #000;
   color: #fff;
   font-size: 15px;
   position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.image-viewer-content .shot-info .by {
+  color: #ddd;
+}
+
+.image-viewer-content .shot-info .author {
+  font-weight: 500;
+}
+
+.image-viewer-content .shot-info .title {
+  margin-top: 3px;
+  display: block;
 }
 
 .image-viewer-content .author .title {
@@ -540,7 +526,7 @@ body::before {
   border: 0;
   cursor: pointer;
   height: 30px;
-  opacity: .6;
+  opacity: 0.6;
   padding: 0;
   position: fixed;
   right: var(--mobile-header-margin-sides);
@@ -555,9 +541,11 @@ body::before {
   height: 30px;
   width: 30px;
   fill: #fff;
-  position: absolute;
-  right: 5px;
-  top: 10px;
+  cursor: pointer;
+}
+
+.image-viewer-content .fullscreen-button svg {
+  vertical-align: middle;
 }
 
 .image-viewer-content .close:hover {
@@ -567,6 +555,7 @@ body::before {
 .image-viewer-content.fullscreen {
   display: flex;
   align-items: center;
+  justify-content: center;
 }
 
 .image-viewer-content.fullscreen img {
@@ -619,22 +608,44 @@ button.about-icon {
 /* ----------------------------- Animations ----------------------------- */
 
 @keyframes splashScreen {
-  0%,80% { opacity: 1; z-index: 99; }
-  99.9%  { opacity: 0; z-index: 99; }
-  100%   { opacity: 0; z-index: -99; }
+  0%,
+  80% {
+    opacity: 1;
+    z-index: 99;
+  }
+  99.9% {
+    opacity: 0;
+    z-index: 99;
+  }
+  100% {
+    opacity: 0;
+    z-index: -99;
+  }
 }
 @-webkit-keyframes splashScreen {
-  0%,80% { opacity: 1; z-index: 99; }
-  99.9%  { opacity: 0; z-index: 99; }
-  100%   { opacity: 0; z-index: -99; }
+  0%,
+  80% {
+    opacity: 1;
+    z-index: 99;
+  }
+  99.9% {
+    opacity: 0;
+    z-index: 99;
+  }
+  100% {
+    opacity: 0;
+    z-index: -99;
+  }
 }
 
 @keyframes fadeIn {
   0% {
-    background: #111111dd url('https://cdn.discordapp.com/emojis/575642684006334464.png?v=1') no-repeat fixed 50% 34%;
+    background: #111111dd url('https://cdn.discordapp.com/emojis/575642684006334464.png?v=1')
+      no-repeat fixed 50% 34%;
   }
   80% {
-    background: #111111dd url('https://cdn.discordapp.com/emojis/575642684006334464.png?v=1') no-repeat fixed 50% 34%;
+    background: #111111dd url('https://cdn.discordapp.com/emojis/575642684006334464.png?v=1')
+      no-repeat fixed 50% 34%;
   }
   100% {
     background: #111111dd no-repeat fixed 50% 34%;
@@ -642,10 +653,12 @@ button.about-icon {
 }
 @-webkit-keyframes fadeIn {
   0% {
-    background: #111111dd url('https://cdn.discordapp.com/emojis/575642684006334464.png?v=1') no-repeat fixed 50% 34%;
+    background: #111111dd url('https://cdn.discordapp.com/emojis/575642684006334464.png?v=1')
+      no-repeat fixed 50% 34%;
   }
   80% {
-    background: #111111dd url('https://cdn.discordapp.com/emojis/575642684006334464.png?v=1') no-repeat fixed 50% 34%;
+    background: #111111dd url('https://cdn.discordapp.com/emojis/575642684006334464.png?v=1')
+      no-repeat fixed 50% 34%;
   }
   100% {
     background: #111111dd no-repeat fixed 50% 34%;
@@ -665,18 +678,23 @@ button.about-icon {
 
 @media only screen and (max-width: 550px) {
   .mobile-menu .filters {
-      flex: 0 0 100%;
-      box-shadow: var(--box-shadow-subtle);
-      margin: 0;
-      z-index: 2;
+    flex: 0 0 100%;
+    box-shadow: var(--box-shadow-subtle);
+    margin: 0;
+    z-index: 2;
+  }
+}
+
+@media only screen and (max-width: 840px) {
+  .image-nav .info-button {
+    margin: 0;
+    position: absolute;
+    top: 9px;
+    right: 80px;
   }
 }
 
 @media only screen and (max-width: 760px) {
-  .search {
-    display: inherit;
-  }
-
   .image-row .image-info .author {
     font-size: 12px;
   }
@@ -691,10 +709,12 @@ button.about-icon {
 
   @keyframes fadeIn {
     0% {
-      background: #111111dd url('https://cdn.discordapp.com/emojis/575642684006334464.png?v=1') no-repeat fixed 50% 19%;
+      background: #111111dd url('https://cdn.discordapp.com/emojis/575642684006334464.png?v=1')
+        no-repeat fixed 50% 19%;
     }
     80% {
-      background: #111111dd url('https://cdn.discordapp.com/emojis/575642684006334464.png?v=1') no-repeat fixed 50% 19%;
+      background: #111111dd url('https://cdn.discordapp.com/emojis/575642684006334464.png?v=1')
+        no-repeat fixed 50% 19%;
     }
     100% {
       background: #111111dd no-repeat fixed 50% 19%;
@@ -702,10 +722,12 @@ button.about-icon {
   }
   @-webkit-keyframes fadeIn {
     0% {
-      background: #111111dd url('https://cdn.discordapp.com/emojis/575642684006334464.png?v=1') no-repeat fixed 50% 19%;
+      background: #111111dd url('https://cdn.discordapp.com/emojis/575642684006334464.png?v=1')
+        no-repeat fixed 50% 19%;
     }
     80% {
-      background: #111111dd url('https://cdn.discordapp.com/emojis/575642684006334464.png?v=1') no-repeat fixed 50% 19%;
+      background: #111111dd url('https://cdn.discordapp.com/emojis/575642684006334464.png?v=1')
+        no-repeat fixed 50% 19%;
     }
     100% {
       background: #111111dd no-repeat fixed 50% 19%;
@@ -717,7 +739,7 @@ button.about-icon {
 
 @supports ((-webkit-backdrop-filter: blur(2em)) or (backdrop-filter: blur(2em))) {
   .image-nav {
-      background: var(--translucent-bg);
-      backdrop-filter: var(--blur-bg);
+    background: var(--translucent-bg);
+    backdrop-filter: var(--blur-bg);
   }
 }

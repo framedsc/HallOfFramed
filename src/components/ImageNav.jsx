@@ -1,90 +1,90 @@
-import React, { useState, useRef, useEffect } from 'react';
 import classNames from 'classnames';
+import React, { useEffect, useRef, useState } from 'react';
 import { SortUp, SortDown, FramedIcon, Menu, About } from '../assets/svgIcons';
 import { useViewport, breakpoints, useOutsideAlerter } from '../utils/utils';
 
-const ImageNav = ({className, options, reverseSort, updateSort, updateType, updateSearch}) => {
-    const [active, setActive] = useState(options[0]);
-    const [type, setType] = useState('All')
-    const [searchTerm, setSearchTerm] = useState('');
 
-    const handleOptionChange = (selection) => {
-        setActive(selection);
-        updateSort(selection);
-    }
+const ImageNav = ({ className, options, reverseSort, updateSort, updateType, updateSearch }) => {
+  const [active, setActive] = useState(options[0]);
+  const [type, setType] = useState('All');
+  const [searchTerm, setSearchTerm] = useState('');
 
-    const handleTypeChange = (value) => {
-        setType(value);
-        updateType(value);
-    }
+  const handleOptionChange = (selection) => {
+    setActive(selection);
+    updateSort(selection);
+  };
 
-    const handleSearchChange = event => {
-        setSearchTerm(event.target.value);
-        updateSearch(event.target.value.toLowerCase());
-      };
+  const handleTypeChange = (value) => {
+    setType(value);
+    updateType(value);
+  };
 
-    const types = ['All', 'Wide', 'Portrait'];
-    const icon = reverseSort ? <SortUp /> : <SortDown />;
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+    updateSearch(event.target.value.toLowerCase());
+  };
 
-    const renderSearch = (
-        <div className="search">
+  const types = ['All', 'Wide', 'Portrait'];
+  const icon = reverseSort ? <SortUp /> : <SortDown />;
+
+  const renderSearch = (
+    <div className="search">
+      <input
+        type="search"
+        name="search"
+        className="search-input"
+        value={searchTerm}
+        onChange={handleSearchChange}
+        placeholder="Search"
+      />
+    </div>
+  );
+
+  const renderSort = (
+    <ul className="filters">
+      {options.map((item, index) => {
+        const isActive = active.key === item.key;
+        const buttonClass = isActive ? 'is-active' : undefined;
+
+        return (
+          <li key={index}>
+            <button
+              id={item.label}
+              className={classNames('filter', buttonClass)}
+              onClick={() => handleOptionChange(item)}
+              key={item.label}
+            >
+              {item.label}
+              {isActive && icon}
+            </button>
+          </li>
+        );
+      })}
+    </ul>
+  );
+
+  const renderFilters = (
+    <div className="image-types">
+      {types.map((item) => {
+        return (
+          <>
             <input
-                type="search"
-                name="search"
-                className="search-input"
-                value={searchTerm}
-                onChange={handleSearchChange}
-                placeholder='Search'
+              id={`${item}-label`}
+              onChange={() => handleTypeChange(item)}
+              checked={type === item}
+              type="radio"
+              value={item}
+              name="type"
+              key={`${item}-input`}
             />
-        </div>
-    );
-
-
-    const renderSort = (
-        <ul className="filters">
-        {options.map((item, index) => {
-            const isActive = active.key === item.key;
-            const buttonClass = isActive ? 'is-active' : undefined;
-
-            return (
-                <li key={index}>
-                    <button
-                        id={item.label}
-                        className={classNames('filter', buttonClass)}
-                        onClick={() => handleOptionChange(item)}
-                        key={item.label}
-                    >
-                        {item.label}
-                        {isActive && icon}
-                    </button>
-                </li>
-            );
-        })}
-        </ul>
-    );
-    
-    const renderFilters = (
-        <div className="image-types">
-            {types.map(item => {
-                return(
-                    <>
-                        <input 
-                            id={`${item}-label`}
-                            onChange={()=> handleTypeChange(item)}
-                            checked={type===item} 
-                            type="radio" 
-                            value={item} 
-                            name="type" 
-                            key={`${item}-input`}
-                        /> 
-                        <label key={`${item}-label`} htmlFor={`${item}-label`}>
-                        {item}   
-                        </label>
-                    </>
-                )
-            })}
-        </div>
-    );
+            <label key={`${item}-label`} htmlFor={`${item}-label`}>
+              {item}
+            </label>
+          </>
+        );
+      })}
+    </div>
+  );
 
     const renderAbout = () => (
         <div className="about">
@@ -114,59 +114,60 @@ const ImageNav = ({className, options, reverseSort, updateSort, updateType, upda
            </>
        )
     }
-
-    const renderMobile = () => {
-        return (
-            <div className="mobile-menu" ref={mobileMenuRef}>
-                <button 
-                    className="menu-button" 
-                    onClick={() => setShowMenu((current) => !current)}>
-                        <Menu />
-                </button>
-                {showMenu && (
-                <div className="mobile-menu-content">
-                    {renderSearch}
-                    {renderSort}
-                    {renderFilters}
-                </div>)}
-            </div>
-        )
-    }
-
-    const handleClickOutside = () => {
-        setShowMenu(false);
-    }
-
-    const handleClickOutsideAboutModal = () => {
-        setShowAbout(false);
-    }
-
-    const [showMenu, setShowMenu] = useState(false);
-    const [showAbout, setShowAbout] = useState(false);
-    const { width } = useViewport();
-    const isMobile = width <= breakpoints.mobile;
-    const viewportClass = isMobile ? 'image-nav--mobile' : 'image-nav--desktop';
-
-    const mobileMenuRef = useRef(null);
-    const aboutModalRef = useRef(null);
-    useOutsideAlerter(mobileMenuRef, handleClickOutside);
-    useOutsideAlerter(aboutModalRef, handleClickOutsideAboutModal);
-
-    useEffect(() => {
-        if (!isMobile) {
-            setShowMenu(false);
-        }
-    }, [isMobile])
     
+  const renderMobile = () => {
     return (
-        <div className={`image-nav ${viewportClass} ${className}`}>
-            <div className="framed-icon">
-                <FramedIcon/>
+      <>
+        <div className="mobile-menu" ref={mobileMenuRef}>
+          <button className="menu-button" onClick={() => setShowMenu((current) => !current)}>
+            <Menu />
+          </button>
+          {showMenu && (
+            <div className="mobile-menu-content">
+              {renderSearch}
+              {renderSort}
+              {renderFilters}
             </div>
-            {!isMobile && renderDesktop()}
-            {isMobile && renderMobile()}
+          )}
         </div>
-    )
+      </>
+    );
+  };
+
+  const handleClickOutside = () => {
+    setShowMenu(false);
+  };
+  
+  const handleClickOutsideAboutModal = () => {
+    setShowAbout(false);
+  }
+
+  const [showMenu, setShowMenu] = useState(false);
+  const [showAbout, setShowAbout] = useState(false);
+  const { width } = useViewport();
+  const isMobile = width <= breakpoints.mobile;
+  const viewportClass = isMobile ? 'image-nav--mobile' : 'image-nav--desktop';
+
+  const mobileMenuRef = useRef(null);
+  const aboutModalRef = useRef(null);
+  useOutsideAlerter(mobileMenuRef, handleClickOutside);
+  useOutsideAlerter(aboutModalRef, handleClickOutsideAboutModal);
+
+  useEffect(() => {
+      if (!isMobile) {
+          setShowMenu(false);
+      }
+  }, [isMobile])
+    
+  return (
+      <div className={`image-nav ${viewportClass} ${className}`}>
+          <div className="framed-icon">
+              <FramedIcon/>
+          </div>
+          {!isMobile && renderDesktop()}
+          {isMobile && renderMobile()}
+      </div>
+  )
 }
 
 export default ImageNav;
