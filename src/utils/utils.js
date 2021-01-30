@@ -1,10 +1,16 @@
 import { useEffect, useLayoutEffect, useState } from 'react';
 
 export const useViewport = () => {
-  const windowWidth = document.documentElement.clientWidth || document.body.clientWidth;
-  const [width, setWidth] = useState(windowWidth);
+  const actualWidth = document.documentElement.clientWidth || document.body.clientWidth;
+  const [width, setWidth] = useState(actualWidth);
+
+  const onWindowLoad = () => {
+    const actualWidth = document.documentElement.clientWidth || document.body.clientWidth;
+    setWidth(actualWidth);
+  }
 
   useEffect(() => {
+    window.setTimeout(onWindowLoad, 1000);
     const handleWindowResize = () => {
       const windowWidth = document.documentElement.clientWidth || document.body.clientWidth;
       setWidth(windowWidth);

@@ -126,6 +126,7 @@ const ImageGrid = ({
                       marginRight: borderOffset,
                       marginBottom: borderOffset,
                     }}
+                    key={`thumbnail-container-${image.id}`}
                   >
                     <img
                       alt={image.gameName}
