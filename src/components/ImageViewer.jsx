@@ -1,5 +1,6 @@
 import classNames from 'classnames';
 import React, { useEffect, useReducer } from 'react';
+import { useSwipeable } from 'react-swipeable';
 import { Cancel, ExitFullscreen, Fullscreen } from '../assets/svgIcons';
 import Spinner from '../components/Spinner/Spinner';
 import { useFullscreenStatus } from '../utils/utils';
@@ -127,6 +128,30 @@ const ImageViewer = ({ image = {}, show, onClose, data, onPrev, onNext, setBgIma
   const fullscreenClass = isFullscreen ? 'fullscreen' : false;
   const loadedClass = showImage ? 'loaded' : 'hidden';
 
+  const swipeConfig = {
+    delta: 10,
+    preventDefaultTouchmoveEvent: true,
+    trackTouch: true,
+    trackMouse: false,
+    rotationAngle: 0,
+  };
+
+  const handlers = useSwipeable({
+    onSwipedRight: () => {
+        if (nextDisabled) {
+            return false;
+        }
+        return handleNext();
+    },
+    onSwipedLeft: () => {
+        if (prevDisabled) {
+            return false;
+        }
+        return handlePrev();
+    },
+    ...swipeConfig,
+  });
+
   return (
     <div className={classNames('image-viewer', visibleClass)} onClick={handleClose}>
       <div className="image-nav">
@@ -149,6 +174,7 @@ const ImageViewer = ({ image = {}, show, onClose, data, onPrev, onNext, setBgIma
               }}
               onLoad={handleLoad}
               className={loadedClass}
+              {...handlers}
             />
             {initialized && !isFullscreen && (
               <div className="shot-info" onClick={(event) => {event.stopPropagation();}}>

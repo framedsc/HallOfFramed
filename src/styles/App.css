@@ -554,7 +554,6 @@ button > svg {
 
 .image-viewer-content.fullscreen {
   display: flex;
-  align-items: center;
   justify-content: center;
 }
 
