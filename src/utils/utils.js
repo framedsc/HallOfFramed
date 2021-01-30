@@ -1,10 +1,14 @@
 import { useState, useEffect, useLayoutEffect } from 'react';
 
 export const useViewport = () => {
-  const [width, setWidth] = useState(window.innerWidth);
+  const windowWidth = document.documentElement.clientWidth || document.body.clientWidth;
+  const [width, setWidth] = useState(windowWidth);
 
   useEffect(() => {
-    const handleWindowResize = () => setWidth(window.innerWidth);
+    const handleWindowResize = () => {
+      const windowWidth = document.documentElement.clientWidth || document.body.clientWidth;
+      setWidth(windowWidth);
+    }
     window.addEventListener("resize", handleWindowResize);
     return () => window.removeEventListener("resize", handleWindowResize);
   }, []);
@@ -34,7 +38,7 @@ export const useOutsideAlerter = (ref, onClickOutside) => {
 }
 
 export const breakpoints = {
-  mobile: 800
+  mobile: 790
 }
 
 function getBrowserFullscreenElementProp() {

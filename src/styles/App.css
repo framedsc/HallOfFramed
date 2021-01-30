@@ -62,7 +62,7 @@ button {
   --header-height: 50px;
   --header-transition: background-color 100ms linear;
   --inactive-hover-bg: hsla(0,0%,100%,0.1);
-  --mobile-header-margin-sides: 25px;
+  --mobile-header-margin-sides: 15px;
   --search-bg: hsla(0,0%,100%,0.1);
   --text-main: #efefef;
   --translucent-bg: hsla(0,0%,18%,0.6);
@@ -76,7 +76,6 @@ button {
 body {
   background: grey no-repeat fixed center;
   font-size: 14px;
-  padding: 0 20px;
 }
 
 /* Splash screen */
@@ -131,13 +130,12 @@ body::before {
   color: var(--text-main);
   display: flex;
   font-weight: 700;
-  margin-left: -20px;
   min-height: var(--header-height);
-  padding-left: 20px;
   position: fixed;
   text-shadow: 0 1px 8px hsla(0,0%,0%,0.5), 0 1px 0px hsla(0,0%,0%,0.6);
   width: 100%;
   z-index: 5;
+  padding-left: 10px;
 }
 
 .image-nav .filter, 
@@ -378,7 +376,7 @@ body::before {
 .mobile-menu .mobile-menu-content .search .search-input,
 .mobile-menu .mobile-menu-content .image-types label,
 .mobile-menu .mobile-menu-content .image-types [type=radio]:checked+label {
-  padding: 15px var(--mobile-header-margin-sides);
+  padding: 15px calc(var(--mobile-header-margin-sides) + 10px);
   margin: 0;
 }
 
@@ -395,7 +393,7 @@ body::before {
 /* ------------------------- Image Grid/Viewer ------------------------- */
 
 .image-rows {
-  padding-top: 55px;
+  padding: 55px 0 0 5px;
   z-index: 1;
 }
 

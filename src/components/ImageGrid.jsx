@@ -6,11 +6,13 @@ const ImageGrid = ({
         rowTargetHeight = 400, 
         borderOffset = 5, 
         onClick,
-        outerPadding = 45
+        outerPadding = 10
     }) => {
 
     const { width } = useViewport();
     const maxWidth = width - outerPadding;
+
+    console.log(maxWidth);
 
     const processImages = () => {
         const processedImages = [];
