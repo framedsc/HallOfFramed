@@ -1,4 +1,4 @@
-import { useState, useEffect, useLayoutEffect } from 'react';
+import { useEffect, useLayoutEffect, useState } from 'react';
 
 export const useViewport = () => {
   const windowWidth = document.documentElement.clientWidth || document.body.clientWidth;
@@ -8,56 +8,56 @@ export const useViewport = () => {
     const handleWindowResize = () => {
       const windowWidth = document.documentElement.clientWidth || document.body.clientWidth;
       setWidth(windowWidth);
-    }
-    window.addEventListener("resize", handleWindowResize);
-    return () => window.removeEventListener("resize", handleWindowResize);
+    };
+    window.addEventListener('resize', handleWindowResize);
+    return () => window.removeEventListener('resize', handleWindowResize);
   }, []);
 
   // Return the width so we can use it in our components
   return { width };
-}
+};
 
 export const useOutsideAlerter = (ref, onClickOutside) => {
   useEffect(() => {
-      /**
-       * Alert if clicked on outside of element
-       */
-      function handleClickOutside(event) {
-          if (ref.current && !ref.current.contains(event.target)) {
-            onClickOutside();
-          }
+    /**
+     * Alert if clicked on outside of element
+     */
+    function handleClickOutside(event) {
+      if (ref.current && !ref.current.contains(event.target)) {
+        onClickOutside();
       }
+    }
 
-      // Bind the event listener
-      document.addEventListener("mousedown", handleClickOutside);
-      return () => {
-          // Unbind the event listener on clean up
-          document.removeEventListener("mousedown", handleClickOutside);
-      };
+    // Bind the event listener
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      // Unbind the event listener on clean up
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
   }, [ref, onClickOutside]);
-}
+};
 
 export const breakpoints = {
-  mobile: 790
-}
+  mobile: 820,
+};
 
 function getBrowserFullscreenElementProp() {
-  if (typeof document.fullscreenElement !== "undefined") {
-    return "fullscreenElement";
-  } else if (typeof document.mozFullScreenElement !== "undefined") {
-    return "mozFullScreenElement";
-  } else if (typeof document.msFullscreenElement !== "undefined") {
-    return "msFullscreenElement";
-  } else if (typeof document.webkitFullscreenElement !== "undefined") {
-    return "webkitFullscreenElement";
+  if (typeof document.fullscreenElement !== 'undefined') {
+    return 'fullscreenElement';
+  } else if (typeof document.mozFullScreenElement !== 'undefined') {
+    return 'mozFullScreenElement';
+  } else if (typeof document.msFullscreenElement !== 'undefined') {
+    return 'msFullscreenElement';
+  } else if (typeof document.webkitFullscreenElement !== 'undefined') {
+    return 'webkitFullscreenElement';
   } else {
-    throw new Error("fullscreenElement is not supported by this browser");
+    throw new Error('fullscreenElement is not supported by this browser');
   }
 }
 
 export const useFullscreenStatus = (elRef) => {
   const [isFullscreen, setIsFullscreen] = useState(
-    document[getBrowserFullscreenElementProp()] != null
+    document[getBrowserFullscreenElementProp()] != null,
   );
 
   const setFullscreen = () => {
@@ -81,4 +81,4 @@ export const useFullscreenStatus = (elRef) => {
   });
 
   return [isFullscreen, setFullscreen];
-}
+};
