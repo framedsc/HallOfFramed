@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import React, { useEffect, useRef, useState } from 'react';
-import { SortUp, SortDown, FramedIcon, Menu, About } from '../assets/svgIcons';
-import { useViewport, breakpoints, useOutsideAlerter } from '../utils/utils';
+import { FramedIcon, Menu, SortDown, SortUp } from '../assets/svgIcons';
+import { breakpoints, useOutsideAlerter, useViewport } from '../utils/utils';
 
 
 const ImageNav = ({ className, options, reverseSort, updateSort, updateType, updateSearch }) => {
@@ -86,7 +86,7 @@ const ImageNav = ({ className, options, reverseSort, updateSort, updateType, upd
     </div>
   );
 
-    const renderAbout = () => (
+    /*const renderAbout = () => (
         <div className="about">
             <button className="about-icon" onClick={() => setShowAbout((current) => !current)}>
                 <About />
@@ -102,7 +102,7 @@ const ImageNav = ({ className, options, reverseSort, updateSort, updateType, upd
                 </div>
             )}
         </div>
-    )
+    )*/
     
     const renderDesktop = () => {
        return (
@@ -110,7 +110,7 @@ const ImageNav = ({ className, options, reverseSort, updateSort, updateType, upd
             {renderSort}
             {renderFilters}
             {renderSearch}
-            {renderAbout()}
+            {/* {renderAbout()} */}
            </>
        )
     }
@@ -138,20 +138,22 @@ const ImageNav = ({ className, options, reverseSort, updateSort, updateType, upd
     setShowMenu(false);
   };
   
-  const handleClickOutsideAboutModal = () => {
-    setShowAbout(false);
-  }
-
   const [showMenu, setShowMenu] = useState(false);
-  const [showAbout, setShowAbout] = useState(false);
   const { width } = useViewport();
   const isMobile = width <= breakpoints.mobile;
   const viewportClass = isMobile ? 'image-nav--mobile' : 'image-nav--desktop';
 
   const mobileMenuRef = useRef(null);
-  const aboutModalRef = useRef(null);
   useOutsideAlerter(mobileMenuRef, handleClickOutside);
+
+  /*
+  const aboutModalRef = useRef(null);
+  const [showAbout, setShowAbout] = useState(false);
   useOutsideAlerter(aboutModalRef, handleClickOutsideAboutModal);
+  const handleClickOutsideAboutModal = () => {
+    setShowAbout(false);
+  }
+  */
 
   useEffect(() => {
       if (!isMobile) {
