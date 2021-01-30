@@ -75,19 +75,18 @@ export const SortDown = () => {
 };
 
 export const FramedIcon = () => {
-  return (
-    <div className="framed-icon">
-      <svg xmlns="http://www.w3.org/2000/svg" x="0" y="0" viewBox="0 0 2048 2048" fill="#9A9A9A">
-        <g>
-          <g>
-            <path d="M892.3,688v242h539v247.2h-539v411.9H609.1v-1150h889.1V688H892.3z" />
-          </g>
-        </g>
-        <path d="M143.6,138.5v1760.9h1760.9V138.5H143.6z M1783.8,1778.7H264.2V259.2h1519.6V1778.7z" />
-      </svg>
-    </div>
-  );
-};
+	return (
+		<svg xmlns="http://www.w3.org/2000/svg" x="0" y="0" viewBox="0 0 2048 2048" fill="#9A9A9A">
+		<g>
+			<g>
+				<path d="M892.3,688v242h539v247.2h-539v411.9H609.1v-1150h889.1V688H892.3z"/>
+			</g>
+		</g>
+		<path d="M143.6,138.5v1760.9h1760.9V138.5H143.6z M1783.8,1778.7H264.2V259.2h1519.6V1778.7z"/>
+		</svg>
+	);
+}
+
 
 export const Menu = () => {
   return (
@@ -129,5 +128,14 @@ export const ExitFullscreen = () => {
       <polygon points="0,29.172 2.828,32 9.414,25.414 12,28 12,20 4,20 6.586,22.586" />
       <polygon points="28.031,12 25.438,9.404 32,2.838 29.164,0 22.598,6.566 20,3.971 20,12" />
     </svg>
-  );
-};
+
+  )
+}
+
+export const About = () => {
+  return (
+    <svg viewBox="0 0 24 24">
+      <path fill="#9A9A9A" d="M13,9H11V7H13M13,17H11V11H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" />
+    </svg>
+  )
+}
