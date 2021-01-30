@@ -31,10 +31,12 @@ const ImageGridContainer = ({data, setBgImage}) => {
             setIsReverse(false);
             setSortOption(option)
         }
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     const handleTypeChange = (type) => {
         setType(type);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     const handleSearchChange = (keyword) => {
