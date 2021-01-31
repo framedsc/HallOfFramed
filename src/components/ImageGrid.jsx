@@ -6,10 +6,9 @@ const ImageGrid = ({
   rowTargetHeight = 400,
   borderOffset = 5,
   onClick,
-  outerPadding = 10,
 }) => {
   const { width } = useViewport();
-  const maxWidth = width - outerPadding;
+  const maxWidth = width - (borderOffset*2);
 
   const processImages = () => {
     const processedImages = [];
@@ -114,7 +113,13 @@ const ImageGrid = ({
 
   const renderGrid = (rows) => {
     return (
-      <div className={className}>
+      <div 
+        className={className} 
+        style={{
+            paddingLeft: borderOffset,
+            paddingTop: 50+borderOffset
+        }}
+      >
         {rows.map((row, index) => {
           return (
             <div key={index} className="image-row">

@@ -257,6 +257,7 @@ button > svg {
   align-items: center;
   justify-content: space-between;
   padding-top: var(--header-height);
+  padding-left: 0;
 }
 
 .image-nav--mobile .framed-icon {
@@ -268,7 +269,6 @@ button > svg {
 
 .mobile-menu {
   width: 100%;
-  margin-right: var(--mobile-header-margin-sides);
 }
 
 .mobile-menu .menu-button {
@@ -292,8 +292,7 @@ button > svg {
   flex-wrap: wrap;
   height: auto;
   justify-content: space-between;
-  margin: 0 -25px 0;
-  max-height: 150px;
+  max-height: 200px;
   opacity: 0;
   padding: 0;
   position: static;
@@ -361,7 +360,6 @@ button > svg {
 /* ------------------------- Image Grid/Viewer ------------------------- */
 
 .image-rows {
-  padding: 55px 0 0 5px;
   z-index: 1;
 }
 
@@ -398,7 +396,7 @@ button > svg {
   color: #fff;
 }
 
-.image-viewer {
+.framed-modal {
   display: none;
   position: fixed;
   top: 0;
@@ -411,13 +409,32 @@ button > svg {
   cursor: zoom-out;
 }
 
+.framed-modal.is-visible {
+  display: block;
+}
+
+.framed-modal .close {
+  border: 0;
+  cursor: pointer;
+  height: 30px;
+  opacity: 0.6;
+  padding: 0;
+  position: fixed;
+  right: var(--mobile-header-margin-sides);
+  top: 10px;
+  width: 30px;
+  z-index: 9999;
+  fill: #fff;
+  outline: 0;
+}
+
+.framed-modal .close:hover {
+  opacity: 1;
+}
+
 /* Blurs image grid while viewer is open using Firefox-compatible property */
 .image-nav.hidden + .image-rows {
   filter: var(--blur-viewer-bg);
-}
-
-.image-viewer.is-visible {
-  display: block;
 }
 
 .image-viewer .image-nav {
@@ -468,12 +485,12 @@ button > svg {
   max-width: min-content;
   max-width: -webkit-min-content;
   position: relative;
+  cursor: auto;
 }
 
 .image-viewer-content img {
   max-width: 95vw;
   max-height: calc(98vh - 130px);
-  cursor: auto;
   z-index: 15;
   border-bottom: 1px solid #888;
 }
@@ -522,21 +539,6 @@ button > svg {
   margin: 0;
 }
 
-.image-viewer-content .close {
-  border: 0;
-  cursor: pointer;
-  height: 30px;
-  opacity: 0.6;
-  padding: 0;
-  position: fixed;
-  right: var(--mobile-header-margin-sides);
-  top: 10px;
-  width: 30px;
-  z-index: 9999;
-  fill: #fff;
-  outline: 0;
-}
-
 .image-viewer-content .fullscreen-button {
   height: 30px;
   width: 30px;
@@ -546,10 +548,6 @@ button > svg {
 
 .image-viewer-content .fullscreen-button svg {
   vertical-align: middle;
-}
-
-.image-viewer-content .close:hover {
-  opacity: 1;
 }
 
 .image-viewer-content.fullscreen {
@@ -566,19 +564,26 @@ button > svg {
   border: 0;
 }
 
-button.about-icon {
-  position: absolute;
-  top: 5px;
-  right: 0;
+.about-icon {
+  fill: #fff;
+  opacity: 0.6;
+  transition: opacity 200ms;
+  cursor: pointer;
+  margin-left: auto;
+  margin-right: 5px;
+}
+
+.about-icon:hover {
+  opacity: 1;
 }
 
 .about-icon svg {
-  height: 40px;
   fill: var(--active-bg);
   padding: 0;
+  width: 30px;
 }
 
-.about-modal {
+.about-modal-container {
   position: fixed;
   background: #00000078;
   top: 0;
@@ -590,15 +595,45 @@ button.about-icon {
   justify-content: center;
 }
 
-.about-modal-content {
-  border-radius: 4px;
-  position: relative;
+.about-modal-bg {
+  position: fixed;
   width: 500px;
   max-width: 90%;
+  color: #fff;
+  text-align: left;
+  background-position-y: 315px;
+  width: 700px;
+  height: 600px;
+  font-size: 15px;
+  background-clip: border-box;
+}
+
+.about-modal-content {
+  color: #fff;
+  text-align: left;
   background: #333;
-  padding: 1em 2em;
-  display: flex;
-  justify-content: space-between;
+  position: fixed;
+  width: 700px;
+  height: auto;
+  padding: 1em;
+  top: 10%;
+  font-size: 15px;
+  line-height: 15px;
+}
+
+.about-modal-content img {
+  margin-bottom: 16px;
+  width: 100%;
+}
+
+.about-modal-content h2 {
+  margin-bottom: 10px;
+  font-size: 18px;
+}
+
+.about-modal-content p {
+  margin-bottom: 16px;
+  line-height: 16px;
 }
 
 .about-modal .about-modal-content > .framed-icon svg {
@@ -635,33 +670,6 @@ button.about-icon {
   100% {
     opacity: 0;
     z-index: -99;
-  }
-}
-
-@keyframes fadeIn {
-  0% {
-    background: #111111dd url('https://cdn.discordapp.com/emojis/575642684006334464.png?v=1')
-      no-repeat fixed 50% 34%;
-  }
-  80% {
-    background: #111111dd url('https://cdn.discordapp.com/emojis/575642684006334464.png?v=1')
-      no-repeat fixed 50% 34%;
-  }
-  100% {
-    background: #111111dd no-repeat fixed 50% 34%;
-  }
-}
-@-webkit-keyframes fadeIn {
-  0% {
-    background: #111111dd url('https://cdn.discordapp.com/emojis/575642684006334464.png?v=1')
-      no-repeat fixed 50% 34%;
-  }
-  80% {
-    background: #111111dd url('https://cdn.discordapp.com/emojis/575642684006334464.png?v=1')
-      no-repeat fixed 50% 34%;
-  }
-  100% {
-    background: #111111dd no-repeat fixed 50% 34%;
   }
 }
 
@@ -705,33 +713,6 @@ button.about-icon {
 
   body::before {
     background-size: 450px;
-  }
-
-  @keyframes fadeIn {
-    0% {
-      background: #111111dd url('https://cdn.discordapp.com/emojis/575642684006334464.png?v=1')
-        no-repeat fixed 50% 19%;
-    }
-    80% {
-      background: #111111dd url('https://cdn.discordapp.com/emojis/575642684006334464.png?v=1')
-        no-repeat fixed 50% 19%;
-    }
-    100% {
-      background: #111111dd no-repeat fixed 50% 19%;
-    }
-  }
-  @-webkit-keyframes fadeIn {
-    0% {
-      background: #111111dd url('https://cdn.discordapp.com/emojis/575642684006334464.png?v=1')
-        no-repeat fixed 50% 19%;
-    }
-    80% {
-      background: #111111dd url('https://cdn.discordapp.com/emojis/575642684006334464.png?v=1')
-        no-repeat fixed 50% 19%;
-    }
-    100% {
-      background: #111111dd no-repeat fixed 50% 19%;
-    }
   }
 }
 

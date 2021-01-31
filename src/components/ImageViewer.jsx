@@ -116,6 +116,7 @@ const ImageViewer = ({ image = {}, show, onClose, data, onPrev, onNext, setBgIma
       prevDisabled,
       setIsFullscreen,
       fullScreenError,
+      show
     ],
   );
 
@@ -157,7 +158,7 @@ const ImageViewer = ({ image = {}, show, onClose, data, onPrev, onNext, setBgIma
   });
 
   return (
-    <div className={classNames('image-viewer', visibleClass)} onClick={handleClose}>
+    <div className={classNames('image-viewer', 'framed-modal', visibleClass)} onClick={handleClose}>
       <div className="image-nav">
         <button className="image-nav-button left" disabled={prevDisabled} onClick={handlePrev}>
           [ Prev ]

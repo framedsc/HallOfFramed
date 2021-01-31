@@ -36,7 +36,10 @@ function App() {
   useEffect(() => {
     !initialized && getNewImages();
     data.length && !bgImageContainer && setBgImageContainer(document.querySelector('.bg-blur'));
-    data.length && bgImageContainer && setBackground(data[0]);
+    if (data.length && bgImageContainer) {
+      const randomImageIndex = Math.floor(Math.random() * Math.floor(data.length-1));
+      setBackground(data[randomImageIndex]);
+    }
   }, [bgImageContainer, data, initialized, setBackground]);
 
   return (
