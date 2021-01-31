@@ -1,5 +1,6 @@
 import classNames from 'classnames';
 import React, { useContext, useEffect, useRef, useState } from 'react';
+import framedBanner from '../assets/framed_intro_pino.jpg';
 import { About, FramedIcon, Menu, SortDown, SortUp } from '../assets/svgIcons';
 import { ModalContext } from '../utils/ModalContext';
 import { breakpoints, useOutsideAlerter, useViewport } from '../utils/utils';
@@ -8,7 +9,7 @@ const ImageNav = ({ className, options, reverseSort, updateSort, updateType, upd
   const [active, setActive] = useState(options[0]);
   const [type, setType] = useState('All');
   const [searchTerm, setSearchTerm] = useState('');
-  const { modal, setModal } = useContext(ModalContext);
+  const { setModal } = useContext(ModalContext);
 
   const handleOptionChange = (selection) => {
     setActive(selection);
@@ -27,17 +28,32 @@ const ImageNav = ({ className, options, reverseSort, updateSort, updateType, upd
 
   const showAbout = () => {
     const modalComponent = (
-      <div className="about-modal">
-      <div className="about-modal-content">
-        <div className="framed-icon">
-          <FramedIcon />
+      <div class="about-modal-container">
+        <div className="about-modal-content">
+          <img src={framedBanner}></img>
+          <h2>About the Hall of Framed</h2>
+          <p>
+            The Framed Screenshot Community Discord server is full of so many amazing screenshots
+            that we quickly ran out of pins with which to showcase them. So we created a Discord bot
+            that would automatically post the most popular screenshots (the ones that exceed a
+            certain number of reactions) to a special channel. A list of those images is updated
+            instantly when a new one gets posted, and that list gets uploaded so that we can display
+            them on this here web site.
+          </p>
+          <p>
+            We hope that this can serve as a showcase for what talented screenshotters can achieve.
+            Maybe you'll find it useful as inspiration, or as a nice source of background images for
+            your PC or phone.
+          </p>
+          <p>
+            The Image Viewer can be controlled with the keyboard. Arrow keys will switch to the
+            previous or next image. F will open an image in fullscreen. Escape will close fullscreen
+            or close the image viewer. You can also swipe on mobile to change images.
+          </p>
         </div>
-        Hall-of-framed website which contains various galleries with screenshots made by the
-        members of the community
       </div>
-    </div>
     );
-    
+
     setModal({ show: true, component: modalComponent, className: 'about-window' });
   };
 
@@ -103,11 +119,13 @@ const ImageNav = ({ className, options, reverseSort, updateSort, updateType, upd
     </div>
   );
 
-  const modalButton = (
+  const renderModalButton = () => {
+    return isMobile ? undefined : (
       <button className="about-icon" onClick={showAbout}>
         <About />
       </button>
     );
+  }
 
   const renderDesktop = () => {
     return (
@@ -115,7 +133,7 @@ const ImageNav = ({ className, options, reverseSort, updateSort, updateType, upd
         {renderSort}
         {renderFilters}
         {renderSearch}
-        {modalButton}
+        {renderModalButton()}
       </>
     );
   };
@@ -128,6 +146,7 @@ const ImageNav = ({ className, options, reverseSort, updateSort, updateType, upd
         </button>
         {showMenu && (
           <div className="mobile-menu-content">
+            {renderModalButton()}
             {renderSearch}
             {renderSort}
             {renderFilters}
