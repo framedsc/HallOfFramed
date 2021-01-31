@@ -10,10 +10,12 @@ export const useViewport = () => {
   }
 
   useEffect(() => {
+    let resizeTimeout;
     window.setTimeout(onWindowLoad, 1000);
     const handleWindowResize = () => {
       const windowWidth = document.documentElement.clientWidth || document.body.clientWidth;
-      setWidth(windowWidth);
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => setWidth(windowWidth), 50);
     };
     window.addEventListener('resize', handleWindowResize);
     return () => window.removeEventListener('resize', handleWindowResize);
@@ -47,7 +49,7 @@ export const breakpoints = {
   mobile: 820,
 };
 
-function getBrowserFullscreenElementProp() {
+export const getBrowserFullscreenElementProp = () => {
   if (typeof document.fullscreenElement !== 'undefined') {
     return 'fullscreenElement';
   } else if (typeof document.mozFullScreenElement !== 'undefined') {
