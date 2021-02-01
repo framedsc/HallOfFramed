@@ -15,6 +15,8 @@ const reducer = (state, action) => {
       return { initialized: true, loadedState: true, showImage: true };
     case 'changeImage':
       return { ...state, loadedState: false };
+    case 'showGlobalSpinner':
+        return { ...state, initialized: false, showImage: false };
     default:
       return state;
   }
@@ -28,10 +30,10 @@ const ImageViewer = ({ image = {}, show, onClose, data, onPrev, onNext, setBgIma
   });
 
   let isFullscreen, setIsFullscreen;
-  const maximizableElement = React.useRef(null);
+  const imageViewerContent = React.useRef(null);
   let fullScreenError;
   try {
-    [isFullscreen, setIsFullscreen] = useFullscreenStatus(maximizableElement);
+    [isFullscreen, setIsFullscreen] = useFullscreenStatus(imageViewerContent);
   } catch (e) {
     fullScreenError = 'Fullscreen not supported';
     isFullscreen = false;
@@ -79,9 +81,9 @@ const ImageViewer = ({ image = {}, show, onClose, data, onPrev, onNext, setBgIma
       const { key } = event;
 
       if (!show) {
-          return false;
+        return false;
       }
-      
+
       switch (key) {
         case 'ArrowRight':
           if (nextDisabled) {
@@ -116,7 +118,7 @@ const ImageViewer = ({ image = {}, show, onClose, data, onPrev, onNext, setBgIma
       prevDisabled,
       setIsFullscreen,
       fullScreenError,
-      show
+      show,
     ],
   );
 
@@ -129,33 +131,47 @@ const ImageViewer = ({ image = {}, show, onClose, data, onPrev, onNext, setBgIma
     };
   }, [initialized, handleKeyboard]);
 
-  const modifier = !initialized ? 'global' : '';
-  const fullscreenClass = isFullscreen ? 'fullscreen' : false;
-  const loadedClass = showImage ? 'loaded' : 'hidden';
-
   const swipeConfig = {
     delta: 10,
     preventDefaultTouchmoveEvent: true,
     trackTouch: true,
-    trackMouse: false,
+    trackMouse: true,
     rotationAngle: 0,
   };
 
   const handlers = useSwipeable({
-    onSwipedRight: () => {
-        if (nextDisabled) {
-            return false;
-        }
-        return handleNext();
-    },
     onSwipedLeft: () => {
-        if (prevDisabled) {
-            return false;
-        }
-        return handlePrev();
+      if (nextDisabled) {
+        return false;
+      }
+      imageViewerContent.current.style.left = '0px';
+      dispatch({ type: 'showGlobalSpinner' });
+      return handleNext();
+    },
+    onSwipedRight: () => {
+      if (prevDisabled) {
+        return false;
+      }
+      imageViewerContent.current.style.left = '0px';
+      dispatch({ type: 'showGlobalSpinner' });
+      return handlePrev();
+    },
+    onSwiping: (event) => {
+      if ((event.dir === 'Right' && !prevDisabled) || (event.dir === 'Left' && !nextDisabled)) {
+        imageViewerContent.current.style.left = `${event.deltaX}px`;
+      } else {
+        imageViewerContent.current.style.left = '0px';
+      }
+    },
+    onSwiped: () => {
+      imageViewerContent.current.style.left = '0px';
     },
     ...swipeConfig,
   });
+
+  const modifier = !initialized ? 'global' : '';
+  const fullscreenClass = isFullscreen ? 'fullscreen' : false;
+  const loadedClass = showImage ? 'loaded' : 'hidden';
 
   return (
     <div className={classNames('image-viewer', 'framed-modal', visibleClass)} onClick={handleClose}>
@@ -168,7 +184,7 @@ const ImageViewer = ({ image = {}, show, onClose, data, onPrev, onNext, setBgIma
         </button>
       </div>
 
-      <div ref={maximizableElement} className={classNames('image-viewer-content', fullscreenClass)}>
+      <div ref={imageViewerContent} className={classNames('image-viewer-content', fullscreenClass)}>
         {image && (
           <>
             <img
@@ -182,7 +198,12 @@ const ImageViewer = ({ image = {}, show, onClose, data, onPrev, onNext, setBgIma
               {...handlers}
             />
             {initialized && !isFullscreen && (
-              <div className="shot-info" onClick={(event) => {event.stopPropagation();}}>
+              <div
+                className="shot-info"
+                onClick={(event) => {
+                  event.stopPropagation();
+                }}
+              >
                 {/* <img src={image.authorsAvatarUrl} alt="avatar" /> */}
                 <div className="info">
                   <span className="by">by</span> <span className="author">{image.author}</span>

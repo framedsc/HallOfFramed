@@ -30,7 +30,7 @@ const ImageNav = ({ className, options, reverseSort, updateSort, updateType, upd
     const modalComponent = (
       <div class="about-modal-container">
         <div className="about-modal-content">
-          <img src={framedBanner}></img>
+          <img alt="Welcome to Framed" src={framedBanner}></img>
           <h2>About the Hall of Framed</h2>
           <p>
             The Framed Screenshot Community Discord server is full of so many amazing screenshots
