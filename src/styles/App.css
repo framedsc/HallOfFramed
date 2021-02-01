@@ -583,7 +583,7 @@ button > svg {
   width: 30px;
 }
 
-.about-modal-container {
+.framed-modal-overlay {
   position: fixed;
   background: #00000078;
   top: 0;
@@ -591,34 +591,29 @@ button > svg {
   left: 0;
   right: 0;
   display: flex;
-  align-items: center;
   justify-content: center;
 }
 
-.about-modal-bg {
-  position: fixed;
-  width: 500px;
+.framed-modal-content {
+  cursor: default; 
   max-width: 90%;
-  color: #fff;
-  text-align: left;
-  background-position-y: 315px;
-  width: 700px;
-  height: 600px;
-  font-size: 15px;
-  background-clip: border-box;
+  position: fixed;
+  top: 10%;
 }
 
 .about-modal-content {
+  padding: 1em;
+  font-size: 15px;
+  line-height: 15px;
+}
+
+.about-modal-content {
+  top: 10%;
+  width: 700px;
+  height: auto;
   color: #fff;
   text-align: left;
   background: #333;
-  position: fixed;
-  width: 700px;
-  height: auto;
-  padding: 1em;
-  top: 10%;
-  font-size: 15px;
-  line-height: 15px;
 }
 
 .about-modal-content img {
@@ -674,12 +669,24 @@ button > svg {
 }
 
 @keyframes mobileMenuContent {
-  0%   { opacity: 0; margin-top: -100px; }
-  100% { opacity: 1; margin-top: 0px; }
+  0% {
+    opacity: 0;
+    margin-top: -100px;
+  }
+  100% {
+    opacity: 1;
+    margin-top: 0px;
+  }
 }
 @-webkit-keyframes mobileMenuContent {
-  0%   { opacity: 0; margin-top: -100px; }
-  100% { opacity: 1; margin-top: 0px; }
+  0% {
+    opacity: 0;
+    margin-top: -100px;
+  }
+  100% {
+    opacity: 1;
+    margin-top: 0px;
+  }
 }
 
 /* ---------------------------- Breakpoints ---------------------------- */

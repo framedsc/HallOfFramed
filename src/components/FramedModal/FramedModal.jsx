@@ -21,8 +21,12 @@ const FramedModal = ({show, className, component, onClose }) => {
   }, [onClose]);
 
   return (
-    <div className={classNames('framed-modal', className, visibleClass)} onClick={handleClose}>
-      {component}
+    <div className={classNames('framed-modal', className, visibleClass)}>
+      <div className="framed-modal-overlay" onClick={handleClose}>
+        <div className="framed-modal-content" onClick={(event) => {event.stopPropagation();}}>
+          {component}
+        </div>
+      </div>
       <button className="close" onClick={handleClose}>
         <Cancel />
       </button>
