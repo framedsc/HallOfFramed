@@ -15,6 +15,8 @@
   --mobile-header-margin-sides: 15px;
   --search-bg: hsla(0, 0%, 100%, 0.1);
   --text-main: #efefef;
+  --text-shadow-1: 0 1px 8px hsla(0, 0%, 0%, 0.5);
+  --text-shadow-2: 0 1px 0px hsla(0, 0%, 0%, 0.6);
   --translucent-bg: hsla(0, 0%, 18%, 0.6);
   --translucent-bg-fallback: hsla(0, 0%, 28%, 0.95);
 }
@@ -88,7 +90,7 @@ button > svg {
   font-weight: 700;
   min-height: var(--header-height);
   position: fixed;
-  text-shadow: 0 1px 8px hsla(0, 0%, 0%, 0.5), 0 1px 0px hsla(0, 0%, 0%, 0.6);
+  text-shadow: var(--text-shadow-1), var(--text-shadow-2);
   width: 100%;
   z-index: 5;
   padding-left: 10px;
@@ -283,6 +285,11 @@ button > svg {
   fill: var(--active-bg);
 }
 
+/* Acts as mask for mobile-menu-content's slide down animation */
+.mobile-menu-content-mask {
+  overflow: hidden;
+}
+
 .mobile-menu .mobile-menu-content {
   animation: mobileMenuContent 300ms forwards;
   background: none;
@@ -293,11 +300,8 @@ button > svg {
   height: auto;
   justify-content: space-between;
   max-height: 200px;
-  opacity: 0;
   padding: 0;
   position: static;
-  top: var(--header-height);
-  right: 0;
 }
 
 .mobile-menu .mobile-menu-content .search {
@@ -357,6 +361,28 @@ button > svg {
   padding-right: 35px;
 }
 
+.mobile-menu .about-icon {
+  align-items: center;
+  animation: slideUp 300ms forwards;
+  display: flex;
+  filter: drop-shadow(var(--text-shadow-1)) drop-shadow(var(--text-shadow-2));
+  margin: 0;
+  opacity: 1;
+  padding: 0;
+  position: absolute;
+  top: 100vh;
+  right: calc(var(--mobile-header-margin-sides) + 5px); /* centered to hamburger icon */
+}
+
+.mobile-menu .about-icon svg {
+  transition: fill 100ms linear;
+}
+
+.mobile-menu .about-icon:hover svg,
+.mobile-menu .about-icon:active svg {
+  fill: var(--active-hover-bg);
+}
+
 /* ------------------------- Image Grid/Viewer ------------------------- */
 
 .image-rows {
@@ -396,6 +422,33 @@ button > svg {
   color: #fff;
 }
 
+.image-row .thumbnail-container .spoiler {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: #000;
+  color: #fff;
+  font-size: 40px;
+  text-shadow: 0px 0px 8px #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-direction: column;
+  z-index: 10;
+}
+
+.no-search-results {
+  text-align: center;
+  padding-top: 30px; 
+  color: #fff;
+  font-size: 24px;
+  text-shadow: var(--text-shadow-1), var(--text-shadow-2);
+}
+/* ------------------------- Modal Window ------------------------- */
+
 .framed-modal {
   display: none;
   position: fixed;
@@ -430,6 +483,72 @@ button > svg {
 
 .framed-modal .close:hover {
   opacity: 1;
+}
+
+/* ------------------------- Social Links ------------------------- */
+
+.about-modal-content {
+  font-family: 'GalanoGrotesqueAlt';
+  position: relative;
+}
+
+.about-modal-content h2 {
+  display: flex;
+  align-items: center;
+  font-size: 18px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.about-modal-content h2 img {
+  border-radius: 50%;
+  max-width: 40px;
+  margin: 0;
+  margin-right: 10px;
+}
+
+.about-modal-content h3 {
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.about-modal-content .close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  border: 1px solid #fff;
+  width: 22px;
+  height: 22px;
+}
+
+.social-links-container h4 {
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+.social-links-container .social-links {
+  margin-bottom: 20px;
+}
+
+.social-links .social-link {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  color: #eee;
+  text-decoration: none;
+}
+
+.social-links .social-link:hover {
+  color: #fff;
+  text-shadow: 0px 0px 4px #fff;
+}
+
+
+.social-links .social-button svg {
+  fill: #fff;
+  width: 30px;
+  margin-right: 10px;
 }
 
 /* Blurs image grid while viewer is open using Firefox-compatible property */
@@ -488,6 +607,10 @@ button > svg {
   cursor: auto;
 }
 
+.image-viewer-content.blur {
+  filter: var(--blur-viewer-bg);
+}
+
 .image-viewer-content img {
   max-width: 95vw;
   max-height: calc(98vh - 130px);
@@ -500,7 +623,11 @@ button > svg {
 }
 
 .image-viewer-content .shot-info .info {
-  width: 95%;
+  width: 90%;
+}
+
+.image-viewer-content .shot-info .info.clickable {
+  cursor: pointer;
 }
 
 .image-viewer-content .shot-info {
@@ -519,7 +646,19 @@ button > svg {
 }
 
 .image-viewer-content .shot-info .author {
-  font-weight: 500;
+  font-weight: 600;
+  color: #fff;
+  font-size: 15px;
+  padding: 0;
+}
+
+.image-viewer-content .info.clickable:hover .author {
+  text-shadow: 0px 0px 4px #fff;
+}
+
+.image-viewer-content .shot-info button.author {
+  cursor: pointer;
+  font-family: 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
 }
 
 .image-viewer-content .shot-info .title {
@@ -533,20 +672,41 @@ button > svg {
   max-width: fit-content;
 }
 
-.image-viewer-content .author img {
-  border-radius: 50%;
-  max-width: 40px;
-  margin: 0;
+.image-viewer-content .author-button {
+  cursor: pointer;
 }
 
-.image-viewer-content .fullscreen-button {
+.image-viewer-content .author-button:hover {
+  text-shadow: 0px 0px 4px #fff;
+}
+
+.image-viewer .author-button svg {
+  width: 19px;
+  margin-left: 10px;
+  fill: #fff;
+}
+
+.image-viewer-content .image-viewer-controls {
+  display: flex;
+}
+
+.image-viewer-content .fullscreen-button,
+.image-viewer-content .download-button {
   height: 30px;
   width: 30px;
   fill: #fff;
   cursor: pointer;
+  opacity: 0.85;
 }
 
-.image-viewer-content .fullscreen-button svg {
+.image-viewer-content .fullscreen-button:hover,
+.image-viewer-content .download-button:hover {
+  opacity: 1;
+  padding: 1px 5px;
+}
+
+.image-viewer-content .fullscreen-button svg,
+.image-viewer-content .download-button svg {
   vertical-align: middle;
 }
 
@@ -585,7 +745,7 @@ button > svg {
 
 .framed-modal-overlay {
   position: fixed;
-  background: #00000078;
+  background: #00000077;
   top: 0;
   bottom: 0;
   left: 0;
@@ -595,19 +755,19 @@ button > svg {
 }
 
 .framed-modal-content {
-  cursor: default; 
+  cursor: default;
   max-width: 90%;
   position: fixed;
   top: 10%;
+  background: #dddddd22;
 }
 
 .about-modal-content {
-  padding: 1em;
   font-size: 15px;
   line-height: 15px;
-}
-
-.about-modal-content {
+  padding: 0.5em;
+  margin: 0.5em;
+  background: #333;
   top: 10%;
   width: 700px;
   height: auto;
@@ -624,6 +784,9 @@ button > svg {
 .about-modal-content h2 {
   margin-bottom: 10px;
   font-size: 18px;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #fff;
 }
 
 .about-modal-content p {
@@ -633,6 +796,16 @@ button > svg {
 
 .about-modal .about-modal-content > .framed-icon svg {
   height: 100px;
+}
+
+/* ------------------------------- Helpers ------------------------------ */
+
+.flex {
+  display: flex
+}
+
+.flex.center {
+  align-items: center;
 }
 
 /* ----------------------------- Animations ----------------------------- */
@@ -670,22 +843,35 @@ button > svg {
 
 @keyframes mobileMenuContent {
   0% {
-    opacity: 0;
-    margin-top: -100px;
+    margin-top: calc(var(--header-height) * 2 * -1);
   }
   100% {
-    opacity: 1;
-    margin-top: 0px;
+    margin-top: 0;
   }
 }
 @-webkit-keyframes mobileMenuContent {
   0% {
-    opacity: 0;
-    margin-top: -100px;
+    margin-top: calc(var(--header-height) * 2 * -1);
   }
   100% {
-    opacity: 1;
-    margin-top: 0px;
+    margin-top: 0;
+  }
+}
+
+@keyframes slideUp {
+  0% {
+    top: 100vh;
+  }
+  100% {
+    top: calc(100vh - var(--header-height));
+  }
+}
+@-webkit-keyframes slideUp {
+  0% {
+    top: 100vh;
+  }
+  100% {
+    top: calc(100vh - var(--header-height));
   }
 }
 

@@ -1,8 +1,10 @@
 import classNames from 'classnames';
-import React, { useEffect, useReducer } from 'react';
+import React, { useContext, useEffect, useReducer } from 'react';
 import { useSwipeable } from 'react-swipeable';
-import { Cancel, ExitFullscreen, Fullscreen } from '../assets/svgIcons';
+import { Cancel, Download, ExitFullscreen, Fullscreen } from '../assets/svgIcons';
+import SocialLinks from '../components/SocialLinks';
 import Spinner from '../components/Spinner/Spinner';
+import { ModalContext, SiteDataContext } from '../utils/context';
 import { useFullscreenStatus } from '../utils/utils';
 
 const reducer = (state, action) => {
@@ -16,7 +18,7 @@ const reducer = (state, action) => {
     case 'changeImage':
       return { ...state, loadedState: false };
     case 'showGlobalSpinner':
-        return { ...state, initialized: false, showImage: false };
+      return { ...state, initialized: false, showImage: false };
     default:
       return state;
   }
@@ -28,6 +30,10 @@ const ImageViewer = ({ image = {}, show, onClose, data, onPrev, onNext, setBgIma
     loadedState: false,
     showImage: false,
   });
+
+  const { modal, setModal } = useContext(ModalContext);
+  const siteData = useContext(SiteDataContext);
+  const { authorData } = siteData;
 
   let isFullscreen, setIsFullscreen;
   const imageViewerContent = React.useRef(null);
@@ -44,9 +50,70 @@ const ImageViewer = ({ image = {}, show, onClose, data, onPrev, onNext, setBgIma
   const prevDisabled = data.findIndex((e) => e.id === image.id) === 0 || !loadedState;
   const nextDisabled = data.findIndex((e) => e.id === image.id) === data.length - 1 || !loadedState;
 
+  const modifier = !initialized ? 'global' : '';
+  const fullscreenClass = isFullscreen ? 'fullscreen' : undefined;
+  const blurClass = modal.show ? 'blur' : undefined;
+  const loadedClass = showImage ? 'loaded' : 'hidden';
+
   const handleExitFullscreen = () => document.exitFullscreen();
 
-  const handlePrev = React.useCallback((event) => {
+  const hasSocials = (author) => {
+    const socialData = authorData.find((item) => author === item.authorNick);
+    const socials = ['flickr', 'twitter', 'instagram', 'steam', 'othersocials'];
+    const socialExists = (item) => socialData[item].length;
+
+    return socials.some(socialExists);
+  };
+
+  const showAuthorWindow = (author) => {
+    const socialData = authorData.find((item) => author === item.authorNick);
+    const modalComponent = (
+      <div className="about-modal-content">
+        <h2>
+          <img src={socialData.authorsAvatarUrl} alt="avatar" /> {socialData.authorNick}
+        </h2>
+        <SocialLinks data={socialData} />
+        <button
+          className="close"
+          onClick={() => setModal({ ...modal, show: false, className: '' })}
+        >
+          <Cancel />
+        </button>
+      </div>
+    );
+    setModal({
+      show: true,
+      component: modalComponent,
+      className: 'author-social-content',
+      withClose: false,
+    });
+  };
+
+  const toDataURL = (url) =>
+    fetch(url)
+      .then((response) => response.blob())
+      .then(
+        (blob) =>
+          new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onloadend = () => resolve(reader.result);
+            reader.onerror = reject;
+            reader.readAsDataURL(blob);
+          }),
+      );
+
+  const handleImageDownload = (source) => {
+    const proxySource = `https://cors-anywhere.herokuapp.com/${source}`;
+    toDataURL(proxySource).then((dataUrl) => {
+      const a = document.createElement('a');
+      a.href = dataUrl;
+      a.download = '';
+      a.click();
+    });
+  };
+
+  const handlePrev = React.useCallback(
+    (event) => {
       event?.stopPropagation();
       dispatch({ type: 'changeImage' });
       onPrev();
@@ -54,7 +121,8 @@ const ImageViewer = ({ image = {}, show, onClose, data, onPrev, onNext, setBgIma
     [onPrev],
   );
 
-  const handleNext = React.useCallback((event) => {
+  const handleNext = React.useCallback(
+    (event) => {
       event?.stopPropagation();
       dispatch({ type: 'changeImage' });
       onNext();
@@ -96,7 +164,7 @@ const ImageViewer = ({ image = {}, show, onClose, data, onPrev, onNext, setBgIma
           }
           return handlePrev(event);
         case 'Escape':
-          if (isFullscreen) {
+          if (isFullscreen || modal.show) {
             return false;
           }
           return handleClose();
@@ -110,6 +178,7 @@ const ImageViewer = ({ image = {}, show, onClose, data, onPrev, onNext, setBgIma
       }
     },
     [
+      modal,
       isFullscreen,
       handleClose,
       handleNext,
@@ -135,7 +204,7 @@ const ImageViewer = ({ image = {}, show, onClose, data, onPrev, onNext, setBgIma
     delta: 10,
     preventDefaultTouchmoveEvent: true,
     trackTouch: true,
-    trackMouse: true,
+    trackMouse: false,
     rotationAngle: 0,
   };
 
@@ -144,7 +213,6 @@ const ImageViewer = ({ image = {}, show, onClose, data, onPrev, onNext, setBgIma
       if (nextDisabled) {
         return false;
       }
-      imageViewerContent.current.style.left = '0px';
       dispatch({ type: 'showGlobalSpinner' });
       return handleNext();
     },
@@ -152,7 +220,6 @@ const ImageViewer = ({ image = {}, show, onClose, data, onPrev, onNext, setBgIma
       if (prevDisabled) {
         return false;
       }
-      imageViewerContent.current.style.left = '0px';
       dispatch({ type: 'showGlobalSpinner' });
       return handlePrev();
     },
@@ -168,10 +235,9 @@ const ImageViewer = ({ image = {}, show, onClose, data, onPrev, onNext, setBgIma
     },
     ...swipeConfig,
   });
-
-  const modifier = !initialized ? 'global' : '';
-  const fullscreenClass = isFullscreen ? 'fullscreen' : false;
-  const loadedClass = showImage ? 'loaded' : 'hidden';
+  
+  const socialsEnabled = image && image.authorName && hasSocials(image.authorName);
+  const infoClass = socialsEnabled ? 'clickable' : undefined;
 
   return (
     <div className={classNames('image-viewer', 'framed-modal', visibleClass)} onClick={handleClose}>
@@ -184,7 +250,10 @@ const ImageViewer = ({ image = {}, show, onClose, data, onPrev, onNext, setBgIma
         </button>
       </div>
 
-      <div ref={imageViewerContent} className={classNames('image-viewer-content', fullscreenClass)}>
+      <div
+        ref={imageViewerContent}
+        className={classNames('image-viewer-content', fullscreenClass, blurClass)}
+      >
         {image && (
           <>
             <img
@@ -204,16 +273,31 @@ const ImageViewer = ({ image = {}, show, onClose, data, onPrev, onNext, setBgIma
                   event.stopPropagation();
                 }}
               >
-                {/* <img src={image.authorsAvatarUrl} alt="avatar" /> */}
-                <div className="info">
-                  <span className="by">by</span> <span className="author">{image.author}</span>
+                <div
+                  className={classNames('info', infoClass)}
+                  onClick={() => showAuthorWindow(image.authorName)}
+                >
+                  <div>
+                      <span className="by">by</span>
+                      <span className="author">{` ${image.authorName}`}</span>
+                  </div>
                   <span className="title">{image.gameName}</span>
                 </div>
-                {!isFullscreen && !fullScreenError && (
-                  <button className="fullscreen-button" onClick={setIsFullscreen}>
-                    <Fullscreen />
+                <div className="image-viewer-controls">
+                  <button
+                    className="download-button"
+                    onClick={() => {
+                      handleImageDownload(image.shotUrl);
+                    }}
+                  >
+                    <Download />
                   </button>
-                )}
+                  {!isFullscreen && !fullScreenError && (
+                    <button className="fullscreen-button" onClick={setIsFullscreen}>
+                      <Fullscreen />
+                    </button>
+                  )}
+                </div>
               </div>
             )}
             {isFullscreen ? (

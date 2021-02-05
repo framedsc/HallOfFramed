@@ -1,9 +1,11 @@
 import classNames from 'classnames';
-import React from 'react';
+import React, { useContext } from 'react';
 import { Cancel } from '../../assets/svgIcons';
+import { ModalContext } from '../../utils/context';
 
 const FramedModal = ({show, className, component, onClose }) => {
   const visibleClass = show ? 'is-visible' : undefined;
+  const { modal, setModal } = useContext(ModalContext);
 
   const handleClose = React.useCallback(() => {
     const isFullscreen = document.fullScreen ||
@@ -16,9 +18,11 @@ const FramedModal = ({show, className, component, onClose }) => {
     } else {
       if (onClose) {
         onClose();
+      } else {
+        setModal({ className:'', component: null, show: false });
       }
     }
-  }, [onClose]);
+  }, [onClose, setModal]);
 
   return (
     <div className={classNames('framed-modal', className, visibleClass)}>
@@ -27,9 +31,10 @@ const FramedModal = ({show, className, component, onClose }) => {
           {component}
         </div>
       </div>
+      {modal.withClose && (
       <button className="close" onClick={handleClose}>
         <Cancel />
-      </button>
+      </button>)}
     </div>
   );
 };

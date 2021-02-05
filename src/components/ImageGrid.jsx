@@ -1,14 +1,9 @@
+import React from 'react';
 import { useViewport } from '../utils/utils';
 
-const ImageGrid = ({
-  className,
-  images,
-  rowTargetHeight = 400,
-  borderOffset = 5,
-  onClick,
-}) => {
+const ImageGrid = ({ className, images, rowTargetHeight = 400, borderOffset = 5, onClick }) => {
   const { width } = useViewport();
-  const maxWidth = width - (borderOffset*2);
+  const maxWidth = width - borderOffset * 2;
 
   const processImages = () => {
     const processedImages = [];
@@ -21,6 +16,7 @@ const ImageGrid = ({
       const image = {
         id: images[i].id,
         author: images[i].author,
+        authorName: images[i].authorName,
         authorsAvatarUrl: images[i].authorsAvatarUrl,
         data: images[i].date,
         gameName: images[i].gameName,
@@ -28,6 +24,7 @@ const ImageGrid = ({
         fullWidth: images[i].width,
         fullHeight: images[i].height,
         shotUrl: images[i].shotUrl,
+        spoiler: images[i].spoiler,
         thumbnailUrl: images[i].thumbnailUrl,
         width: width,
         height: rowTargetHeight,
@@ -113,11 +110,11 @@ const ImageGrid = ({
 
   const renderGrid = (rows) => {
     return (
-      <div 
-        className={className} 
+      <div
+        className={className}
         style={{
-            paddingLeft: borderOffset,
-            paddingTop: 50+borderOffset
+          paddingLeft: borderOffset,
+          paddingTop: 50 + borderOffset,
         }}
       >
         {rows.map((row, index) => {
@@ -142,10 +139,15 @@ const ImageGrid = ({
                         height: image.height,
                         cursor: 'pointer',
                       }}
-                      onClick={() => onClick(image, imageIndex)}
+                      onClick={() => onClick(image)}
                     />
+                    {image.spoiler && (
+                      <div className="spoiler" onClick={(event) => {event.target.style.display='none'}}>
+                        <span>SPOILER</span>
+                      </div>
+                    )}
                     <div className="image-info">
-                      <span className="by">by</span> <span className="author">{image.author}</span>
+                      <span className="by">by</span> <span className="author">{image.authorName}</span>
                     </div>
                   </div>
                 );

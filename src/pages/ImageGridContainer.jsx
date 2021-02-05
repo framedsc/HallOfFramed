@@ -1,11 +1,11 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import FramedModal from '../components/FramedModal/FramedModal';
 import ImageGrid from '../components/ImageGrid';
 import ImageNav from '../components/ImageNav';
 import ImageViewer from '../components/ImageViewer';
-import { ModalContext } from '../utils/ModalContext';
+import { ModalContext, SiteDataContext } from '../utils/context';
 
-const ImageGridContainer = ({ data, setBgImage }) => {
+const ImageGridContainer = ({ setBgImage }) => {
   const sortOptions = [
     {
       label: 'Date',
@@ -17,14 +17,24 @@ const ImageGridContainer = ({ data, setBgImage }) => {
     },
   ];
 
-  const [imageData, setImageData] = useState([]);
+  const [images, setImages] = useState([]);
   const [sortOption, setSortOption] = useState(sortOptions[0]);
   const [type, setType] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [showViewer, setShowViewer] = useState(false);
   const [viewerSrc, setViewerSrc] = useState({});
   const [isReverse, setIsReverse] = useState(false);
-  const [modal, setModal] = useState({ show: false, component: null, className: '' });
+  const [modal, setModal] = useState({ show: false, component: null, className: '', withClose: true });
+  const siteData = useContext(SiteDataContext);
+  const { imageData } = siteData || [];
+
+  const handleClose = () => {
+    if (modal.className !== 'author-social-content') {
+      setViewerSrc({});
+      setShowViewer(false);
+    }
+    setModal({ ...modal, className:'', component: null, show: false });
+  };
 
   const handleSortChange = (option) => {
     if (option.key === sortOption.key) {
@@ -48,12 +58,6 @@ const ImageGridContainer = ({ data, setBgImage }) => {
   const handleImageClick = (image) => {
     setViewerSrc(image);
     setShowViewer(true);
-  };
-
-  const handleClose = () => {
-    setViewerSrc({});
-    setShowViewer(false);
-    setModal({ ...modal, component: null, show: false });
   };
 
   const searchData = useCallback(
@@ -85,7 +89,7 @@ const ImageGridContainer = ({ data, setBgImage }) => {
       results = images.sort(sortMethod);
 
       if (type === 'Wide') {
-        results = results.filter((item) => item.width >= item.height);
+        results = results.filter((item) => item.width > item.height);
       } else if (type === 'Portrait') {
         results = results.filter((item) => item.width <= item.height);
       }
@@ -96,26 +100,32 @@ const ImageGridContainer = ({ data, setBgImage }) => {
   );
 
   const selectPreviousImage = () => {
-    const index = imageData.findIndex((e) => e.id === viewerSrc.id);
+    const index = images.findIndex((e) => e.id === viewerSrc.id);
     if (index - 1 >= 0) {
-      setViewerSrc(imageData[index - 1]);
+      setViewerSrc(images[index - 1]);
     }
   };
 
   const selectNextImage = () => {
-    const index = imageData.findIndex((e) => e.id === viewerSrc.id);
-    if (index + 1 <= imageData.length) {
-      setViewerSrc(imageData[index + 1]);
+    const index = images.findIndex((e) => e.id === viewerSrc.id);
+    if (index + 1 <= images.length) {
+      setViewerSrc(images[index + 1]);
     }
   };
 
-  useEffect(() => {
-    if (data.length) {
-      const images = filterImages(data.slice());
+  const noSearchResults = () => {
+    return searchTerm.length > 3 && !images.length ? (
+      <div className="no-search-results">There are no images matching your search criteria</div>
+    ) : null;
+  };
 
-      setImageData(images);
+  useEffect(() => {
+    if (imageData.length) {
+      const filteredImages = filterImages(imageData.slice());
+
+      setImages(filteredImages);
     }
-  }, [data, sortOption, type, searchTerm, isReverse, filterImages]);
+  }, [imageData, sortOption, type, searchTerm, isReverse, filterImages, showViewer]);
 
   const container = document.querySelector('.image-grid');
 
@@ -133,18 +143,18 @@ const ImageGridContainer = ({ data, setBgImage }) => {
         {imageData && container && (
           <ImageGrid
             className="image-rows"
-            images={imageData}
+            images={images}
             rowTargetHeight={400}
-            container={container}
             onClick={handleImageClick}
             borderOffset={7}
           />
         )}
+        {noSearchResults()}
         <ImageViewer
           image={viewerSrc}
           show={showViewer}
           onClose={handleClose}
-          data={imageData}
+          data={images}
           onPrev={selectPreviousImage}
           onNext={selectNextImage}
           setBgImage={setBgImage}

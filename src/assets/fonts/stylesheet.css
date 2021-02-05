@@ -1,0 +1,23 @@
+@font-face {
+    font-family: 'GalanoGrotesqueAlt';
+    src: url('GalanoGrotesqueAlt-Regular.eot');
+    src: local('☞Galano Grotesque Alt'), local('GalanoGrotesqueAlt-Regular'),
+        url('GalanoGrotesqueAlt-Regular.eot?#iefix') format('embedded-opentype'),
+        url('GalanoGrotesqueAlt-Regular.woff2') format('woff2'),
+        url('GalanoGrotesqueAlt-Regular.woff') format('woff'),
+        url('GalanoGrotesqueAlt-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'GalanoGrotesqueAlt';
+    src: url('GalanoGrotesqueAlt-Bold.eot');
+    src: local('☞Galano Grotesque Alt Bold'), local('GalanoGrotesqueAlt-Bold'),
+        url('GalanoGrotesqueAlt-Bold.eot?#iefix') format('embedded-opentype'),
+        url('GalanoGrotesqueAlt-Bold.woff2') format('woff2'),
+        url('GalanoGrotesqueAlt-Bold.woff') format('woff'),
+        url('GalanoGrotesqueAlt-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}

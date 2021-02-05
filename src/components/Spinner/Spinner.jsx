@@ -1,71 +1,35 @@
-import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import React from 'react';
 
-class Spinner extends PureComponent {
-  static propTypes = {
-    className: PropTypes.string,
-    modifier: PropTypes.string,
-    show: PropTypes.bool.isRequired,
-  };
+const Spinner = ({show = false, className, modifier='' }) => {
+  const baseClass = 'framed-spinner';
 
-  static defaultProps = {
-    show: false,
-    modifier: ''
-  };
+  const svgSpinner = (
+    <div className={`${baseClass}-svg-wrapper`}>
+      <svg className={`${baseClass}-svg-back`} viewBox="0 0 200 200">
+        <circle cx="100" cy="100" r="90" fill="none" />
+      </svg>
+      <svg className={`${baseClass}-svg-segment`} viewBox="0 0 200 200">
+        <circle cx="100" cy="100" r="90" fill="none" />
+      </svg>
+    </div>
+  );
 
-  constructor(props) {
-    super(props);
-
-    this.renderSpinner = this.renderSpinner.bind(this);
-    this.baseClass = 'framed-spinner';
-  }
-
-  get svgSpinner() {
-    return (
-      <div className={`${this.baseClass}-svg-wrapper`}>
-        <svg className={`${this.baseClass}-svg-back`} viewBox="0 0 200 200">
-          <circle cx="100" cy="100" r="90" fill="none" />
-        </svg>
-        <svg className={`${this.baseClass}-svg-segment`} viewBox="0 0 200 200">
-          <circle cx="100" cy="100" r="90" fill="none" />
-        </svg>
-      </div>
+  const spinner = (
+    <div
+      className={classNames(baseClass, `${baseClass}--${modifier}`, className)}
+    >
+      {svgSpinner}
+    </div>
     );
-  }
 
-  get spinnerContainer() {
-    const { modifier } = this.props;
-    const modifierClass = modifier ? 'global' : false;
+    const spinnerContainer = () => {
+      const modifierClass = modifier ? 'global' : false;
+  
+      return <div className={`${baseClass}-container ${modifierClass}`}>{spinner}</div>;
+    }
 
-    return <div className={`${this.baseClass}-container ${modifierClass}`}>{this.spinner}</div>;
-  }
-
-  get spinner() {
-    const { className, modifier } = this.props;
-
-    return (
-      <div
-        className={classNames(
-          this.baseClass,
-          `${this.baseClass}--${modifier}`,
-          className
-        )}
-      >
-        {this.svgSpinner}
-      </div>
-    );
-  }
-
-  renderSpinner() {
-    return this.spinnerContainer;
-  }
-
-  render() {
-    const { show } = this.props;
-
-    return show ? this.renderSpinner() : null;
-  }
-}
+  return show ? spinnerContainer() : null;
+};
 
 export default Spinner;

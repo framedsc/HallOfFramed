@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import framedBanner from '../assets/framed_intro_pino.jpg';
 import { About, FramedIcon, Menu, SortDown, SortUp } from '../assets/svgIcons';
-import { ModalContext } from '../utils/ModalContext';
+import { ModalContext } from '../utils/context';
 import { breakpoints, useOutsideAlerter, useViewport } from '../utils/utils';
 
 const ImageNav = ({ className, options, reverseSort, updateSort, updateType, updateSearch }) => {
@@ -52,7 +52,7 @@ const ImageNav = ({ className, options, reverseSort, updateSort, updateType, upd
       </div>
     );
 
-    setModal({ show: true, component: modalComponent, className: 'about-window' });
+    setModal({ show: true, component: modalComponent, className: 'about-window', withClose: true });
   };
 
   const types = ['All', 'Wide', 'Portrait'];
@@ -117,13 +117,12 @@ const ImageNav = ({ className, options, reverseSort, updateSort, updateType, upd
     </div>
   );
 
-  const renderModalButton = () => {
-    return isMobile ? undefined : (
+  const aboutIconButton = (
       <button className="about-icon" onClick={showAbout}>
         <About />
       </button>
     );
-  }
+  
 
   const renderDesktop = () => {
     return (
@@ -131,7 +130,7 @@ const ImageNav = ({ className, options, reverseSort, updateSort, updateType, upd
         {renderSort}
         {renderFilters}
         {renderSearch}
-        {renderModalButton()}
+        {aboutIconButton}
       </>
     );
   };
@@ -143,11 +142,13 @@ const ImageNav = ({ className, options, reverseSort, updateSort, updateType, upd
           <Menu />
         </button>
         {showMenu && (
-          <div className="mobile-menu-content">
-            {renderModalButton()}
-            {renderSearch}
-            {renderSort}
-            {renderFilters}
+          <div className="mobile-menu-content-mask">
+            <div className="mobile-menu-content">
+              {renderSearch}
+              {renderSort}
+              {renderFilters}
+              {aboutIconButton}
+            </div>
           </div>
         )}
       </div>

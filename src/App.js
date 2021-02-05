@@ -1,12 +1,28 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import ImageGridContainer from '../src/pages/ImageGridContainer';
-import { getImages } from './api/request';
+import { SiteDataContext } from '../src/utils/context';
+import { getAuthors, getImages } from './api/request';
+import './assets/fonts/stylesheet.css';
 import './components/Spinner/Spinner.css';
 import './styles/App.css';
 import './styles/reset.css';
 
+function normalizeData(data) {
+  let noramlizedData = [];
+
+  const entries = Object.entries(data._default);
+
+  entries.forEach((item) => {
+    const id = item[0];
+    let attributes = item[1];
+    noramlizedData.push({ id, ...attributes });
+  });
+
+  return noramlizedData;
+}
+
 function App() {
-  const [data, setData] = useState([]);
+  const [siteData, setSiteData] = useState({ imageData: [], authorData: [] });
   const [initialized, setInitialized] = useState(false);
   const [bgImageContainer, setBgImageContainer] = useState(null);
 
@@ -18,33 +34,43 @@ function App() {
     [bgImageContainer],
   );
 
-  const getNewImages = async () => {
+  const getData = async () => {
     setInitialized(true);
-    const response = await getImages({});
-    const entries = Object.entries(response.data._default);
-    const shots = [];
+    const imagesResponse = await getImages({});
+    const authorsResponse = await getAuthors({});
+    const normalizedImages = normalizeData(imagesResponse.data);
+    const normalizedAuthors = normalizeData(authorsResponse.data);
 
-    entries.forEach((item) => {
-      const id = item[0];
-      const shotData = item[1];
-      shots.push({ id, ...shotData });
-    });
+    console.log(normalizedImages, normalizedAuthors)
+    for (let i = 0; i < normalizedImages.length; i++) {
+      const authorName = normalizedAuthors.find((author) => author.authorid === normalizedImages[i].author)?.authorNick;
+      if (authorName) {
+        normalizedImages[i].authorName=authorName;
+      }
+    }
 
-    setData(shots);
+    setSiteData({imageData: normalizedImages, authorData: normalizedAuthors})
+
   };
 
   useEffect(() => {
-    !initialized && getNewImages();
-    data.length && !bgImageContainer && setBgImageContainer(document.querySelector('.bg-blur'));
-    if (data.length && bgImageContainer) {
-      const randomImageIndex = Math.floor(Math.random() * Math.floor(data.length-1));
-      setBackground(data[randomImageIndex]);
+    const { imageData } = siteData;
+
+    !initialized && getData();
+    imageData.length && !bgImageContainer && setBgImageContainer(document.querySelector('.bg-blur'));
+    if (imageData.length && bgImageContainer) {
+      const randomImageIndex = Math.floor(Math.random() * Math.floor(imageData.length-1));
+      setBackground(imageData[randomImageIndex]);
     }
-  }, [bgImageContainer, data, initialized, setBackground]);
+  }, [bgImageContainer, siteData, initialized, setBackground]);
 
   return (
     <div className="image-grid">
-      {data && <ImageGridContainer data={data} setBgImage={setBackground} />}
+      {siteData.imageData && siteData.authorData && (
+        <SiteDataContext.Provider value={siteData}>
+          <ImageGridContainer setBgImage={setBackground} />
+        </SiteDataContext.Provider>
+      )}
     </div>
   );
 }
