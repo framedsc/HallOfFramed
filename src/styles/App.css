@@ -488,7 +488,7 @@ button > svg {
   opacity: 1;
 }
 
-/* ------------------------- Social Links ------------------------- */
+/* ------------------------- About Modal Content ------------------------- */
 
 .about-modal-content {
   font-family: 'GalanoGrotesqueAlt';
@@ -501,13 +501,6 @@ button > svg {
   font-size: 18px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-}
-
-.about-modal-content h2 img {
-  border-radius: 50%;
-  max-width: 40px;
-  margin: 0;
-  margin-right: 10px;
 }
 
 .about-modal-content h3 {
@@ -537,46 +530,14 @@ button > svg {
   height: 22px;
 }
 
-.social-links-container {
-  overflow: hidden;
-}
-
-.social-links-container .social-links {
-  margin-bottom: 20px;
-}
-
-.social-links-container .social-links:last-child {
-  margin-bottom: 0;
-}
-
-.social-links .social-link {
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
-  color: #eee;
-  text-decoration: none;
-  border: 0;
-}
-
-.social-links .social-link:hover {
-  color: #fff;
-  text-shadow: 0px 0px 4px #fff;
-}
-
-.social-links .social-button svg {
-  fill: #fff;
-  width: 30px;
-  margin-right: 10px;
-}
-
 /* Blurs image grid while viewer is open using Firefox-compatible property */
 .image-nav.hidden + .image-rows {
   filter: var(--blur-viewer-bg);
 }
 
 .image-viewer {
-    justify-content: center;
-    align-items: center;
+  justify-content: center;
+  align-items: center;
 }
 
 .image-viewer.is-visible {
@@ -585,16 +546,18 @@ button > svg {
 
 .image-viewer .viewer-nav {
   -webkit-backdrop-filter: none;
-    backdrop-filter: none;
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    background: none;
-    box-shadow: none;
-    margin-left: 0;
-    padding: 0;
-    position: fixed;
-    top: 0;
+  backdrop-filter: none;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  background: none;
+  box-shadow: none;
+  margin-left: 0;
+  padding: 0;
+  position: fixed;
+  top: 0;
+  height: 50px;
+  align-items: center;
 }
 
 .image-viewer .viewer-nav-button {
@@ -634,16 +597,16 @@ button > svg {
 
 .image-viewer-content {
   background: #000;
-    display: inline-block;
-    text-align: left;
-    max-width: min-content;
-    max-width: -webkit-min-content;
-    position: relative;
-    cursor: auto;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    margin-top: 30px;
+  display: inline-block;
+  text-align: left;
+  max-width: min-content;
+  max-width: -webkit-min-content;
+  position: relative;
+  cursor: auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 10px;
 }
 
 .image-viewer-content:hover .viewer-nav-button {
@@ -656,7 +619,7 @@ button > svg {
 
 .image-viewer-content img {
   max-width: calc(100vw - 40px);
-  max-height: calc(98vh - 100px);
+  max-height: calc(98vh - 90px);
   z-index: 15;
   border-bottom: 1px solid #888;
 }
@@ -666,7 +629,7 @@ button > svg {
 }
 
 .image-viewer-content .shot-info .info {
-  width: 90%;
+  width: calc(100% - 60px); /* excluding width of 'image-viewer-controls' (download/fullscreen buttons) */
 }
 
 .image-viewer-content .shot-info .info.clickable {
@@ -674,7 +637,6 @@ button > svg {
 }
 
 .image-viewer-content .shot-info {
-  width: 100%;
   padding: 8px 10px;
   background-color: #000;
   color: #fff;
@@ -682,7 +644,19 @@ button > svg {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  position: relative;
+  border-top: 1px solid #888;
+  min-height: 50px;
+  overflow: hidden;
+  position: absolute;
+  bottom: -50px;
+  width: 100%;
+  transition: all 250ms;
+  z-index: 1000;
+}
+
+.shot-info.expanded {
+  align-items: flex-start;
+  padding-top: 10px;
 }
 
 .image-viewer-content .shot-info .by {
@@ -715,6 +689,13 @@ button > svg {
   filter: drop-shadow(var(--text-shadow-3)) drop-shadow(var(--text-shadow-4));
 }
 
+.image-viewer-content .info img {
+  border-radius: 50%;
+  max-width: 40px;
+  margin: 0;
+  margin-right: 10px;
+}
+
 .image-viewer-content .shot-info button.author {
   cursor: pointer;
   font-family: 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
@@ -722,7 +703,7 @@ button > svg {
 }
 
 .image-viewer-content .shot-info .title {
-  margin-top: 3px;
+  margin-top: 5px;
   display: block;
 }
 
@@ -862,6 +843,135 @@ button > svg {
   height: 100px;
 }
 
+.author-links-list {
+  height: 0;
+  opacity: 0;
+  max-height: 0;
+  transition: all 250ms linear;
+}
+
+.shot-info.expanded .author-links-list {
+  height: auto;
+  margin-top: 10px;
+  margin-bottom: -10px;
+  max-height: 100px;
+  opacity: 1;
+}
+
+.shot-info.expanded p.author-links-list {
+  margin-bottom: 10px;
+}
+
+.author-links-list li {
+  display: inline-flex;
+  margin: 0 15px 10px 0;
+}
+
+.author-more-photos a,
+.author-link a {
+  align-items: center;
+  border-bottom: solid 1px transparent;
+  color: var(--active-bg);
+  display: inline-flex;
+  text-decoration: none;
+  padding: 2px 0;
+  pointer-events: none;
+}
+
+.shot-info.expanded .author-more-photos a,
+.shot-info.expanded .author-link a {
+  pointer-events: all;
+}
+
+
+.author-more-photos {
+  display: flex;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.author-more-photos a:hover,
+.author-link a:hover {
+  color: var(--active-hover-bg);
+  border-bottom-color: var(--active-bg);
+  text-shadow: 0px 0px 4px #fff;
+}
+
+.author-link a::before {
+  background-image: url('../assets/social-icons.svg#global');
+  background-position: center;
+  content: '';
+  display: inline-flex;
+  height: 22px;
+  opacity: 0.8;
+  margin-right: 5px;
+  width: 20px;
+}
+
+.author-link a:hover::before {
+  opacity: 0.9;
+}
+
+.author-link a[href*='behance.com']::before {
+  background-image: url('../assets/social-icons.svg#behance');
+}
+
+.author-link a[href*='flickr.com']::before {
+  background-image: url('../assets/social-icons.svg#flickr');
+}
+
+.author-link a[href*='github.com']::before {
+  background-image: url('../assets/social-icons.svg#github');
+}
+
+.author-link a[href*='instagram.com']::before {
+  background-image: url('../assets/social-icons.svg#instagram');
+}
+
+.author-link a[href*='patreon.com']::before {
+  background-image: url('../assets/social-icons.svg#patreon');
+}
+
+.author-link a[href*='twitter.com']::before {
+  background-image: url('../assets/social-icons.svg#twitter');
+}
+
+/* Toggle arrow */
+
+.image-viewer.is-visible .author::after {
+  align-items: center;
+  border-radius: var(--border-radius);
+  content: '╲╱';
+  display: inline-flex;
+  font-size: 5px;
+  font-weight: initial;
+  height: 16px;
+  justify-content: center;
+  margin: 0 0 -16px 6px;
+  position: relative;
+  top: -3px;
+  width: 16px;
+}
+
+.image-viewer.is-visible .shot-info.expanded .author::after {
+  background: var(--active-bg);
+  content: '╱╲';
+  color: var(--active-fg);
+}
+
+.shot-info .title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: opacity 250ms;
+  white-space: nowrap;
+}
+
+.shot-info.expanded .title {
+  line-height: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
 /* ------------------------------- Helpers ------------------------------ */
 
 .flex {
@@ -940,12 +1050,6 @@ button > svg {
 }
 
 /* ---------------------------- Breakpoints ---------------------------- */
-@media only screen and (max-width: 380px) {
-  .social-links .social-button svg {
-    display: none;
-  }
-}
-
 @media only screen and (max-width: 550px) {
   .mobile-menu .filters {
     flex: 0 0 100%;
@@ -958,6 +1062,14 @@ button > svg {
     top: 50px;
     width: 90%;
     overflow-y: scroll;
+  }
+
+  .author-link a::before {
+    margin-right: 0;
+  }
+
+  .author-link span {
+    display: none;
   }
 }
 

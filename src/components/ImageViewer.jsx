@@ -7,12 +7,19 @@ import Spinner from '../components/Spinner/Spinner';
 import { ModalContext, SiteDataContext } from '../utils/context';
 import { useFullscreenStatus } from '../utils/utils';
 
+const initialState = {
+  initialized: false, 
+  loadedState: false, 
+  showImage: false, 
+  authorExpanded: false
+}
+
 const reducer = (state, action) => {
   switch (action.type) {
     case 'initialize':
       return { ...state, initialized: true };
     case 'close':
-      return { initialized: false, loadedState: false, showImage: false };
+      return { ...initialState };
     case 'loadImage':
       return { initialized: true, loadedState: true, showImage: true };
     case 'changeImage':
@@ -22,7 +29,7 @@ const reducer = (state, action) => {
     case 'expandSocials':
       return { ...state, authorExpanded: true };
     case 'closeSocials':
-      return { ...state, authorExpanded: false} ;
+      return { ...state, authorExpanded: false };
     default:
       return state;
   }
@@ -36,7 +43,7 @@ const ImageViewer = ({ image = {}, show, onClose, data, onPrev, onNext, setBgIma
     showImage: false,
   });
 
-  const { modal, setModal } = useContext(ModalContext);
+  const { modal } = useContext(ModalContext);
   const siteData = useContext(SiteDataContext);
   const { authorData } = siteData;
 
@@ -60,25 +67,21 @@ const ImageViewer = ({ image = {}, show, onClose, data, onPrev, onNext, setBgIma
   const blurClass = modal.show ? 'blur' : undefined;
   const loadedClass = showImage ? 'loaded' : 'hidden';
   const viewerClass = modal.show ? 'hidden' : 'visible';
+  const socialData = image && authorData.find((item) => image.authorName === item.authorNick);
 
   const handleExitFullscreen = () => document.exitFullscreen();
 
   const hasSocials = (author) => {
-    const socialData = authorData.find((item) => author === item.authorNick);
+    //const socialData = authorData.find((item) => author === item.authorNick);
     const socials = ['flickr', 'twitter', 'instagram', 'steam', 'othersocials'];
     const socialExists = (item) => socialData[item].length;
 
     return socials.some(socialExists);
-  };
+  }; 
 
-  const expandSocials = () => {
-
-  }
-
-  const showSocials = (author) => {
-    const socialData = authorData.find((item) => author === item.authorNick);
-    console.log('showSocials', socialData)
-    return <SocialLinks data={socialData} />
+  const renderSocials = (author) => {
+    //const socialData = authorData.find((item) => author === item.authorNick);
+    return <SocialLinks data={socialData} />;
   };
 
   const handlePrev = React.useCallback(
@@ -205,19 +208,16 @@ const ImageViewer = ({ image = {}, show, onClose, data, onPrev, onNext, setBgIma
     ...swipeConfig,
   });
 
-  const socialsEnabled = image && image.authorName && hasSocials(image.authorName);
-  const infoClass = socialsEnabled ? 'clickable' : undefined;
-
   return (
     <div className={classNames('image-viewer', 'framed-modal', visibleClass)} onClick={handleClose}>
       <div className={classNames('viewer-nav', viewerClass)}>
-          <button className="viewer-nav-button left" disabled={prevDisabled} onClick={handlePrev}>
-            <NextArrow />
-          </button>
-          <button className="viewer-nav-button right" disabled={nextDisabled} onClick={handleNext}>
-            <NextArrow />
-          </button>
-        </div>
+        <button className="viewer-nav-button left" disabled={prevDisabled} onClick={handlePrev}>
+          <NextArrow />
+        </button>
+        <button className="viewer-nav-button right" disabled={nextDisabled} onClick={handleNext}>
+          <NextArrow />
+        </button>
+      </div>
       <div
         ref={imageViewerContent}
         className={classNames('image-viewer-content', fullscreenClass, blurClass)}
@@ -242,17 +242,17 @@ const ImageViewer = ({ image = {}, show, onClose, data, onPrev, onNext, setBgIma
                 }}
               >
                 <div
-                  className={classNames('info', infoClass)}
-                  onClick={authorExpanded ? () => dispatch({ type: 'closeSocials' }) : () => dispatch({ type: 'expandSocials' })}
+                  className='info clickable'
+                  onClick={
+                    !authorExpanded
+                      ? () => dispatch({ type: 'expandSocials' })
+                      : () => dispatch({ type: 'closeSocials' })
+                  }
                 >
-                  <div className={socialsEnabled && 'flex center'}>
-                    <span className="by">{`by `}</span>
-                    <span className={socialsEnabled ? 'author flex center' : 'author'}>
-                      {image.authorName}
-                    </span>
-                  </div>
-                  {/* {hasSocials && showSocials(image.authorName)} */}
+                  <span className="by">{`by `}</span>
+                  <span className="author">{image.authorName}</span>
                   <span className="title">{image.gameName}</span>
+                  {renderSocials(image.authorName)}
                 </div>
                 <div className="image-viewer-controls">
                   {!isFullscreen && !fullScreenError && (

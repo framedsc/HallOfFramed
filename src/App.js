@@ -41,7 +41,6 @@ function App() {
     const normalizedImages = normalizeData(imagesResponse.data);
     const normalizedAuthors = normalizeData(authorsResponse.data);
 
-    console.log(normalizedImages, normalizedAuthors)
     for (let i = 0; i < normalizedImages.length; i++) {
       const authorName = normalizedAuthors.find((author) => author.authorid === normalizedImages[i].author)?.authorNick;
       if (authorName) {

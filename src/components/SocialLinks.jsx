@@ -1,4 +1,5 @@
 import { Flickr, Globe, Instagram, Steam, Twitter } from '../assets/svgIcons';
+import { extractTopLevelDomain } from '../utils/utils';
 
 export const SocialLinks = ({ data = null }) => {
   if (!data) {
@@ -7,24 +8,25 @@ export const SocialLinks = ({ data = null }) => {
 
   const renderSocials = (linkList) => {
     return (
-      <ul className="author-links-list">
+      <>
         {linkList.map((social, index) => {
-          const socialText = social.label ? social.label : social.link;
+          const socialText = social.label ? social.label : extractTopLevelDomain(social.link);
           return (
-            <li key={`social-button-${index}`}>
+            <li className="author-link" key={`social-button-${index}`}>
               <a
                 className="social-link"
                 key={`social-link-${index}`}
                 rel="noreferrer"
                 target="_blank"
                 href={social.link}
+                title={social.link}
               >
                 <span>{socialText}</span>
               </a>
             </li>
           );
         })}
-      </ul>
+      </>
     );
   };
 
@@ -51,15 +53,13 @@ export const SocialLinks = ({ data = null }) => {
     otherSocials.push({ key: 'other', icon: <Globe />, link: data.othersocials[i] });
   }
 
-  console.log('render socials')
-
   return !authorSocials.length && !otherSocials.length ? (
-    <p>This author has not shared their socials within Framed</p>
+    <p className="author-links-list">This author has not listed their socials on Framed</p>
   ) : (
-    <>
+    <ul className="author-links-list">
       {authorSocials.length > 0 && renderSocials(authorSocials)}
       {otherSocials.length > 0 && renderSocials(otherSocials)}
-    </>
+    </ul>
   );
 };
 
