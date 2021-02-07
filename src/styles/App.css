@@ -868,7 +868,9 @@ button > svg {
 }
 
 .author-more-photos a,
-.author-link a {
+.author-link a,
+.author-more-photos a:visited,
+.author-link a:visited {
   align-items: center;
   border-bottom: solid 1px transparent;
   color: var(--active-bg);
