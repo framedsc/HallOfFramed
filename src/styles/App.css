@@ -17,6 +17,8 @@
   --text-main: #efefef;
   --text-shadow-1: 0 1px 8px hsla(0, 0%, 0%, 0.5);
   --text-shadow-2: 0 1px 0px hsla(0, 0%, 0%, 0.6);
+  --text-shadow-3: 0 1px 8px hsla(0, 100%, 100%, 0.76);
+  --text-shadow-4: 0 1px 0px hsla(0, 100%, 100%, 0.76);
   --translucent-bg: hsla(0, 0%, 18%, 0.6);
   --translucent-bg-fallback: hsla(0, 0%, 28%, 0.95);
 }
@@ -103,7 +105,8 @@ button > svg {
   font-size: 14px;
 }
 
-.image-nav.hidden {
+.image-nav.hidden,
+.viewer-nav.hidden {
   visibility: hidden;
 }
 
@@ -442,7 +445,7 @@ button > svg {
 
 .no-search-results {
   text-align: center;
-  padding-top: 30px; 
+  padding-top: 30px;
   color: #fff;
   font-size: 24px;
   text-shadow: var(--text-shadow-1), var(--text-shadow-2);
@@ -513,6 +516,18 @@ button > svg {
   font-weight: 600;
 }
 
+.about-modal-content a {
+  color: inherit;
+  padding-bottom: 0px;
+  display: inline-block;
+  text-decoration: none;
+  border-bottom: 2px solid #eee;
+}
+
+.about-modal-content a:hover {
+  text-shadow: 0px 0px 4px #fff;
+}
+
 .about-modal-content .close {
   position: absolute;
   top: 12px;
@@ -522,13 +537,16 @@ button > svg {
   height: 22px;
 }
 
-.social-links-container h4 {
-  margin-bottom: 10px;
-  font-size: 16px;
+.social-links-container {
+  overflow: hidden;
 }
 
 .social-links-container .social-links {
   margin-bottom: 20px;
+}
+
+.social-links-container .social-links:last-child {
+  margin-bottom: 0;
 }
 
 .social-links .social-link {
@@ -537,13 +555,13 @@ button > svg {
   margin-bottom: 10px;
   color: #eee;
   text-decoration: none;
+  border: 0;
 }
 
 .social-links .social-link:hover {
   color: #fff;
   text-shadow: 0px 0px 4px #fff;
 }
-
 
 .social-links .social-button svg {
   fill: #fff;
@@ -556,55 +574,80 @@ button > svg {
   filter: var(--blur-viewer-bg);
 }
 
-.image-viewer .image-nav {
-  backdrop-filter: none;
-  width: 100%;
-  height: var(--header-height);
-  display: flex;
-  position: fixed;
-  justify-content: space-between;
-  background: none;
-  box-shadow: none;
-  margin-left: 0;
+.image-viewer {
+    justify-content: center;
+    align-items: center;
 }
 
-.image-viewer .image-nav-button {
+.image-viewer.is-visible {
+  display: flex;
+}
+
+.image-viewer .viewer-nav {
+  -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    background: none;
+    box-shadow: none;
+    margin-left: 0;
+    padding: 0;
+    position: fixed;
+    top: 0;
+}
+
+.image-viewer .viewer-nav-button {
   width: 49%;
   height: 90%;
-  background-color: transparent;
-  font-size: 16px;
   color: #fff;
   opacity: 0.6;
   cursor: pointer;
   font-weight: 600;
 }
 
-.image-viewer .image-nav-button:hover {
+.image-viewer .viewer-nav-button:hover {
   opacity: 1;
 }
 
-.image-viewer .image-nav-button:disabled {
+.image-viewer .viewer-nav-button:disabled {
   cursor: default;
   opacity: 0.4;
 }
 
-.image-viewer .image-nav-button.left {
+.image-viewer .viewer-nav-button.left {
   text-align: right;
 }
 
-.image-viewer .image-nav-button.right {
+.image-viewer .viewer-nav-button.right {
   text-align: left;
+}
+
+.image-viewer .viewer-nav-button svg {
+  fill: #fff;
+  width: 40px;
+}
+
+.image-viewer .viewer-nav-button.left svg {
+  transform: scaleX(-1);
 }
 
 .image-viewer-content {
   background: #000;
-  display: inline-block;
-  text-align: left;
-  margin-top: 50px;
-  max-width: min-content;
-  max-width: -webkit-min-content;
-  position: relative;
-  cursor: auto;
+    display: inline-block;
+    text-align: left;
+    max-width: min-content;
+    max-width: -webkit-min-content;
+    position: relative;
+    cursor: auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-top: 30px;
+}
+
+.image-viewer-content:hover .viewer-nav-button {
+  opacity: 0.7;
 }
 
 .image-viewer-content.blur {
@@ -612,8 +655,8 @@ button > svg {
 }
 
 .image-viewer-content img {
-  max-width: 95vw;
-  max-height: calc(98vh - 130px);
+  max-width: calc(100vw - 40px);
+  max-height: calc(98vh - 100px);
   z-index: 15;
   border-bottom: 1px solid #888;
 }
@@ -631,18 +674,23 @@ button > svg {
 }
 
 .image-viewer-content .shot-info {
+  width: 100%;
   padding: 8px 10px;
   background-color: #000;
   color: #fff;
   font-size: 15px;
-  position: relative;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: relative;
 }
 
 .image-viewer-content .shot-info .by {
   color: #ddd;
+}
+
+.image-viewer-content .flex .by {
+  margin-right: 5px;
 }
 
 .image-viewer-content .shot-info .author {
@@ -652,13 +700,25 @@ button > svg {
   padding: 0;
 }
 
+.image-viewer-content .shot-info .author svg {
+  display: inline-block;
+  width: 20px;
+  vertical-align: middle;
+  fill: #fff;
+}
+
 .image-viewer-content .info.clickable:hover .author {
   text-shadow: 0px 0px 4px #fff;
 }
 
+.image-viewer-content .info.clickable:hover svg {
+  filter: drop-shadow(var(--text-shadow-3)) drop-shadow(var(--text-shadow-4));
+}
+
 .image-viewer-content .shot-info button.author {
   cursor: pointer;
-  font-family: 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  font-family: 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
+    'Helvetica Neue', sans-serif;
 }
 
 .image-viewer-content .shot-info .title {
@@ -765,10 +825,9 @@ button > svg {
 .about-modal-content {
   font-size: 15px;
   line-height: 15px;
-  padding: 0.5em;
+  padding: 1em;
   margin: 0.5em;
   background: #333;
-  top: 10%;
   width: 700px;
   height: auto;
   color: #fff;
@@ -789,6 +848,11 @@ button > svg {
   border-bottom: 2px solid #fff;
 }
 
+.about-modal-content h4 {
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
 .about-modal-content p {
   margin-bottom: 16px;
   line-height: 16px;
@@ -801,7 +865,7 @@ button > svg {
 /* ------------------------------- Helpers ------------------------------ */
 
 .flex {
-  display: flex
+  display: flex;
 }
 
 .flex.center {
@@ -876,6 +940,11 @@ button > svg {
 }
 
 /* ---------------------------- Breakpoints ---------------------------- */
+@media only screen and (max-width: 380px) {
+  .social-links .social-button svg {
+    display: none;
+  }
+}
 
 @media only screen and (max-width: 550px) {
   .mobile-menu .filters {
@@ -883,6 +952,12 @@ button > svg {
     box-shadow: var(--box-shadow-subtle);
     margin: 0;
     z-index: 2;
+  }
+
+  .framed-modal-content {
+    top: 50px;
+    width: 90%;
+    overflow-y: scroll;
   }
 }
 
@@ -892,6 +967,18 @@ button > svg {
     position: absolute;
     top: 9px;
     right: 80px;
+  }
+
+  .framed-modal-content {
+    top: 50px;
+    width: 90%;
+    overflow-y: auto;
+    max-height: 90%;
+  }
+
+  .about-modal-content {
+    width: calc(100% - 16px);
+    padding-bottom: 50px;
   }
 }
 

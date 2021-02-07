@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import React, { useContext, useEffect, useReducer } from 'react';
 import { useSwipeable } from 'react-swipeable';
-import { Cancel, Download, ExitFullscreen, Fullscreen } from '../assets/svgIcons';
+import { Cancel, ExitFullscreen, Fullscreen, NextArrow } from '../assets/svgIcons';
 import SocialLinks from '../components/SocialLinks';
 import Spinner from '../components/Spinner/Spinner';
 import { ModalContext, SiteDataContext } from '../utils/context';
@@ -19,13 +19,18 @@ const reducer = (state, action) => {
       return { ...state, loadedState: false };
     case 'showGlobalSpinner':
       return { ...state, initialized: false, showImage: false };
+    case 'expandSocials':
+      return { ...state, authorExpanded: true };
+    case 'closeSocials':
+      return { ...state, authorExpanded: false} ;
     default:
       return state;
   }
 };
 
 const ImageViewer = ({ image = {}, show, onClose, data, onPrev, onNext, setBgImage }) => {
-  const [{ initialized, loadedState, showImage }, dispatch] = useReducer(reducer, {
+  const [{ authorExpanded, initialized, loadedState, showImage }, dispatch] = useReducer(reducer, {
+    authorExpanded: false,
     initialized: false,
     loadedState: false,
     showImage: false,
@@ -54,6 +59,7 @@ const ImageViewer = ({ image = {}, show, onClose, data, onPrev, onNext, setBgIma
   const fullscreenClass = isFullscreen ? 'fullscreen' : undefined;
   const blurClass = modal.show ? 'blur' : undefined;
   const loadedClass = showImage ? 'loaded' : 'hidden';
+  const viewerClass = modal.show ? 'hidden' : 'visible';
 
   const handleExitFullscreen = () => document.exitFullscreen();
 
@@ -65,51 +71,14 @@ const ImageViewer = ({ image = {}, show, onClose, data, onPrev, onNext, setBgIma
     return socials.some(socialExists);
   };
 
-  const showAuthorWindow = (author) => {
+  const expandSocials = () => {
+
+  }
+
+  const showSocials = (author) => {
     const socialData = authorData.find((item) => author === item.authorNick);
-    const modalComponent = (
-      <div className="about-modal-content">
-        <h2>
-          <img src={socialData.authorsAvatarUrl} alt="avatar" /> {socialData.authorNick}
-        </h2>
-        <SocialLinks data={socialData} />
-        <button
-          className="close"
-          onClick={() => setModal({ ...modal, show: false, className: '' })}
-        >
-          <Cancel />
-        </button>
-      </div>
-    );
-    setModal({
-      show: true,
-      component: modalComponent,
-      className: 'author-social-content',
-      withClose: false,
-    });
-  };
-
-  const toDataURL = (url) =>
-    fetch(url)
-      .then((response) => response.blob())
-      .then(
-        (blob) =>
-          new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onloadend = () => resolve(reader.result);
-            reader.onerror = reject;
-            reader.readAsDataURL(blob);
-          }),
-      );
-
-  const handleImageDownload = (source) => {
-    const proxySource = `https://cors-anywhere.herokuapp.com/${source}`;
-    toDataURL(proxySource).then((dataUrl) => {
-      const a = document.createElement('a');
-      a.href = dataUrl;
-      a.download = '';
-      a.click();
-    });
+    console.log('showSocials', socialData)
+    return <SocialLinks data={socialData} />
   };
 
   const handlePrev = React.useCallback(
@@ -235,21 +204,20 @@ const ImageViewer = ({ image = {}, show, onClose, data, onPrev, onNext, setBgIma
     },
     ...swipeConfig,
   });
-  
+
   const socialsEnabled = image && image.authorName && hasSocials(image.authorName);
   const infoClass = socialsEnabled ? 'clickable' : undefined;
 
   return (
     <div className={classNames('image-viewer', 'framed-modal', visibleClass)} onClick={handleClose}>
-      <div className="image-nav">
-        <button className="image-nav-button left" disabled={prevDisabled} onClick={handlePrev}>
-          [ Prev ]
-        </button>
-        <button className="image-nav-button right" disabled={nextDisabled} onClick={handleNext}>
-          [ Next ]
-        </button>
-      </div>
-
+      <div className={classNames('viewer-nav', viewerClass)}>
+          <button className="viewer-nav-button left" disabled={prevDisabled} onClick={handlePrev}>
+            <NextArrow />
+          </button>
+          <button className="viewer-nav-button right" disabled={nextDisabled} onClick={handleNext}>
+            <NextArrow />
+          </button>
+        </div>
       <div
         ref={imageViewerContent}
         className={classNames('image-viewer-content', fullscreenClass, blurClass)}
@@ -268,30 +236,25 @@ const ImageViewer = ({ image = {}, show, onClose, data, onPrev, onNext, setBgIma
             />
             {initialized && !isFullscreen && (
               <div
-                className="shot-info"
+                className={authorExpanded ? 'shot-info expanded' : 'shot-info'}
                 onClick={(event) => {
                   event.stopPropagation();
                 }}
               >
                 <div
                   className={classNames('info', infoClass)}
-                  onClick={() => showAuthorWindow(image.authorName)}
+                  onClick={authorExpanded ? () => dispatch({ type: 'closeSocials' }) : () => dispatch({ type: 'expandSocials' })}
                 >
-                  <div>
-                      <span className="by">by</span>
-                      <span className="author">{` ${image.authorName}`}</span>
+                  <div className={socialsEnabled && 'flex center'}>
+                    <span className="by">{`by `}</span>
+                    <span className={socialsEnabled ? 'author flex center' : 'author'}>
+                      {image.authorName}
+                    </span>
                   </div>
+                  {/* {hasSocials && showSocials(image.authorName)} */}
                   <span className="title">{image.gameName}</span>
                 </div>
                 <div className="image-viewer-controls">
-                  <button
-                    className="download-button"
-                    onClick={() => {
-                      handleImageDownload(image.shotUrl);
-                    }}
-                  >
-                    <Download />
-                  </button>
                   {!isFullscreen && !fullScreenError && (
                     <button className="fullscreen-button" onClick={setIsFullscreen}>
                       <Fullscreen />

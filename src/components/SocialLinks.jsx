@@ -7,11 +7,11 @@ export const SocialLinks = ({ data = null }) => {
 
   const renderSocials = (linkList) => {
     return (
-      <ul className="social-links">
+      <ul className="author-links-list">
         {linkList.map((social, index) => {
           const socialText = social.label ? social.label : social.link;
           return (
-            <li key={`social-button-${index}`} className="social-button">
+            <li key={`social-button-${index}`}>
               <a
                 className="social-link"
                 key={`social-link-${index}`}
@@ -19,8 +19,7 @@ export const SocialLinks = ({ data = null }) => {
                 target="_blank"
                 href={social.link}
               >
-                {social.icon}
-                <span className="social">{socialText}</span>
+                <span>{socialText}</span>
               </a>
             </li>
           );
@@ -32,7 +31,7 @@ export const SocialLinks = ({ data = null }) => {
   const socials = [
     { key: 'twitter', icon: <Twitter />, label: 'Twitter' },
     { key: 'steam', icon: <Steam />, label: 'Steam' },
-    { key: 'flickr', icon: <Flickr />, label: 'Twitter' },
+    { key: 'flickr', icon: <Flickr />, label: 'Flickr' },
     { key: 'instagram', icon: <Instagram />, label: 'Instagram' },
   ];
   let authorSocials = [];
@@ -52,14 +51,15 @@ export const SocialLinks = ({ data = null }) => {
     otherSocials.push({ key: 'other', icon: <Globe />, link: data.othersocials[i] });
   }
 
-  return !authorSocials.length && !otherSocials.length ? null : (
-    <div className="social-links-container">
-      {authorSocials.length > 0 && (<h4>Social media</h4>)}
-      {renderSocials(authorSocials)}
+  console.log('render socials')
 
-      {otherSocials.length > 0 && (<h4>Other</h4>)}
-      {renderSocials(otherSocials)}
-    </div>
+  return !authorSocials.length && !otherSocials.length ? (
+    <p>This author has not shared their socials within Framed</p>
+  ) : (
+    <>
+      {authorSocials.length > 0 && renderSocials(authorSocials)}
+      {otherSocials.length > 0 && renderSocials(otherSocials)}
+    </>
   );
 };
 
