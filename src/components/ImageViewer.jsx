@@ -71,19 +71,6 @@ const ImageViewer = ({ image = {}, show, onClose, data, onPrev, onNext, setBgIma
 
   const handleExitFullscreen = () => document.exitFullscreen();
 
-  const hasSocials = (author) => {
-    //const socialData = authorData.find((item) => author === item.authorNick);
-    const socials = ['flickr', 'twitter', 'instagram', 'steam', 'othersocials'];
-    const socialExists = (item) => socialData[item].length;
-
-    return socials.some(socialExists);
-  }; 
-
-  const renderSocials = (author) => {
-    //const socialData = authorData.find((item) => author === item.authorNick);
-    return <SocialLinks data={socialData} />;
-  };
-
   const handlePrev = React.useCallback(
     (event) => {
       event?.stopPropagation();
@@ -252,7 +239,7 @@ const ImageViewer = ({ image = {}, show, onClose, data, onPrev, onNext, setBgIma
                   <span className="by">{`by `}</span>
                   <span className="author">{image.authorName}</span>
                   <span className="title">{image.gameName}</span>
-                  {renderSocials(image.authorName)}
+                  <SocialLinks data={socialData} />
                 </div>
                 <div className="image-viewer-controls">
                   {!isFullscreen && !fullScreenError && (

@@ -20,6 +20,7 @@ export const SocialLinks = ({ data = null }) => {
                 target="_blank"
                 href={social.link}
                 title={social.link}
+                onClick={(event) => event.stopPropagation()}
               >
                 <span>{socialText}</span>
               </a>

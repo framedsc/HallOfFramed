@@ -49,6 +49,11 @@ body::before {
   z-index: 99;
 }
 
+a:visited,
+a:visited {
+  color: #efefef;
+}
+
 /* ---------------------- Background blur element ---------------------- */
 
 .bg-blur-container {
@@ -514,7 +519,8 @@ button > svg {
   padding-bottom: 0px;
   display: inline-block;
   text-decoration: none;
-  border-bottom: 2px solid #eee;
+  padding-bottom: 1px;
+  border-bottom: 1px solid #eee;
 }
 
 .about-modal-content a:hover {
@@ -630,6 +636,8 @@ button > svg {
 
 .image-viewer-content .shot-info .info {
   width: calc(100% - 60px); /* excluding width of 'image-viewer-controls' (download/fullscreen buttons) */
+  mask-image: linear-gradient(hsla(0, 0%, 0%, 1) 98%, transparent);
+  -webkit-mask-image: linear-gradient(hsla(0, 0%, 0%, 1) 98%, transparent);
 }
 
 .image-viewer-content .shot-info .info.clickable {
@@ -847,7 +855,7 @@ button > svg {
   height: 0;
   opacity: 0;
   max-height: 0;
-  transition: all 250ms linear;
+  transition: max-height .25s, opacity .25s, margin-top .25s;
 }
 
 .shot-info.expanded .author-links-list {
@@ -936,6 +944,10 @@ button > svg {
 
 .author-link a[href*='twitter.com']::before {
   background-image: url('../assets/social-icons.svg#twitter');
+}
+
+.author-link a[href*="steamcommunity.com"]:before {
+  background-image: url("../assets/social-icons.svg#steam");
 }
 
 /* Toggle arrow */
@@ -1072,6 +1084,12 @@ button > svg {
 
   .author-link span {
     display: none;
+  }
+}
+
+@media screen and (max-height: 700px) {
+  .shot-info.expanded .author-links-list {
+    max-height: 150px;
   }
 }
 
