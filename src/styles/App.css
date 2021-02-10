@@ -656,7 +656,7 @@ button > svg {
   min-height: 50px;
   overflow: hidden;
   position: absolute;
-  bottom: -50px;
+  bottom: -54px;
   width: 100%;
   transition: all 250ms;
   z-index: 1000;
@@ -691,6 +691,10 @@ button > svg {
 
 .image-viewer-content .info.clickable:hover .author {
   text-shadow: 0px 0px 4px #fff;
+}
+
+.image-viewer-content .expanded .info.clickable:hover .author {
+  text-shadow: none;
 }
 
 .image-viewer-content .info.clickable:hover svg {
@@ -860,8 +864,6 @@ button > svg {
 
 .shot-info.expanded .author-links-list {
   height: auto;
-  margin-top: 10px;
-  margin-bottom: -10px;
   max-height: 100px;
   opacity: 1;
 }
@@ -872,7 +874,7 @@ button > svg {
 
 .author-links-list li {
   display: inline-flex;
-  margin: 0 15px 10px 0;
+  margin: 0 15px 0px 0;
 }
 
 .author-more-photos a,
@@ -976,14 +978,15 @@ button > svg {
 .shot-info .title {
   overflow: hidden;
   text-overflow: ellipsis;
-  transition: opacity 250ms;
+  transition: all 250ms;
   white-space: nowrap;
+  line-height: 18px;
 }
 
 .shot-info.expanded .title {
-  line-height: 0;
-  opacity: 0;
-  pointer-events: none;
+  color: #ddd;
+  font-size: 14px;
+  margin-bottom: 10px;
 }
 
 /* ------------------------------- Helpers ------------------------------ */
