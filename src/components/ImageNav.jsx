@@ -1,11 +1,11 @@
 import classNames from 'classnames';
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { About, FramedIcon, Menu, SortDown, SortUp } from '../assets/svgIcons';
+import { About, Cancel, FramedIcon, Menu, Search, SortDown, SortUp } from '../assets/svgIcons';
 import AboutModalContent from '../components/AboutModalContent';
 import { ModalContext } from '../utils/context';
 import { breakpoints, useOutsideAlerter, useViewport } from '../utils/utils';
 
-const ImageNav = ({ className, options, reverseSort, updateSort, updateType, updateSearch }) => {
+const ImageNav = ({ className, options, reverseSort, updateSort, updateFormat, updateSearch }) => {
   const [active, setActive] = useState(options[0]);
   const [type, setType] = useState('All');
   const [searchTerm, setSearchTerm] = useState('');
@@ -16,14 +16,19 @@ const ImageNav = ({ className, options, reverseSort, updateSort, updateType, upd
     updateSort(selection);
   };
 
-  const handleTypeChange = (value) => {
+  const handleFormatChange = (value) => {
     setType(value);
-    updateType(value);
+    updateFormat(value);
   };
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
     updateSearch(event.target.value.toLowerCase());
+  };
+
+  const clearSearch = () => {
+    setSearchTerm('');
+    updateSearch('');
   };
 
   const showAbout = () => {
@@ -32,11 +37,12 @@ const ImageNav = ({ className, options, reverseSort, updateSort, updateType, upd
     setModal({ show: true, component: modalComponent, className: 'about-window', withClose: true });
   };
 
-  const types = ['All', 'Wide', 'Portrait'];
-  const icon = reverseSort ? <SortUp /> : <SortDown />;
+  const formats = ['All', 'Wide', 'Portrait'];
+  const icon = reverseSort ? <SortUp key='sortup'/> : <SortDown key='sortdown'/>;
+  const activeClass = searchTerm.length > 0 ? 'active' : undefined;
 
   const renderSearch = (
-    <div className="search">
+    <div className={classNames('search', activeClass)}>
       <input
         type="search"
         name="search"
@@ -44,7 +50,12 @@ const ImageNav = ({ className, options, reverseSort, updateSort, updateType, upd
         value={searchTerm}
         onChange={handleSearchChange}
         placeholder="Search"
+        autoComplete='off'
       />
+      <Search className="search" />
+      <button className="cancel" onClick={clearSearch}>
+        <Cancel />
+      </button>
     </div>
   );
 
@@ -73,12 +84,12 @@ const ImageNav = ({ className, options, reverseSort, updateSort, updateType, upd
 
   const renderFilters = (
     <div className="image-types">
-      {types.map((item) => {
+      {formats.map((item) => {
         return (
           <>
             <input
               id={`${item}-label`}
-              onChange={() => handleTypeChange(item)}
+              onChange={() => handleFormatChange(item)}
               checked={type === item}
               type="radio"
               value={item}
@@ -95,11 +106,10 @@ const ImageNav = ({ className, options, reverseSort, updateSort, updateType, upd
   );
 
   const aboutIconButton = (
-      <button className="about-icon" onClick={showAbout}>
-        <About />
-      </button>
-    );
-  
+    <button className="about-icon" onClick={showAbout}>
+      <About />
+    </button>
+  );
 
   const renderDesktop = () => {
     return (

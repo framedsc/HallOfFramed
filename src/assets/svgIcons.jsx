@@ -102,10 +102,9 @@ export const Fullscreen = () => (
   </svg>
 );
 
-export const Cancel = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+export const Cancel = ({className}) => (
+  <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
     <path
-      fill="#fff"
       d="M21 4.41L19.59 3 12 10.59 4.41 3 3 4.41 10.59 12 3 19.59 4.41 21 12 13.41 19.59 21 21 19.59 13.41 12 21 4.41z"
     />
   </svg>
@@ -236,23 +235,6 @@ export const Globe = () => (
   </svg>
 );
 
-export const CTA = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 22">
-    <defs>
-      <clipPath>
-        <path d="m-7 1024.36h34v34h-34z" />
-      </clipPath>
-      <clipPath>
-        <path d="m-6 1028.36h32v32h-32z" />
-      </clipPath>
-    </defs>
-    <path
-      d="m345.44 248.29l-194.29 194.28c-12.359 12.365-32.397 12.365-44.75 0-12.354-12.354-12.354-32.391 0-44.744l171.91-171.91-171.91-171.9c-12.354-12.359-12.354-32.394 0-44.748 12.354-12.359 32.391-12.359 44.75 0l194.29 194.28c6.177 6.18 9.262 14.271 9.262 22.366 0 8.099-3.091 16.196-9.267 22.373"
-      transform="matrix(.03541-.00013.00013.03541 2.98 3.02)"
-    />
-  </svg>
-);
-
 export const NextArrow = () => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 476.213 476.213">
     <polygon
@@ -260,4 +242,8 @@ export const NextArrow = () => (
 	345.606,368.713 476.213,238.106 "
     />
   </svg>
+);
+
+export const Search = ({className}) => (
+  <svg className={className} viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path></svg>
 );

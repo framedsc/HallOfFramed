@@ -239,6 +239,12 @@ button > svg {
   background: var(--inactive-hover-bg);
 }
 
+.image-nav .search {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
 .image-nav .search .search-input {
   background: var(--search-bg);
   border-radius: var(--border-radius);
@@ -249,6 +255,48 @@ button > svg {
   transition: var(--header-transition);
   border: 0;
   -webkit-appearance: none;
+}
+
+.image-nav .search .search,
+.image-nav .search .cancel {
+  display: inline-block;
+  color: rgba(0, 0, 0, 0.87);
+  fill: rgb(158, 158, 158);
+  height: 24px;
+  width: 24px;
+  user-select: none;
+  transition: opacity 200ms cubic-bezier(0.4, 0, 0.2, 1) 0s;
+  opacity: 1;
+  position: absolute; 
+  right: 10px;
+}
+
+.image-nav .search:hover svg {
+  fill: #ccc;
+}
+
+
+.image-nav .search svg.search {
+  opacity: 1;
+  right:7px;
+}
+
+.image-nav .search .cancel {
+  padding: 0;
+  width: 20px;
+}
+
+.image-nav .search .cancel svg {
+  opacity: 0;
+  width: 20px;
+}
+
+.image-nav .search.active svg.search {
+  opacity: 0;
+}
+
+.image-nav .search.active .cancel svg {
+  opacity: 1;
 }
 
 /* Targets field's placeholder text */
@@ -595,6 +643,7 @@ button > svg {
 .image-viewer .viewer-nav-button svg {
   fill: #fff;
   width: 40px;
+  pointer-events: none;
 }
 
 .image-viewer .viewer-nav-button.left svg {
@@ -635,7 +684,9 @@ button > svg {
 }
 
 .image-viewer-content .shot-info .info {
-  width: calc(100% - 60px); /* excluding width of 'image-viewer-controls' (download/fullscreen buttons) */
+  width: calc(
+    100% - 60px
+  ); /* excluding width of 'image-viewer-controls' (download/fullscreen buttons) */
   mask-image: linear-gradient(hsla(0, 0%, 0%, 1) 98%, transparent);
   -webkit-mask-image: linear-gradient(hsla(0, 0%, 0%, 1) 98%, transparent);
 }
@@ -859,7 +910,7 @@ button > svg {
   height: 0;
   opacity: 0;
   max-height: 0;
-  transition: max-height .25s, opacity .25s, margin-top .25s;
+  transition: max-height 0.25s, opacity 0.25s, margin-top 0.25s;
 }
 
 .shot-info.expanded .author-links-list {
@@ -894,7 +945,6 @@ button > svg {
 .shot-info.expanded .author-link a {
   pointer-events: all;
 }
-
 
 .author-more-photos {
   display: flex;
@@ -948,8 +998,8 @@ button > svg {
   background-image: url('../assets/social-icons.svg#twitter');
 }
 
-.author-link a[href*="steamcommunity.com"]:before {
-  background-image: url("../assets/social-icons.svg#steam");
+.author-link a[href*='steamcommunity.com']:before {
+  background-image: url('../assets/social-icons.svg#steam');
 }
 
 /* Toggle arrow */

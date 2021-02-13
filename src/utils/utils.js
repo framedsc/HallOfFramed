@@ -1,5 +1,9 @@
 import { useEffect, useLayoutEffect, useState } from 'react';
 
+export const scrolledToBottom = (el, buffer) => {
+  return (el.getBoundingClientRect().bottom - buffer) <= window.innerHeight;
+}
+
 export const useViewport = () => {
   const actualWidth = document.documentElement.clientWidth || document.body.clientWidth;
   const [width, setWidth] = useState(actualWidth);
@@ -23,6 +27,24 @@ export const useViewport = () => {
 
   // Return the width so we can use it in our components
   return { width };
+};
+
+export const useScrollPosition = (moreImageToLoad) => {
+  const [isBottom, setIsBottom] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => {
+      const wrappedElement = document.body;
+      if (moreImageToLoad) {
+        setIsBottom(scrolledToBottom(wrappedElement, 100));
+      }
+    };
+    window.addEventListener('scroll', onScroll, false);
+    return () => window.removeEventListener('scroll', onScroll, false);
+  }, [moreImageToLoad]);
+
+  // Return the width so we can use it in our components
+  return moreImageToLoad ? isBottom : false;
 };
 
 export const useOutsideAlerter = (ref, onClickOutside) => {

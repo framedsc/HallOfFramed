@@ -1,7 +1,13 @@
 import React from 'react';
 import { useViewport } from '../utils/utils';
 
-const ImageGrid = ({ className, images, rowTargetHeight = 400, borderOffset = 5, onClick }) => {
+const ImageGrid = ({
+  className,
+  images,
+  rowTargetHeight = 400,
+  borderOffset = 5,
+  onClick,
+}) => {
   const { width } = useViewport();
   const maxWidth = width - borderOffset * 2;
 
@@ -142,12 +148,18 @@ const ImageGrid = ({ className, images, rowTargetHeight = 400, borderOffset = 5,
                       onClick={() => onClick(image)}
                     />
                     {image.spoiler && (
-                      <div className="spoiler" onClick={(event) => {event.target.style.display='none'}}>
+                      <div
+                        className="spoiler"
+                        onClick={(event) => {
+                          event.target.style.display = 'none';
+                        }}
+                      >
                         <span>SPOILER</span>
                       </div>
                     )}
                     <div className="image-info">
-                      <span className="by">by</span> <span className="author">{image.authorName}</span>
+                      <span className="by">by</span>{' '}
+                      <span className="author">{image.authorName}</span>
                     </div>
                   </div>
                 );

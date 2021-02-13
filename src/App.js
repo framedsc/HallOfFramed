@@ -76,7 +76,7 @@ function App() {
     <div className="image-grid">
       {siteData.imageData && siteData.authorData && (
         <SiteDataContext.Provider value={siteData}>
-          <ImageGridContainer setBgImage={setBackground} />
+          <ImageGridContainer pageSize={200} setBgImage={setBackground} />
         </SiteDataContext.Provider>
       )}
     </div>
