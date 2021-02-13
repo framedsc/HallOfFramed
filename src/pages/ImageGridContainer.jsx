@@ -192,7 +192,7 @@ const ImageGridContainer = ({ pageSize, setBgImage }) => {
   };
 
   const noSearchResults = () => {
-    return searchTerm.length > 3 && !images.length ? (
+    return searchTerm.length >= 3 && !images.length ? (
       <div className="no-search-results">There are no images matching your search criteria</div>
     ) : null;
   };
