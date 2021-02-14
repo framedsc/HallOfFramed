@@ -352,3 +352,5 @@ MigrationBackup/
 .ionide/
 .eslintcache
 
+build/asset-manifest.json
+build/index.html
