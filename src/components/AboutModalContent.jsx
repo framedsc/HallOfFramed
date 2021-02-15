@@ -26,6 +26,18 @@ const AboutModalContent = () => {
         mobile or touch device, you can also use swipe motions to navigate the images.
       </p>
 
+      <h4>Search options</h4>
+      <p>
+        You can search by using some options. Here's some examples :
+      <ol>
+        <li>- <code>'gameName:Nier Automata'</code>: searches for all shots on Nier Automata</li>
+        <li>- <code>'authorName: Jim'</code>: searches for all shots by Jim</li>
+        <li>- <code>'score: 42'</code>: searches for all shots with a score superior or equal (by default) to 42</li>
+        <li>- <code>'width: {">"}3840'</code>: searches for all shots with a width superior or equal to 3840</li>
+        <li>- <code>'height: {"<"}2160'</code>: searches for all shots with a width inferior or equal to 2160</li>
+      </ol>
+      </p>
+
       <h4>Contact</h4>
       <p>
         For general queries, or if you want to get an invite to the Discord server you can contact
