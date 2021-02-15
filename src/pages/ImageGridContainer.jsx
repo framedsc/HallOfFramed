@@ -84,6 +84,8 @@ const ImageGridContainer = ({ pageSize, setBgImage }) => {
   const { imageData } = siteData || [];
   const moreImagesToLoad = page * pageSize <= images.length;
   const isBottom = useScrollPosition(moreImagesToLoad);
+  const searchOptsString = ["authorName", "gameName"]
+  const searchOptsNumber = ["height", "score", "width"]
 
   const checkLoadMore = () => {
     if (isBottom && !waiting) {
@@ -126,6 +128,28 @@ const ImageGridContainer = ({ pageSize, setBgImage }) => {
         return data;
       }
       dispatch({ type: 'setPage', page: 1 });
+
+      let searchOption = searchTerm.substring(0, searchTerm.indexOf(':'))
+      let newSearchTerm = searchTerm.substring(searchTerm.indexOf(':') + 1)
+      
+      if (searchOptsString.indexOf(searchOption) > -1){
+        const results = data.filter((obj) => {
+          // if more than 1 char, search for the tag after lowercasing and removing spaces, else return data (nothing)
+          return (newSearchTerm?.length > 1) ? obj[searchOption].toLowerCase().replace(/\s+/g, '').indexOf(newSearchTerm.toLowerCase().replace(/\s+/g, '')) !== -1 : data
+        });
+        return results;
+      }
+      else if (searchOptsNumber.indexOf(searchOption) > -1) {
+        const results = data.filter((obj) => {
+          // i may have been a little crazy here
+          return (newSearchTerm?.length > 1) 
+          /* if there is a '<', search for all item lower than the searched number, else it search for item upper, '>' or not */
+          ? (newSearchTerm.indexOf('<') !== -1) ? obj[searchOption] <= parseInt(newSearchTerm.substr(newSearchTerm.indexOf('<') + 1), 10) : obj[searchOption] >= parseInt(newSearchTerm.substr(newSearchTerm.indexOf('>') + 1), 10) 
+          : data
+        });
+        return results;
+      }
+
       const results = data.filter((obj) => {
         return Object.keys(obj).reduce((acc, curr) => {
           return acc || obj[curr].toString().toLowerCase().includes(searchTerm.toLowerCase());

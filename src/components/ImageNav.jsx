@@ -23,7 +23,7 @@ const ImageNav = ({ className, options, reverseSort, updateSort, updateFormat, u
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
-    updateSearch(event.target.value.toLowerCase());
+    updateSearch(event.target.value);
   };
 
   const clearSearch = () => {
