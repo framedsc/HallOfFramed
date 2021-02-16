@@ -570,9 +570,14 @@ button > svg {
   color: inherit;
   padding-bottom: 0px;
   display: inline-block;
-  text-decoration: none;
-  padding-bottom: 1px;
-  border-bottom: 1px solid #eee;
+  text-decoration: underline;
+}
+
+.about-modal-content code {
+  background: #2a2a2a;
+  padding: 2px 4px;
+  border-radius: 3px;
+  display: inline-block
 }
 
 .about-modal-content a:hover {

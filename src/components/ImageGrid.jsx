@@ -22,13 +22,11 @@ const ImageGrid = ({
       const image = {
         id: images[i].id,
         author: images[i].author,
-        authorName: images[i].authorName,
+        authorid: images[i].authorid,
         authorsAvatarUrl: images[i].authorsAvatarUrl,
         data: images[i].date,
-        gameName: images[i].gameName,
+        game: images[i].game,
         score: images[i].score,
-        fullWidth: images[i].width,
-        fullHeight: images[i].height,
         shotUrl: images[i].shotUrl,
         spoiler: images[i].spoiler,
         thumbnailUrl: images[i].thumbnailUrl,
@@ -159,7 +157,7 @@ const ImageGrid = ({
                     )}
                     <div className="image-info">
                       <span className="by">by</span>{' '}
-                      <span className="author">{image.authorName}</span>
+                      <span className="author">{image.author}</span>
                     </div>
                   </div>
                 );

@@ -5,11 +5,11 @@ const AboutModalContent = () => {
       <h2>About the Hall of Framed</h2>
       <p>
         The <a href="https://framedsc.github.io/">Framed Screenshot Community</a> Discord server first started in 2019 as a place to discuss
-        and collaborate in the space of video game screenshots, and has since become so full of
+        and collaborate in the space of video game screenshots. It has since become so full of
         incredible shots that we’ve run out of room to highlight them all. To fix that we created a
         Discord bot that curates the most popular shots within the server, displaying them within a
         dedicated channel that filters to this site. Posted shots can be voted on in the Discord
-        server, and our clever bot will publish entries into the Hall of Framed based on popularity,
+        server. Our clever bot will publish entries into the Hall of Framed based on popularity,
         which has allowed us to put the power to curate the best shots into the hands of our
         community, helping to showcase the depth and variety of creativity within this space.
       </p>
@@ -27,21 +27,23 @@ const AboutModalContent = () => {
       </p>
 
       <h4>Search options</h4>
-      <p>
-        You can search by using some options. Here's some examples :
-      <ol>
-        <li>- <code>'gameName:Nier Automata'</code>: searches for all shots on Nier Automata</li>
-        <li>- <code>'authorName: Jim'</code>: searches for all shots by Jim</li>
-        <li>- <code>'score: 42'</code>: searches for all shots with a score superior or equal (by default) to 42</li>
-        <li>- <code>'width: {">"}3840'</code>: searches for all shots with a width superior or equal to 3840</li>
-        <li>- <code>'height: {"<"}2160'</code>: searches for all shots with a width inferior or equal to 2160</li>
-      </ol>
-      </p>
+      <div>
+        <p>You can simply type in the box to search, or you can specify the term you wish to search for. Here's some examples:</p>
+        <ol>
+          <li><code>cyberpunk</code> : searches all data for the text "cyberpunk"</li>
+          <li><code>game: Nier Automata</code> : searches for shots from the game "Nier Automata"</li>
+          <li><code>author: Dread</code> : searches for all shots by "Dread"</li>
+          <li><code>score: 42</code> : searches for shots with at least 42 reactions/likes</li>
+          <li><code>width: {">"}3840</code> : searches for shots with a width greater than or equal 3840</li>
+          <li><code>height: {"<"}2160</code> : searches for shots with a width greater than or equal to 2160</li>
+        </ol>
+        <br/>
+      </div>
 
       <h4>Contact</h4>
       <p>
-        For general queries, or if you want to get an invite to the Discord server you can contact
-        either Jim2Point0 or Otis_Inf on the below links
+        For general inquiries, or if you want to get an invite to the Discord server you can contact
+        either Jim2Point0 or Otis_Inf via the below links
       </p>
 
       <p>

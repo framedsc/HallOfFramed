@@ -48,17 +48,17 @@ const reducer = (state, action) => {
     case 'setImages':
       return { ...state, images: action.images };
     case 'selectImage':
-        return { ...state, viewerSrc: action.image, showViewer: true };
+      return { ...state, viewerSrc: action.image, showViewer: true };
     case 'loadImage':
-        return { initialized: true, loadedState: true, showImage: true };
+      return { initialized: true, loadedState: true, showImage: true };
     case 'changeSort':
-        return {
-          ...state,
-          page: 1,
-          waiting: true,
-          sortOption: action.sortOption,
-          isReverse: action.isReverse,
-        };
+      return {
+        ...state,
+        page: 1,
+        waiting: true,
+        sortOption: action.sortOption,
+        isReverse: action.isReverse,
+      };
     default:
       return state;
   }
@@ -84,8 +84,6 @@ const ImageGridContainer = ({ pageSize, setBgImage }) => {
   const { imageData } = siteData || [];
   const moreImagesToLoad = page * pageSize <= images.length;
   const isBottom = useScrollPosition(moreImagesToLoad);
-  const searchOptsString = ["authorName", "gameName"]
-  const searchOptsNumber = ["height", "score", "width"]
 
   const checkLoadMore = () => {
     if (isBottom && !waiting) {
@@ -122,30 +120,40 @@ const ImageGridContainer = ({ pageSize, setBgImage }) => {
     dispatch({ type: 'selectImage', image });
   };
 
-  const searchData = useCallback(
-    (data) => {
+  const searchData = useCallback((data) => {
+      const searchOptionStrings = ['author', 'game'];
+      const searchOptionNumbers = ['height', 'score', 'width'];
+
       if (searchTerm?.length < 3) {
         return data;
       }
       dispatch({ type: 'setPage', page: 1 });
 
-      let searchOption = searchTerm.substring(0, searchTerm.indexOf(':'))
-      let newSearchTerm = searchTerm.substring(searchTerm.indexOf(':') + 1)
-      
-      if (searchOptsString.indexOf(searchOption) > -1){
+      let searchOption = searchTerm.substring(0, searchTerm.indexOf(':')).toLowerCase();
+      let newSearchTerm = searchTerm.substring(searchTerm.indexOf(':') + 1).replace(/\s+/g, '');
+
+      if (searchOptionStrings.includes(searchOption)) {
         const results = data.filter((obj) => {
           // if more than 1 char, search for the tag after lowercasing and removing spaces, else return data (nothing)
-          return (newSearchTerm?.length > 1) ? obj[searchOption].toLowerCase().replace(/\s+/g, '').indexOf(newSearchTerm.toLowerCase().replace(/\s+/g, '')) !== -1 : data
+          return newSearchTerm?.length >= 3
+            ? obj[searchOption]
+                .toLowerCase()
+                .replace(/\s+/g, '')
+                .indexOf(newSearchTerm.toLowerCase()) !== -1
+            : data;
         });
         return results;
-      }
-      else if (searchOptsNumber.indexOf(searchOption) > -1) {
+      } else if (searchOptionNumbers.includes(searchOption)) {
         const results = data.filter((obj) => {
           // i may have been a little crazy here
-          return (newSearchTerm?.length > 1) 
-          /* if there is a '<', search for all item lower than the searched number, else it search for item upper, '>' or not */
-          ? (newSearchTerm.indexOf('<') !== -1) ? obj[searchOption] <= parseInt(newSearchTerm.substr(newSearchTerm.indexOf('<') + 1), 10) : obj[searchOption] >= parseInt(newSearchTerm.substr(newSearchTerm.indexOf('>') + 1), 10) 
-          : data
+          return newSearchTerm?.length >= 3
+            ? /* if there is a '<', search for all item lower than the searched number, else it search for item upper, '>' or not */
+              newSearchTerm.indexOf('<') !== -1
+              ? obj[searchOption] <=
+                parseInt(newSearchTerm.substr(newSearchTerm.indexOf('<') + 1), 10)
+              : obj[searchOption] >=
+                parseInt(newSearchTerm.substr(newSearchTerm.indexOf('>') + 1), 10)
+            : data;
         });
         return results;
       }
@@ -249,7 +257,7 @@ const ImageGridContainer = ({ pageSize, setBgImage }) => {
   moreImagesToLoad && checkLoadMore();
 
   return (
-    <div style={{ margin: '0 auto' }} className="home">
+    <div className="home">
       <ModalContext.Provider value={{ modal, setModal }}>
         <ImageNav
           className={showViewer || modal.show ? 'hidden' : ''}

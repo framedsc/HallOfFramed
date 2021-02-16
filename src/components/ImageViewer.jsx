@@ -67,7 +67,7 @@ const ImageViewer = ({ image = {}, show, onClose, data, onPrev, onNext, setBgIma
   const blurClass = modal.show ? 'blur' : undefined;
   const loadedClass = showImage ? 'loaded' : 'hidden';
   const viewerClass = modal.show ? 'hidden' : 'visible';
-  const socialData = image && authorData.find((item) => image.authorName === item.authorNick);
+  const socialData = image && authorData.find((item) => image.author === item.authorNick);
 
   const handleExitFullscreen = () => document.exitFullscreen();
 
@@ -212,7 +212,7 @@ const ImageViewer = ({ image = {}, show, onClose, data, onPrev, onNext, setBgIma
         {image && (
           <>
             <img
-              alt={image.gameName}
+              alt={image.game}
               src={image.shotUrl}
               onClick={(event) => {
                 event.stopPropagation();
@@ -237,8 +237,8 @@ const ImageViewer = ({ image = {}, show, onClose, data, onPrev, onNext, setBgIma
                   }
                 >
                   <span className="by">{`by `}</span>
-                  <span className="author">{image.authorName}</span>
-                  <span className="title">{image.gameName}</span>
+                  <span className="author">{image.author}</span>
+                  <span className="title">{image.game}</span>
                   <SocialLinks data={socialData} />
                 </div>
                 <div className="image-viewer-controls">
