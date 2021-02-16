@@ -257,8 +257,8 @@ button > svg {
   -webkit-appearance: none;
 }
 
-.image-nav .search .search,
-.image-nav .search .cancel {
+.image-nav .search svg.search,
+.image-nav .search button.cancel {
   display: inline-block;
   color: rgba(0, 0, 0, 0.87);
   fill: rgb(158, 158, 158);
@@ -271,22 +271,23 @@ button > svg {
   right: 10px;
 }
 
-.image-nav .search:hover svg {
+.image-nav .search input:focus + svg {
   fill: #ccc;
 }
 
 .image-nav .search svg.search {
   opacity: 1;
-  right:7px;
+  right: 7px;
+  pointer-events: none;
 }
 
-.image-nav .search .cancel {
+.image-nav .search button.cancel {
   padding: 0;
   width: 20px;
   pointer-events: none;
 }
 
-.image-nav .search .cancel svg {
+.image-nav .search button.cancel svg {
   opacity: 0;
   width: 20px;
 }
@@ -301,6 +302,7 @@ button > svg {
 
 .image-nav .search.active .cancel svg {
   opacity: 1;
+  fill: #ccc;
 }
 
 /* Targets field's placeholder text */
@@ -1175,14 +1177,14 @@ button > svg {
     padding-bottom: 50px;
   }
 
-  .image-nav .search .search,
-  .image-nav .search .cancel {
+  .image-nav .search svg.search,
+  .image-nav .search button.cancel {
     height: 30px;
     width: 30px;
     top: 8px;
   }
 
-  .image-nav .search .cancel svg {
+  .image-nav .search button.cancel svg {
     width: 30px;
     height: 30px;
   }
