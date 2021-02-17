@@ -35,10 +35,16 @@ const AboutModalContent = () => {
           <li><code>author: Dread</code> : searches for all shots by "Dread"</li>
           <li><code>score: 42</code> : searches for shots with at least 42 reactions/likes</li>
           <li><code>width: {">"}3840</code> : searches for shots with a width greater than or equal 3840</li>
-          <li><code>height: {"<"}2160</code> : searches for shots with a width greater than or equal to 2160</li>
+          <li><code>height: {"<"}2160</code> : searches for shots with a height smaller than or equal to 2160</li>
         </ol>
         <br/>
       </div>
+
+      <h4>Copyright and usage</h4>
+      <p>
+        All shots on this site are &copy; the rightful owner of the work. Shots on this site are strictly for personal use only. 
+        It's not allowed to use the shots in commercial or other non-personal contexts without the written approval of the copyright owner. 
+      </p>
 
       <h4>Contact</h4>
       <p>
