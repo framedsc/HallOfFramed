@@ -123,8 +123,9 @@ const ImageNav = ({ className, options, reverseSort, updateSort, updateFormat, u
   };
 
   const renderMobile = () => {
+    const mobileMenuClass = showMenu ? 'show' : false;
     return (
-      <div className="mobile-menu" ref={mobileMenuRef}>
+      <div className={classNames('mobile-menu', mobileMenuClass)} ref={mobileMenuRef}>
         <button className="menu-button" onClick={() => setShowMenu((current) => !current)}>
           <Menu />
         </button>
@@ -134,10 +135,10 @@ const ImageNav = ({ className, options, reverseSort, updateSort, updateFormat, u
               {renderSearch}
               {renderSort}
               {renderFilters}
-              {aboutIconButton}
             </div>
           </div>
         )}
+        {aboutIconButton}
       </div>
     );
   };

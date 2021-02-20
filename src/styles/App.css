@@ -27,9 +27,15 @@
   box-sizing: border-box; /* Automatically take into account padding when calculating dimensions for more consistency */
 }
 
+html {
+  height: -webkit-fill-available;
+}
+
 body {
   background: grey no-repeat fixed center;
   font-size: 14px;
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
 }
 
 /* Splash screen */
@@ -277,7 +283,7 @@ button > svg {
 
 .image-nav .search svg.search {
   opacity: 1;
-  right: 7px;
+  right: calc(var(--mobile-header-margin-sides) - 3px);
   pointer-events: none;
 }
 
@@ -339,7 +345,7 @@ button > svg {
   background: none;
   padding: 0;
   position: absolute;
-  right: var(--mobile-header-margin-sides);
+  right: calc(var(--mobile-header-margin-sides) - 5px);
   top: 9px;
 }
 
@@ -374,11 +380,6 @@ button > svg {
 .mobile-menu .mobile-menu-content .search .search-input {
   background: var(--search-bg);
   width: 100%;
-}
-
-.mobile-menu .mobile-menu-content .filters,
-.mobile-menu .mobile-menu-content .image-types {
-  margin-right: 0px !important;
 }
 
 .mobile-menu .mobile-menu-content .image-types {
@@ -421,28 +422,6 @@ button > svg {
 .mobile-menu .mobile-menu-content .filters .filter,
 .mobile-menu .mobile-menu-content .filters .filter.is-active {
   padding-right: 35px;
-}
-
-.mobile-menu .about-icon {
-  align-items: center;
-  animation: slideUp 300ms forwards;
-  display: flex;
-  filter: drop-shadow(var(--text-shadow-1)) drop-shadow(var(--text-shadow-2));
-  margin: 0;
-  opacity: 1;
-  padding: 0;
-  position: absolute;
-  top: 100vh;
-  right: calc(var(--mobile-header-margin-sides) + 5px); /* centered to hamburger icon */
-}
-
-.mobile-menu .about-icon svg {
-  transition: fill 100ms linear;
-}
-
-.mobile-menu .about-icon:hover svg,
-.mobile-menu .about-icon:active svg {
-  fill: var(--active-hover-bg);
 }
 
 /* ------------------------- Image Grid/Viewer ------------------------- */
@@ -867,14 +846,15 @@ button > svg {
   right: 0;
   display: flex;
   justify-content: center;
+  align-items: center;
 }
 
 .framed-modal-content {
   cursor: default;
   max-width: 90%;
-  position: fixed;
-  top: 10%;
   background: #dddddd22;
+  overflow-y: auto;
+  max-height: 90%;
 }
 
 .about-modal-content {
@@ -1137,9 +1117,7 @@ button > svg {
   }
 
   .framed-modal-content {
-    top: 50px;
     width: 90%;
-    overflow-y: scroll;
   }
 
   .author-link a::before {
@@ -1158,6 +1136,32 @@ button > svg {
 }
 
 @media only screen and (max-width: 840px) {
+  .mobile-menu .about-icon {
+    align-items: center;
+    display: flex;
+    filter: drop-shadow(var(--text-shadow-1)) drop-shadow(var(--text-shadow-2));
+    margin: 0;
+    opacity: 1;
+    padding: 0;
+    position: fixed;
+    top: 157px;
+    right: -50px;
+    transition: right 200ms;
+  }
+
+  .mobile-menu.show .about-icon {
+    right: calc(var(--mobile-header-margin-sides)); /* centered to hamburger icon */
+  } 
+  
+  .mobile-menu .about-icon svg {
+    transition: fill 100ms linear;
+  }
+  
+  .mobile-menu .about-icon:hover svg,
+  .mobile-menu .about-icon:active svg {
+    fill: var(--active-hover-bg);
+  }
+
   .image-nav .info-button {
     margin: 0;
     position: absolute;
@@ -1166,9 +1170,7 @@ button > svg {
   }
 
   .framed-modal-content {
-    top: 50px;
     width: 90%;
-    overflow-y: auto;
     max-height: 90%;
   }
 
@@ -1202,6 +1204,9 @@ button > svg {
   body::before {
     background-size: 450px;
   }
+}
+
+@media (pointer:none), (pointer:coarse) {
 }
 
 /* ---------------------- Browser support checks ---------------------- */
