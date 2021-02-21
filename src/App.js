@@ -4,7 +4,9 @@ import { SiteDataContext } from '../src/utils/context';
 import { getAuthors, getImages } from './api/request';
 import './assets/fonts/stylesheet.css';
 import './components/Spinner/Spinner.css';
+import './styles/AboutModalContent.css';
 import './styles/App.css';
+import './styles/FramedModalContent.css';
 import './styles/reset.css';
 
 function normalizeData(data) {
