@@ -9,6 +9,7 @@ import './styles/App.css';
 import './styles/FramedModalContent.css';
 import './styles/reset.css';
 
+
 function normalizeData(data) {
   let noramlizedData = [];
 
@@ -23,10 +24,19 @@ function normalizeData(data) {
   return noramlizedData;
 }
 
+function getQueryParam(param) {
+  const search = window.location.search;
+  const params = new URLSearchParams(search);
+
+  return params.get(param);
+}
+
 function App() {
   const [siteData, setSiteData] = useState({ imageData: [], authorData: [] });
   const [initialized, setInitialized] = useState(false);
   const [bgImageContainer, setBgImageContainer] = useState(null);
+
+  const imageId=(getQueryParam('imageId'));
 
   const setBackground = useCallback(
     (imageObject) => {
@@ -69,7 +79,7 @@ function App() {
     <div className="image-grid">
       {siteData.imageData && siteData.authorData && (
         <SiteDataContext.Provider value={siteData}>
-          <ImageGridContainer pageSize={200} setBgImage={setBackground} />
+          <ImageGridContainer imageId={imageId} pageSize={200} setBgImage={setBackground} />
         </SiteDataContext.Provider>
       )}
     </div>

@@ -59,8 +59,8 @@ const ImageViewer = ({ image = {}, show, onClose, data, onPrev, onNext, setBgIma
   }
 
   const visibleClass = show ? 'is-visible' : undefined;
-  const prevDisabled = data.findIndex((e) => e.id === image.id) === 0 || !loadedState;
-  const nextDisabled = data.findIndex((e) => e.id === image.id) === data.length - 1 || !loadedState;
+  const prevDisabled = data.findIndex((e) => e.id === image?.id) === 0 || !loadedState;
+  const nextDisabled = data.findIndex((e) => e.id === image?.id) === data.length - 1 || !loadedState;
 
   const modifier = !initialized ? 'global' : '';
   const fullscreenClass = isFullscreen ? 'fullscreen' : undefined;

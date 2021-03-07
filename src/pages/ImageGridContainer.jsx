@@ -1,4 +1,5 @@
 import React, { useCallback, useContext, useEffect, useReducer, useState } from 'react';
+import { useHistory } from "react-router-dom";
 import FramedModal from '../components/FramedModal/FramedModal';
 import ImageGrid from '../components/ImageGrid';
 import ImageNav from '../components/ImageNav';
@@ -17,18 +18,6 @@ const sortOptions = [
   },
 ];
 
-const initialState = {
-  images: [],
-  sortOption: sortOptions[0],
-  format: 'all',
-  searchTerm: '',
-  showViewer: false,
-  viewerSrc: {},
-  isReverse: false,
-  waiting: false,
-  page: 1,
-};
-
 const reducer = (state, action) => {
   switch (action.type) {
     case 'reset':
@@ -42,7 +31,7 @@ const reducer = (state, action) => {
     case 'changeFormat':
       return { ...state, page: 1, waiting: true, ...action };
     case 'close':
-      return { ...state, viewerSrc: {}, showViewer: false };
+      return { ...state, viewerSrc: null, showViewer: false };
     case 'setSearchTerm':
       return { ...state, searchTerm: action.searchTerm };
     case 'setImages':
@@ -64,9 +53,22 @@ const reducer = (state, action) => {
   }
 };
 
+const initialState = {
+  images: [],
+  sortOption: sortOptions[0],
+  format: 'all',
+  searchTerm: '',
+  showViewer: false,
+  viewerSrc: null,
+  isReverse: false,
+  waiting: false,
+  page: 1,
+};
+
 let timer;
 
-const ImageGridContainer = ({ pageSize, setBgImage }) => {
+const ImageGridContainer = ({ pageSize, setBgImage, imageId }) => {
+  // component state
   const [
     { images, sortOption, format, searchTerm, showViewer, viewerSrc, isReverse, waiting, page },
     dispatch,
@@ -74,6 +76,7 @@ const ImageGridContainer = ({ pageSize, setBgImage }) => {
     ...initialState,
   });
 
+  // context
   const [modal, setModal] = useState({
     show: false,
     component: null,
@@ -81,9 +84,19 @@ const ImageGridContainer = ({ pageSize, setBgImage }) => {
     withClose: true,
   });
   const siteData = useContext(SiteDataContext);
+
+  // component variables
   const { imageData } = siteData || [];
   const moreImagesToLoad = page * pageSize <= images.length;
   const isBottom = useScrollPosition(moreImagesToLoad);
+  const history = useHistory()
+
+  // component methods
+  const loadImageFromQueryString = useCallback(() => {
+    const imageIndex = imageData.findIndex((e) => e.id === imageId);
+    const image = imageData[imageIndex];
+    dispatch({type: 'selectImage', image, showViewer: true})
+  }, [imageData, imageId]);
 
   const checkLoadMore = () => {
     if (isBottom && !waiting) {
@@ -92,6 +105,10 @@ const ImageGridContainer = ({ pageSize, setBgImage }) => {
   };
 
   const handleClose = () => {
+    const params = new URLSearchParams()
+    params.delete("imageId")
+    history.push({search: params.toString()})
+
     if (modal.className !== 'author-social-content') {
       dispatch({ type: 'close' });
     }
@@ -117,6 +134,10 @@ const ImageGridContainer = ({ pageSize, setBgImage }) => {
   };
 
   const handleImageClick = (image) => {
+    const params = new URLSearchParams()
+    params.append("imageId", image.id)
+    history.push({search: params.toString()})
+
     dispatch({ type: 'selectImage', image });
   };
 
@@ -251,8 +272,14 @@ const ImageGridContainer = ({ pageSize, setBgImage }) => {
     filterImages,
     showViewer,
     paginate,
-    waiting,
+    waiting
   ]);
+
+  useEffect(() => {
+    if (imageData.length && imageId !== null) {
+      loadImageFromQueryString();
+    }
+  }, [imageData, imageId, loadImageFromQueryString]);
 
   moreImagesToLoad && checkLoadMore();
 
