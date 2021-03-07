@@ -9,7 +9,6 @@ import './styles/App.css';
 import './styles/FramedModalContent.css';
 import './styles/reset.css';
 
-
 function normalizeData(data) {
   let noramlizedData = [];
 
@@ -36,10 +35,9 @@ function App() {
   const [initialized, setInitialized] = useState(false);
   const [bgImageContainer, setBgImageContainer] = useState(null);
 
-  const imageId=(getQueryParam('imageId'));
+  const imageId = getQueryParam('imageId');
 
-  const setBackground = useCallback(
-    (imageObject) => {
+  const setBackground = useCallback((imageObject) => {
       const bgImage = imageObject.thumbnailUrl;
       bgImageContainer.style.backgroundImage = `url('${bgImage}')`;
     },
@@ -54,26 +52,31 @@ function App() {
     const normalizedAuthors = normalizeData(authorsResponse.data);
 
     for (let i = 0; i < normalizedImages.length; i++) {
-      normalizedImages[i].authorid=normalizedImages[i].author;
-      const authorName = normalizedAuthors.find((author) => author.authorid === normalizedImages[i].authorid).authorNick;
-      normalizedImages[i].author=authorName;
-      normalizedImages[i].game=normalizedImages[i].gameName;
+      normalizedImages[i].authorid = normalizedImages[i].author;
+      const authorName = normalizedAuthors.find(
+        (author) => author.authorid === normalizedImages[i].authorid,
+      ).authorNick;
+      normalizedImages[i].author = authorName;
+      normalizedImages[i].game = normalizedImages[i].gameName;
     }
 
-    setSiteData({imageData: normalizedImages, authorData: normalizedAuthors})
-
+    setSiteData({ imageData: normalizedImages, authorData: normalizedAuthors });
   };
 
   useEffect(() => {
     const { imageData } = siteData;
 
     !initialized && getData();
-    imageData.length && !bgImageContainer && setBgImageContainer(document.querySelector('.bg-blur'));
+    imageData.length &&
+      !bgImageContainer &&
+      setBgImageContainer(document.querySelector('.bg-blur'));
     if (imageData.length && bgImageContainer) {
-      const randomImageIndex = Math.floor(Math.random() * Math.floor(imageData.length-1));
+      const randomImageIndex = imageId
+        ? imageData.findIndex((e) => e.id === imageId)
+        : Math.floor(Math.random() * Math.floor(imageData.length - 1));
       setBackground(imageData[randomImageIndex]);
     }
-  }, [bgImageContainer, siteData, initialized, setBackground]);
+  }, [bgImageContainer, siteData, initialized, setBackground, imageId]);
 
   return (
     <div className="image-grid">

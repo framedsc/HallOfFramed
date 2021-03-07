@@ -132,7 +132,8 @@ const ImageGridContainer = ({ pageSize, setBgImage, imageId }) => {
   };
 
   const updateImageParam = (id) => {
-    const params = new URLSearchParams()
+    const search = window.location.search;
+    const params = new URLSearchParams(search);
     if (id) {
       params.append("imageId", id)
     } else {
