@@ -105,9 +105,7 @@ const ImageGridContainer = ({ pageSize, setBgImage, imageId }) => {
   };
 
   const handleClose = () => {
-    const params = new URLSearchParams()
-    params.delete("imageId")
-    history.push({search: params.toString()})
+    updateImageParam();
 
     if (modal.className !== 'author-social-content') {
       dispatch({ type: 'close' });
@@ -133,10 +131,19 @@ const ImageGridContainer = ({ pageSize, setBgImage, imageId }) => {
     dispatch({ type: 'setSearchTerm', searchTerm: keyword });
   };
 
-  const handleImageClick = (image) => {
+  const updateImageParam = (id) => {
     const params = new URLSearchParams()
-    params.append("imageId", image.id)
+    if (id) {
+      params.append("imageId", id)
+    } else {
+      params.delete("imageId")
+    }
     history.push({search: params.toString()})
+
+  }
+
+  const handleImageClick = (image) => {
+    updateImageParam(image.id);
 
     dispatch({ type: 'selectImage', image });
   };
@@ -233,6 +240,7 @@ const ImageGridContainer = ({ pageSize, setBgImage, imageId }) => {
   const selectPreviousImage = () => {
     const index = images.findIndex((e) => e.id === viewerSrc.id);
     if (index - 1 >= 0) {
+      updateImageParam(images[index - 1].id);
       dispatch({ type: 'selectImage', image: images[index - 1] });
     }
   };
@@ -240,6 +248,7 @@ const ImageGridContainer = ({ pageSize, setBgImage, imageId }) => {
   const selectNextImage = () => {
     const index = images.findIndex((e) => e.id === viewerSrc.id);
     if (index + 1 <= images.length) {
+      updateImageParam(images[index + 1].id);
       dispatch({ type: 'selectImage', image: images[index + 1] });
     }
   };
