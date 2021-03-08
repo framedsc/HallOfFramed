@@ -126,3 +126,10 @@ export const extractTopLevelDomain = (url) => {
 
   return newURL.slice(0, end);
 }
+
+export const getQueryParam = (param) => {
+  const search = window.location.search;
+  const params = new URLSearchParams(search);
+
+  return params.get(param);
+}

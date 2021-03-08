@@ -5,7 +5,7 @@ import ImageGrid from '../components/ImageGrid';
 import ImageNav from '../components/ImageNav';
 import ImageViewer from '../components/ImageViewer';
 import { ModalContext, SiteDataContext } from '../utils/context';
-import { scrolledToBottom, useScrollPosition } from '../utils/utils';
+import { getQueryParam, scrolledToBottom, useScrollPosition } from '../utils/utils';
 
 const sortOptions = [
   {
@@ -18,57 +18,59 @@ const sortOptions = [
   },
 ];
 
-const reducer = (state, action) => {
-  switch (action.type) {
-    case 'reset':
-      return { ...initialState };
-    case 'loadMoreImages':
-      return { ...state, waiting: true, page: action.page };
-    case 'doneWaiting':
-      return { ...state, waiting: false };
-    case 'setPage':
-      return { ...state, waiting: true, page: action.page };
-    case 'changeFormat':
-      return { ...state, page: 1, waiting: true, ...action };
-    case 'close':
-      return { ...state, viewerSrc: null, showViewer: false };
-    case 'setSearchTerm':
-      return { ...state, searchTerm: action.searchTerm };
-    case 'setImages':
-      return { ...state, images: action.images };
-    case 'selectImage':
-      return { ...state, viewerSrc: action.image, showViewer: true };
-    case 'loadImage':
-      return { initialized: true, loadedState: true, showImage: true };
-    case 'changeSort':
-      return {
-        ...state,
-        page: 1,
-        waiting: true,
-        sortOption: action.sortOption,
-        isReverse: action.isReverse,
-      };
-    default:
-      return state;
-  }
-};
-
-const initialState = {
-  images: [],
-  sortOption: sortOptions[0],
-  format: 'all',
-  searchTerm: '',
-  showViewer: false,
-  viewerSrc: null,
-  isReverse: false,
-  waiting: false,
-  page: 1,
-};
-
 let timer;
 
 const ImageGridContainer = ({ pageSize, setBgImage, imageId }) => {
+  const searchQuery = getQueryParam('search');
+
   // component state
+  const reducer = (state, action) => {
+    switch (action.type) {
+      case 'reset':
+        return { ...initialState };
+      case 'loadMoreImages':
+        return { ...state, waiting: true, page: action.page };
+      case 'doneWaiting':
+        return { ...state, waiting: false };
+      case 'setPage':
+        return { ...state, waiting: true, page: action.page };
+      case 'changeFormat':
+        return { ...state, page: 1, waiting: true, ...action };
+      case 'close':
+        return { ...state, viewerSrc: null, showViewer: false };
+      case 'setSearchTerm':
+        return { ...state, searchTerm: action.searchTerm };
+      case 'setImages':
+        return { ...state, images: action.images };
+      case 'selectImage':
+        return { ...state, viewerSrc: action.image, showViewer: true };
+      case 'loadImage':
+        return { initialized: true, loadedState: true, showImage: true };
+      case 'changeSort':
+        return {
+          ...state,
+          page: 1,
+          waiting: true,
+          sortOption: action.sortOption,
+          isReverse: action.isReverse,
+        };
+      default:
+        return state;
+    }
+  };
+  
+  const initialState = {
+    images: [],
+    sortOption: sortOptions[0],
+    format: 'all',
+    searchTerm: searchQuery || '',
+    showViewer: false,
+    viewerSrc: null,
+    isReverse: false,
+    waiting: false,
+    page: 1,
+  };
+
   const [
     { images, sortOption, format, searchTerm, showViewer, viewerSrc, isReverse, waiting, page },
     dispatch,
@@ -89,7 +91,7 @@ const ImageGridContainer = ({ pageSize, setBgImage, imageId }) => {
   const { imageData } = siteData || [];
   const moreImagesToLoad = page * pageSize <= images.length;
   const isBottom = useScrollPosition(moreImagesToLoad);
-  const history = useHistory()
+  const history = useHistory();
 
   // component methods
   const loadImageFromQueryString = useCallback(() => {
@@ -303,6 +305,7 @@ const ImageGridContainer = ({ pageSize, setBgImage, imageId }) => {
           updateSort={handleSortChange}
           updateFormat={handleFormatChange}
           updateSearch={handleSearchChange}
+          defaultSearch={searchQuery}
         />
         {imageData && (
           <ImageGrid

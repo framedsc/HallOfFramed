@@ -8,6 +8,7 @@ import './styles/AboutModalContent.css';
 import './styles/App.css';
 import './styles/FramedModalContent.css';
 import './styles/reset.css';
+import { getQueryParam } from './utils/utils';
 
 function normalizeData(data) {
   let noramlizedData = [];
@@ -21,13 +22,6 @@ function normalizeData(data) {
   });
 
   return noramlizedData;
-}
-
-function getQueryParam(param) {
-  const search = window.location.search;
-  const params = new URLSearchParams(search);
-
-  return params.get(param);
 }
 
 function App() {

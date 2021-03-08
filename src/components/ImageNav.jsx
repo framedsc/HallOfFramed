@@ -1,15 +1,17 @@
 import classNames from 'classnames';
 import React, { useContext, useEffect, useRef, useState } from 'react';
+import { useHistory } from "react-router-dom";
 import { About, Cancel, FramedIcon, Menu, Search, SortDown, SortUp } from '../assets/svgIcons';
 import AboutModalContent from '../components/AboutModalContent';
 import { ModalContext } from '../utils/context';
 import { breakpoints, useOutsideAlerter, useViewport } from '../utils/utils';
 
-const ImageNav = ({ className, options, reverseSort, updateSort, updateFormat, updateSearch }) => {
+const ImageNav = ({ className, options, reverseSort, updateSort, updateFormat, updateSearch, defaultSearch }) => {
   const [active, setActive] = useState(options[0]);
   const [type, setType] = useState('All');
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState(defaultSearch || '');
   const { setModal } = useContext(ModalContext);
+  const history = useHistory()
 
   const handleOptionChange = (selection) => {
     setActive(selection);
@@ -22,8 +24,9 @@ const ImageNav = ({ className, options, reverseSort, updateSort, updateFormat, u
   };
 
   const handleSearchChange = (event) => {
-    setSearchTerm(event.target.value);
-    updateSearch(event.target.value);
+    const inputValue = event.target.value;
+    setSearchTerm(inputValue);
+    updateSearch(inputValue);
   };
 
   const clearSearch = () => {
@@ -156,10 +159,18 @@ const ImageNav = ({ className, options, reverseSort, updateSort, updateFormat, u
   useOutsideAlerter(mobileMenuRef, handleClickOutside);
 
   useEffect(() => {
+    const search = window.location.search;
+    const params = new URLSearchParams(search);
+    params.delete("search");
     if (!isMobile) {
       setShowMenu(false);
     }
-  }, [isMobile]);
+
+    if (searchTerm) {
+      params.append("search", searchTerm)
+    } 
+    history.push({search: params.toString()})
+  }, [isMobile, history, searchTerm]);
 
   return (
     <div className={`image-nav ${viewportClass} ${className}`}>
