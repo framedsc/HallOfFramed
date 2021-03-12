@@ -29,7 +29,8 @@ function App() {
   const [initialized, setInitialized] = useState(false);
   const [bgImageContainer, setBgImageContainer] = useState(null);
 
-  const imageId = parseInt(getQueryParam('imageId'));
+  const imageIdParam = getQueryParam('imageId');
+  const imageId = imageIdParam && parseInt(imageIdParam);
 
   const setBackground = useCallback((imageObject) => {
       if (!imageObject) {
