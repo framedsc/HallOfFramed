@@ -10,7 +10,7 @@ import { getQueryParam, scrolledToBottom, useScrollPosition } from '../utils/uti
 const sortOptions = [
   {
     label: 'Date',
-    key: 'date',
+    key: 'epochTime',
   },
   {
     label: 'Popularity',
@@ -24,10 +24,31 @@ const ImageGridContainer = ({ pageSize, setBgImage, imageId }) => {
   const searchQuery = getQueryParam('search');
 
   // component state
+  const initialState = {
+    images: [],
+    sortOption: sortOptions[0],
+    format: 'all',
+    searchTerm: searchQuery || '',
+    showViewer: false,
+    viewerSrc: null,
+    isReverse: false,
+    waiting: false,
+    page: 1,
+  };
+
   const reducer = (state, action) => {
     switch (action.type) {
       case 'reset':
-        return { ...initialState };
+        return { 
+          ...state, 
+          sortOption:sortOptions[0], 
+          format: 'all',
+          searchTerm: '',
+          showViewer: false,
+          viewerSrc: null,
+          isReverse: false,
+          page: 1
+        };
       case 'loadMoreImages':
         return { ...state, waiting: true, page: action.page };
       case 'doneWaiting':
@@ -58,18 +79,6 @@ const ImageGridContainer = ({ pageSize, setBgImage, imageId }) => {
         return state;
     }
   };
-  
-  const initialState = {
-    images: [],
-    sortOption: sortOptions[0],
-    format: 'all',
-    searchTerm: searchQuery || '',
-    showViewer: false,
-    viewerSrc: null,
-    isReverse: false,
-    waiting: false,
-    page: 1,
-  };
 
   const [
     { images, sortOption, format, searchTerm, showViewer, viewerSrc, isReverse, waiting, page },
@@ -95,7 +104,7 @@ const ImageGridContainer = ({ pageSize, setBgImage, imageId }) => {
 
   // component methods
   const loadImageFromQueryString = useCallback(() => {
-    const imageIndex = imageData.findIndex((e) => e.id === imageId);
+    const imageIndex = imageData.findIndex((e) => e.epochTime === imageId);
     const image = imageData[imageIndex];
     dispatch({type: 'selectImage', image, showViewer: true})
   }, [imageData, imageId]);
@@ -136,17 +145,16 @@ const ImageGridContainer = ({ pageSize, setBgImage, imageId }) => {
   const updateImageParam = (id) => {
     const search = window.location.search;
     const params = new URLSearchParams(search);
+    params.delete("imageId");
     if (id) {
       params.append("imageId", id)
-    } else {
-      params.delete("imageId")
-    }
+    } 
     history.push({search: params.toString()})
 
   }
 
   const handleImageClick = (image) => {
-    updateImageParam(image.id);
+    updateImageParam(image.epochTime);
 
     dispatch({ type: 'selectImage', image });
   };
@@ -241,17 +249,17 @@ const ImageGridContainer = ({ pageSize, setBgImage, imageId }) => {
   );
 
   const selectPreviousImage = () => {
-    const index = images.findIndex((e) => e.id === viewerSrc.id);
+    const index = images.findIndex((e) => e.epochTime === viewerSrc.epochTime);
     if (index - 1 >= 0) {
-      updateImageParam(images[index - 1].id);
+      updateImageParam(images[index - 1].epochTime);
       dispatch({ type: 'selectImage', image: images[index - 1] });
     }
   };
 
   const selectNextImage = () => {
-    const index = images.findIndex((e) => e.id === viewerSrc.id);
+    const index = images.findIndex((e) => e.epochTime === viewerSrc.epochTime);
     if (index + 1 <= images.length) {
-      updateImageParam(images[index + 1].id);
+      updateImageParam(images[index + 1].epochTime);
       dispatch({ type: 'selectImage', image: images[index + 1] });
     }
   };
@@ -306,6 +314,7 @@ const ImageGridContainer = ({ pageSize, setBgImage, imageId }) => {
           updateFormat={handleFormatChange}
           updateSearch={handleSearchChange}
           defaultSearch={searchQuery}
+          onLogoClick={()=> dispatch({type:'reset'})}
         />
         {imageData && (
           <ImageGrid

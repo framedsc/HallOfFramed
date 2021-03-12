@@ -51,9 +51,9 @@ const AboutModalContent = () => {
               <li><code>cyberpunk</code><span> : searches all data for the text "cyberpunk"</span></li>
               <li><code>game: Cyberpunk</code><span> : finds shots from the game "Cyberpunk"</span></li>
               <li><code>author: Dread</code><span> : finds all shots by "Dread"</span></li>
-              <li><code>score: 42</code><span> : finds shots with at least 42 reactions/likes</span></li>
-              <li><code>width:{` >`}3840</code><span> : finds shots with a width greater than or equal 3840</span></li>
-              <li><code>height:{` <`}2160</code><span> : finds shots with a height smaller than or equal to 2160</span></li>
+              <li><code>score:{` > 42`}</code><span> : finds shots with at least 42 reactions/likes</span></li>
+              <li><code>width:{` > `}3840</code><span> : finds shots with a width greater than or equal 3840</span></li>
+              <li><code>height:{` < `}2160</code><span> : finds shots with a height smaller than or equal to 2160</span></li>
             </ol>
             <br />
           </div>

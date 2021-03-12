@@ -24,7 +24,7 @@ const ImageGrid = ({
         author: images[i].author,
         authorid: images[i].authorid,
         authorsAvatarUrl: images[i].authorsAvatarUrl,
-        data: images[i].date,
+        epochTime: images[i].epochTime,
         game: images[i].game,
         score: images[i].score,
         shotUrl: images[i].shotUrl,

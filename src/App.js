@@ -29,9 +29,12 @@ function App() {
   const [initialized, setInitialized] = useState(false);
   const [bgImageContainer, setBgImageContainer] = useState(null);
 
-  const imageId = getQueryParam('imageId');
+  const imageId = parseInt(getQueryParam('imageId'));
 
   const setBackground = useCallback((imageObject) => {
+      if (!imageObject) {
+        return;
+      }
       const bgImage = imageObject.thumbnailUrl;
       bgImageContainer.style.backgroundImage = `url('${bgImage}')`;
     },
@@ -66,7 +69,7 @@ function App() {
       setBgImageContainer(document.querySelector('.bg-blur'));
     if (imageData.length && bgImageContainer) {
       const randomImageIndex = imageId
-        ? imageData.findIndex((e) => e.id === imageId)
+        ? imageData.findIndex((e) => e.epochTime === imageId)
         : Math.floor(Math.random() * Math.floor(imageData.length - 1));
       setBackground(imageData[randomImageIndex]);
     }

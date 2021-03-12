@@ -6,7 +6,7 @@ import AboutModalContent from '../components/AboutModalContent';
 import { ModalContext } from '../utils/context';
 import { breakpoints, useOutsideAlerter, useViewport } from '../utils/utils';
 
-const ImageNav = ({ className, options, reverseSort, updateSort, updateFormat, updateSearch, defaultSearch }) => {
+const ImageNav = ({ className, options, reverseSort, updateSort, updateFormat, updateSearch, defaultSearch, onLogoClick }) => {
   const [active, setActive] = useState(options[0]);
   const [type, setType] = useState('All');
   const [searchTerm, setSearchTerm] = useState(defaultSearch || '');
@@ -28,6 +28,13 @@ const ImageNav = ({ className, options, reverseSort, updateSort, updateFormat, u
     setSearchTerm(inputValue);
     updateSearch(inputValue);
   };
+
+  const handleLogoClick = () => {
+    setType('All');
+    setSearchTerm('');
+    setActive(options[0]);
+    onLogoClick();
+  }
 
   const clearSearch = () => {
     setSearchTerm('');
@@ -175,7 +182,7 @@ const ImageNav = ({ className, options, reverseSort, updateSort, updateFormat, u
   return (
     <div className={`image-nav ${viewportClass} ${className}`}>
       <div className="framed-icon">
-        <FramedIcon />
+        <button onClick={handleLogoClick} type="button"><FramedIcon /></button>
       </div>
       {!isMobile && renderDesktop()}
       {isMobile && renderMobile()}
