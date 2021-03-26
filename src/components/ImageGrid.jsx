@@ -1,5 +1,5 @@
 import React from 'react';
-import { useViewport } from '../utils/utils';
+import { useViewport } from '../utils/hooks';
 
 const ImageGrid = ({
   className,
@@ -24,7 +24,7 @@ const ImageGrid = ({
         author: images[i].author,
         authorid: images[i].authorid,
         authorsAvatarUrl: images[i].authorsAvatarUrl,
-        epochTime: images[i].epochTime,
+        epochtime: images[i].epochtime,
         game: images[i].game,
         score: images[i].score,
         shotUrl: images[i].shotUrl,

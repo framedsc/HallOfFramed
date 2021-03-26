@@ -1,17 +1,19 @@
 import classNames from 'classnames';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useHistory } from "react-router-dom";
-import { About, Cancel, FramedIcon, Menu, Search, SortDown, SortUp } from '../assets/svgIcons';
+import { About, FramedIcon, Menu, SortDown, SortUp } from '../assets/svgIcons';
 import AboutModalContent from '../components/AboutModalContent';
 import { ModalContext } from '../utils/context';
-import { breakpoints, useOutsideAlerter, useViewport } from '../utils/utils';
+import { useOutsideAlerter, useViewport } from '../utils/hooks';
+import { breakpoints } from '../utils/utils';
+import AdvancedSearch from './AdvancedSearch';
 
-const ImageNav = ({ className, options, reverseSort, updateSort, updateFormat, updateSearch, defaultSearch, onLogoClick }) => {
+const ImageNav = ({ className, options, reverseSort, updateSort, updateFormat, onLogoClick, searchProps }) => {
   const [active, setActive] = useState(options[0]);
   const [type, setType] = useState('All');
-  const [searchTerm, setSearchTerm] = useState(defaultSearch || '');
+  const [searchFocused, setSearchFocused] = useState(false);
   const { setModal } = useContext(ModalContext);
-  const history = useHistory()
+  const history = useHistory();
 
   const handleOptionChange = (selection) => {
     setActive(selection);
@@ -23,23 +25,11 @@ const ImageNav = ({ className, options, reverseSort, updateSort, updateFormat, u
     updateFormat(value);
   };
 
-  const handleSearchChange = (event) => {
-    const inputValue = event.target.value;
-    setSearchTerm(inputValue);
-    updateSearch(inputValue);
-  };
-
   const handleLogoClick = () => {
     setType('All');
-    setSearchTerm('');
     setActive(options[0]);
     onLogoClick();
   }
-
-  const clearSearch = () => {
-    setSearchTerm('');
-    updateSearch('');
-  };
 
   const showAbout = () => {
     const modalComponent = <AboutModalContent />;
@@ -47,27 +37,28 @@ const ImageNav = ({ className, options, reverseSort, updateSort, updateFormat, u
     setModal({ show: true, component: modalComponent, className: 'about-window', withClose: true });
   };
 
+  const handleSearchFocus = () => {
+    setSearchFocused(true);
+  }
+
+  const handleSearchBlur = () => {
+    setSearchFocused(false);
+  }
+
   const formats = ['All', 'Wide', 'Portrait'];
   const icon = reverseSort ? <SortUp key='sortup'/> : <SortDown key='sortdown'/>;
-  const activeClass = searchTerm.length > 0 ? 'active' : undefined;
 
-  const renderSearch = (
-    <div className={classNames('search', activeClass)}>
-      <input
-        type="search"
-        name="search"
-        className="search-input"
-        value={searchTerm}
-        onChange={handleSearchChange}
-        placeholder="Search"
-        autoComplete='off'
+  const renderSearch = ()=> {
+    return (
+      <AdvancedSearch
+        handleSearchFocus={handleSearchFocus}
+        handleSearchBlur={handleSearchBlur}
+        focused={searchFocused}
+        isMobile={isMobile}
+        {...searchProps}
       />
-      <Search className="search" />
-      <button className="cancel" onClick={clearSearch}>
-        <Cancel />
-      </button>
-    </div>
-  );
+    )
+  }
 
   const renderSort = (
     <ul className="filters">
@@ -92,28 +83,32 @@ const ImageNav = ({ className, options, reverseSort, updateSort, updateFormat, u
     </ul>
   );
 
-  const renderFilters = (
-    <div className="image-types">
-      {formats.map((item) => {
-        return (
-          <>
-            <input
-              id={`${item}-label`}
-              onChange={() => handleFormatChange(item)}
-              checked={type === item}
-              type="radio"
-              value={item}
-              name="type"
-              key={`${item}-input`}
-            />
-            <label key={`${item}-label`} htmlFor={`${item}-label`}>
-              {item}
-            </label>
-          </>
-        );
-      })}
-    </div>
-  );
+  const renderFilters = () => {
+    const hiddenClass = searchFocused && !isMobile ? 'hidden' : false;
+    
+    return (
+      <div className={classNames('image-types', hiddenClass)}>
+        {formats.map((item) => {
+          return (
+            <>
+              <input
+                id={`${item}-label`}
+                onChange={() => handleFormatChange(item)}
+                checked={type === item}
+                type="radio"
+                value={item}
+                name="type"
+                key={`${item}-input`}
+              />
+              <label key={`${item}-label`} htmlFor={`${item}-label`}>
+                {item}
+              </label>
+            </>
+          );
+        })}
+      </div>
+    )
+  }
 
   const aboutIconButton = (
     <button className="about-icon" onClick={showAbout}>
@@ -125,8 +120,8 @@ const ImageNav = ({ className, options, reverseSort, updateSort, updateFormat, u
     return (
       <>
         {renderSort}
-        {renderFilters}
-        {renderSearch}
+        {renderFilters()}
+        {renderSearch()}
         {aboutIconButton}
       </>
     );
@@ -142,9 +137,9 @@ const ImageNav = ({ className, options, reverseSort, updateSort, updateFormat, u
         {showMenu && (
           <div className="mobile-menu-content-mask">
             <div className="mobile-menu-content">
-              {renderSearch}
+              {renderSearch()}
               {renderSort}
-              {renderFilters}
+              {renderFilters()}
             </div>
           </div>
         )}
@@ -166,18 +161,10 @@ const ImageNav = ({ className, options, reverseSort, updateSort, updateFormat, u
   useOutsideAlerter(mobileMenuRef, handleClickOutside);
 
   useEffect(() => {
-    const search = window.location.search;
-    const params = new URLSearchParams(search);
-    params.delete("search");
     if (!isMobile) {
       setShowMenu(false);
     }
-
-    if (searchTerm) {
-      params.append("search", searchTerm)
-    } 
-    history.push({search: params.toString()})
-  }, [isMobile, history, searchTerm]);
+  }, [isMobile, history]);
 
   return (
     <div className={`image-nav ${viewportClass} ${className}`}>
@@ -190,4 +177,4 @@ const ImageNav = ({ className, options, reverseSort, updateSort, updateFormat, u
   );
 };
 
-export default ImageNav;
+export default React.memo(ImageNav);

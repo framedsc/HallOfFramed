@@ -1,0 +1,380 @@
+.image-nav .search {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.image-nav .search .search-input {
+  background: var(--search-bg);
+  border-radius: var(--border-radius);
+  color: hsla(0, 0%, 100%, 0.4);
+  font-size: inherit;
+  outline: 0;
+  padding: 5px 10px;
+  transition: var(--header-transition);
+  border: 0;
+  -webkit-appearance: none;
+  width: 190px;
+  transition: width 200ms;
+}
+
+.image-nav .search.focused .search-input::placeholder {
+  color: #bbb;
+}
+
+.image-nav .search.focused .search-input {
+  width: 435px;
+}
+
+.image-nav .search svg.search,
+.image-nav .search button.cancel {
+  display: inline-block;
+  color: rgba(0, 0, 0, 0.87);
+  fill: rgb(158, 158, 158);
+  height: 24px;
+  width: 24px;
+  user-select: none;
+  transition: opacity 200ms cubic-bezier(0.4, 0, 0.2, 1) 0s;
+  opacity: 1;
+  position: absolute;
+  right: 10px;
+}
+
+.image-nav .search input:focus + svg {
+  fill: #ccc;
+}
+
+.image-nav .search svg.search {
+  opacity: 1;
+  right: calc(var(--mobile-header-margin-sides) - 3px);
+  pointer-events: none;
+}
+
+.image-nav .search button.cancel {
+  padding: 0;
+  width: 20px;
+  pointer-events: none;
+}
+
+.image-nav .search button.cancel svg {
+  opacity: 0;
+  width: 20px;
+}
+
+.image-nav .search.active svg.search {
+  opacity: 0;
+}
+
+.image-nav .search.active .cancel {
+  pointer-events: all;
+}
+
+.image-nav .search.active .cancel svg {
+  opacity: 1;
+  fill: #bbb;
+}
+
+.image-nav .search .search-input::placeholder {
+  color: inherit;
+  opacity: 1;
+}
+
+.image-nav .focused .search-input,
+.mobile-menu .mobile-menu-content .search .search-input:focus {
+  background-color: hsla(0, 0%, 100%, 0.3);
+  color: inherit;
+}
+
+.image-nav .search-filters {
+  padding: 10px;
+  width: 100%;
+  position: absolute;
+  top: 30px;
+  left: 0;
+  background: #222;
+  border-radius: 5px;
+  visibility: hidden;
+  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.3);
+  height: fit-content;
+  font-family: 'GalanoGrotesqueAlt';
+}
+
+.image-nav .focused .search-header {
+  margin-bottom: 5px;
+  display: block;
+  padding-bottom: 5px;
+  text-transform: capitalize;
+}
+
+.image-nav .focused .search-filters {
+  height: fit-content;
+  min-height: 50px;
+  visibility: visible;
+  display: flex;
+  text-shadow:none;
+}
+
+.image-nav .focused .filter-options {
+ flex-basis: 60%;
+ max-width: 60%;
+}
+.image-nav .focused .current-filters {
+  flex-basis: 40%;
+  max-width: 40%;
+}
+
+.image-nav .focused .search-option {
+  font-weight: normal;
+  cursor: pointer;
+  width: 90%;
+  padding: 4px 5px 4px 0;
+  transition: all 200ms;
+  background: transparent;
+}
+
+.image-nav .focused .search-option span {
+  line-height: 15px;
+  height: 18px;
+  display: inline-block;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.image-nav .focused .search-option .result {
+  width: 100%;
+  color: #dedede;
+}
+
+.image-nav .focused .search-hint {
+  color: #888;
+  margin-left: 3px;
+}
+
+.image-nav .focused .search-option .operator {
+  font-family: 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
+    'Helvetica Neue', sans-serif;
+  line-height: 18px;
+}
+
+.image-nav .range-info {
+  font-weight: normal;
+  color: #bbb;
+}
+
+.image-nav .range-info p {
+  margin-bottom: 5px;
+}
+
+.image-nav .range-info span {
+  font-weight: bold;
+  text-transform: capitalize;
+  color: #ccc;
+}
+
+.image-nav .focused .search-option:hover {
+  background: #333;
+  padding-left: 5px;
+}
+
+.image-nav .focused .filter-options .search-option:first-child {
+  margin-top: 10px;
+}
+
+.image-nav .focused .filter-options .search-option:last-child {
+  margin-bottom: 0;
+}
+
+.image-nav .search-filters .search-filter {
+  margin: 0 0 2px -10px;
+  display: none;
+  font-weight: normal;
+  cursor: pointer;
+  transition: all 300ms;
+  text-align: left;
+  padding: 3px 0px 3px 0px;
+  border-bottom: 1px solid #ccc;
+  background: #fff;
+  margin-left: -10px;
+  white-space: nowrap;
+  width: 0;
+  position: relative;
+  color: #DDD;
+  font-family: 'GalanoGrotesqueAlt';
+}
+
+.image-nav .search-filters .search-filter .filter-text {
+  display: inline-block;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  position: relative;
+  vertical-align: middle;
+  transition: all 200ms;
+  width: 0;
+  line-height: 15px;
+  height: 18px;
+  overflow: hidden;
+}
+
+.image-nav .search-filters .search-filter.normal {
+  margin-left: 0;
+  background: transparent;
+  width: 100%;
+}
+
+.image-nav .search-filters .search-filter.normal .filter-text{
+  width: 85%;
+  overflow: hidden;
+}
+
+
+.image-nav .search-filters .search-filter .cancel-button {
+  transition: all 200ms;
+  height: 17px;
+  width: 17px;
+  display: block;
+  margin-left: auto;
+}
+
+.image-nav .search-filters .search-filter.normal .cancel-button {
+  right: 0;
+}
+
+.image-nav .search-filters .search-filter .cancel-button svg {
+  width: 17px;
+  fill: #fff;
+  height: 17px;
+}
+
+.image-nav .search-filters .search-filter:hover svg {
+  fill: #333;
+}
+
+.image-nav .focused .search-filters .search-filter {
+  display: flex;
+  align-items: center;
+}
+
+.image-nav .search-filters .add-filter {
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  padding: 3px;
+  cursor: pointer;
+  background-color: #222;
+  transition: all 150ms;
+}
+
+.image-nav .search-filters .add-filter:hover {
+  background-color: #333;
+}
+
+.image-nav .search-filters .search-filter:hover {
+  background: #ccc;
+  color: #333;
+  padding-left: 3px;
+  padding-right: 3px;
+}
+
+.image-nav .search-filters .search-filter span {
+  transition: all 100ms;
+  margin-left: 0;
+}
+
+.image-nav .search-filters .search-filter:last-child{
+  margin-bottom: 0;
+}
+
+/* Date Picker overrides */
+
+abbr[title] {
+  text-decoration: none;
+}
+
+.react-date-picker__calendar--closed {
+  display: block;
+}
+
+.react-date-picker {
+  display: block;
+}
+
+.react-date-picker__wrapper {
+  height: 0;
+  margin-top: 10px;
+  opacity: 0;
+}
+
+.image-nav .react-calendar {
+  max-width: 230px;
+  background-color: transparent;
+  border: 0;
+}
+
+.image-nav .react-calendar__navigation {
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 10px;
+}
+
+.image-nav .react-calendar__navigation button:enabled:hover {
+  color: #222;
+}
+
+.image-nav .react-calendar__tile {
+  padding: 8px;
+}
+
+.image-nav .react-calendar__tile:disabled {
+  pointer-events: none;
+  background: #333;
+}
+
+.react-calendar__navigation button[disabled] {
+  pointer-events: none;
+  visibility: hidden;
+}
+
+.image-nav .react-date-picker__calendar .react-calendar__tile--now{
+  background: transparent;
+  font-weight: bold;
+  color: #fff;
+}
+
+.image-nav .react-calendar__tile:hover,
+.image-nav .react-date-picker__calendar .react-calendar__tile--now:hover {
+  background: #e6e6e6;
+  color: #222;
+}
+
+.image-nav .react-date-picker__calendar {
+  position: relative !important;
+  width: 230px;
+  color: #ddd;
+}
+
+.image-nav .react-calendar__month-view__weekdays__weekday,
+.image-nav .react-date-picker__calendar button {
+  color: #ddd;
+}
+
+.image-nav .react-date-picker__calendar .react-calendar__month-view__days__day--neighboringMonth {
+  opacity: 0.4;
+}
+
+.image-nav .react-calendar__month-view__days {
+  border: 1px solid #ddd;
+}
+
+/* Breakpoints */
+@media only screen and (max-width: 840px) {
+  .image-nav .search svg.search,
+  .image-nav .search button.cancel {
+    height: 30px;
+    width: 30px;
+    top: 8px;
+  }
+
+  .image-nav .search button.cancel svg {
+    width: 30px;
+    height: 30px;
+  }
+}

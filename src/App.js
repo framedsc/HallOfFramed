@@ -3,12 +3,13 @@ import ImageGridContainer from '../src/pages/ImageGridContainer';
 import { SiteDataContext } from '../src/utils/context';
 import { getAuthors, getImages } from './api/request';
 import './assets/fonts/stylesheet.css';
-import './components/Spinner/Spinner.css';
 import './styles/AboutModalContent.css';
+import './styles/AdvancedSearch.css';
 import './styles/App.css';
 import './styles/FramedModalContent.css';
 import './styles/reset.css';
-import { getQueryParam } from './utils/utils';
+import './styles/Spinner.css';
+import { generateSearchData, getQueryParam } from './utils/utils';
 
 function normalizeData(data) {
   let noramlizedData = [];
@@ -25,7 +26,7 @@ function normalizeData(data) {
 }
 
 function App() {
-  const [siteData, setSiteData] = useState({ imageData: [], authorData: [] });
+  const [siteData, setSiteData] = useState({ imageData: [], authorData: [], searchData:{} });
   const [initialized, setInitialized] = useState(false);
   const [bgImageContainer, setBgImageContainer] = useState(null);
 
@@ -56,9 +57,12 @@ function App() {
       ).authorNick;
       normalizedImages[i].author = authorName;
       normalizedImages[i].game = normalizedImages[i].gameName;
+      normalizedImages[i].epochtime = normalizedImages[i].epochTime;
     }
 
-    setSiteData({ imageData: normalizedImages, authorData: normalizedAuthors });
+    const populatedSearchData = generateSearchData(normalizedImages);
+
+    setSiteData({ imageData: normalizedImages, authorData: normalizedAuthors, searchData: populatedSearchData });
   };
 
   useEffect(() => {
@@ -70,7 +74,7 @@ function App() {
       setBgImageContainer(document.querySelector('.bg-blur'));
     if (imageData.length && bgImageContainer) {
       const randomImageIndex = imageId
-        ? imageData.findIndex((e) => e.epochTime === imageId)
+        ? imageData.findIndex((e) => e.epochtime === imageId)
         : Math.floor(Math.random() * Math.floor(imageData.length - 1));
       setBackground(imageData[randomImageIndex]);
     }
@@ -78,7 +82,9 @@ function App() {
 
   return (
     <div className="image-grid">
-      {siteData.imageData && siteData.authorData && (
+      {siteData.imageData.length > 0 && 
+      siteData.authorData.length > 0 && 
+      siteData.searchData.hasOwnProperty('searchOptions') && (
         <SiteDataContext.Provider value={siteData}>
           <ImageGridContainer imageId={imageId} pageSize={200} setBgImage={setBackground} />
         </SiteDataContext.Provider>

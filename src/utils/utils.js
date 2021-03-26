@@ -1,71 +1,80 @@
-import { useEffect, useLayoutEffect, useState } from 'react';
+const baseSearchData = {
+  minDate:new Date('2019-02-17'),
+  maxDate:new Date(),
+  numberHelpers: [
+    { label: 'greater than', hint: '>=', operator: '>'},
+    { label: 'less than', hint: '<=', operator: '<'},
+  ],
+  searchOptions: [
+    {
+      label: 'author',
+      property: 'author',
+      hint: 'user name',
+      type: 'string',
+      helperText: ":",
+      entries: [],
+      helpers: true
+    },
+    {
+      label: 'title',
+      property: 'game',
+      hint: 'game title',
+      type: 'string',
+      helperText: ":",
+      entries: [],
+      helpers:true
+    },
+    {
+      label: 'before',
+      property: 'epochtime',
+      hint: 'specific date',
+      type: 'number',
+      helperText: ":",
+      operator: '<',
+      helpers:false
+    },
+    {
+      label: 'after',
+      property: 'epochtime',
+      hint: 'specific date',
+      type: 'number',
+      helperText: ":",
+      operator: '>',
+      helpers:false
+    },
+    {
+      label: 'width',
+      property: 'width',
+      hint: 'pixels wide',
+      helperText: ":",
+      type: 'number',
+      helpers:true,
+      range: []
+    },
+    {
+      label: 'height',
+      property: 'height',
+      hint: 'pixels tall',
+      helperText: ":",
+      type: 'number',
+      helpers:true,
+      range: []
+    },
+    {
+      label: 'score',
+      property: 'score',
+      hint: 'number of reactions',
+      helperText: ":",
+      type: 'number',
+      helpers:true, 
+      range: []
+    }
+  ]
+}
 
 export const scrolledToBottom = (el, buffer) => {
   return (el.getBoundingClientRect().bottom - buffer) <= window.innerHeight;
 }
-
-export const useViewport = () => {
-  const actualWidth = document.documentElement.clientWidth || document.body.clientWidth;
-  const [width, setWidth] = useState(actualWidth);
-
-  const onWindowLoad = () => {
-    const actualWidth = document.documentElement.clientWidth || document.body.clientWidth;
-    setWidth(actualWidth);
-  }
-
-  useEffect(() => {
-    let resizeTimeout;
-    window.setTimeout(onWindowLoad, 1000);
-    const handleWindowResize = () => {
-      const windowWidth = document.documentElement.clientWidth || document.body.clientWidth;
-      clearTimeout(resizeTimeout);
-      resizeTimeout = setTimeout(() => setWidth(windowWidth), 50);
-    };
-    window.addEventListener('resize', handleWindowResize);
-    return () => window.removeEventListener('resize', handleWindowResize);
-  }, []);
-
-  // Return the width so we can use it in our components
-  return { width };
-};
-
-export const useScrollPosition = (moreImageToLoad) => {
-  const [isBottom, setIsBottom] = useState(false);
-
-  useEffect(() => {
-    const onScroll = () => {
-      const wrappedElement = document.body;
-      if (moreImageToLoad) {
-        setIsBottom(scrolledToBottom(wrappedElement, 100));
-      }
-    };
-    window.addEventListener('scroll', onScroll, false);
-    return () => window.removeEventListener('scroll', onScroll, false);
-  }, [moreImageToLoad]);
-
-  // Return the width so we can use it in our components
-  return moreImageToLoad ? isBottom : false;
-};
-
-export const useOutsideAlerter = (ref, onClickOutside) => {
-  useEffect(() => {
-    /**
-     * Alert if clicked on outside of element
-     */
-    function handleClickOutside(event) {
-      if (ref.current && !ref.current.contains(event.target)) {
-        onClickOutside();
-      }
-    }
-
-    // Bind the event listener
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      // Unbind the event listener on clean up
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [ref, onClickOutside]);
-};
 
 export const breakpoints = {
   mobile: 820,
@@ -84,34 +93,6 @@ export const getBrowserFullscreenElementProp = () => {
     throw new Error('fullscreenElement is not supported by this browser');
   }
 }
-
-export const useFullscreenStatus = (elRef) => {
-  const [isFullscreen, setIsFullscreen] = useState(
-    document[getBrowserFullscreenElementProp()] != null,
-  );
-
-  const setFullscreen = () => {
-    if (elRef.current == null) return;
-
-    elRef.current
-      .requestFullscreen()
-      .then(() => {
-        setIsFullscreen(document[getBrowserFullscreenElementProp()] != null);
-      })
-      .catch(() => {
-        setIsFullscreen(false);
-      });
-  };
-
-  useLayoutEffect(() => {
-    document.onfullscreenchange = () =>
-      setIsFullscreen(document[getBrowserFullscreenElementProp()] != null);
-
-    return () => (document.onfullscreenchange = undefined);
-  });
-
-  return [isFullscreen, setFullscreen];
-};
 
 export const extractTopLevelDomain = (url) => {
   if (!url.indexOf('//')) {
@@ -132,4 +113,56 @@ export const getQueryParam = (param) => {
   const params = new URLSearchParams(search);
 
   return params.get(param);
+}
+
+const getRange = (key, data) => {
+  const sortMethod = (a, b) => (a[key] > b[key] ? 1 : b[key] > a[key] ? -1 : 0);
+  const sortedData = data.sort(sortMethod);
+  return [sortedData[0][key], sortedData[data.length-1][key]];
+}
+
+export const generateSearchData = (data) => {
+  const searchData = baseSearchData;
+  const searchWithEntries = searchData.searchOptions.filter((item) => {
+    return item.hasOwnProperty('entries')
+  })
+
+  for (let item of data) {
+    for (let searchOption of searchWithEntries) {
+      const property = searchOption.property;
+      const entries = searchOption.entries;
+      if (!entries.includes(item[property])) {
+        entries.push(item[property])
+      }
+    }
+  }
+
+  // get min-max ranges
+  for (let item of searchData.searchOptions) {
+    if (item.hasOwnProperty('range')) {
+      item.range=getRange(item.property, data);
+    }
+  }
+
+  for (let item of searchWithEntries) {
+    item.entries.sort();
+  }
+  return (searchData);
+}
+
+export const getSearchKey = (searchOption) => {
+  const index = baseSearchData.searchOptions.findIndex(e => e.label === searchOption);
+  const found = index > -1;
+  return found ? baseSearchData.searchOptions[index].property : false;
+}
+
+export const getOperator = (searchOption) => {
+  const index = baseSearchData.searchOptions.findIndex(e => e.label === searchOption);
+  const searchItem = baseSearchData.searchOptions[index];
+  return searchItem?.operator;
+}
+
+export const getSearchDataByType = (type) => {
+  const itemsByType = baseSearchData.searchOptions.filter((item) => item.type === type);
+  return itemsByType.map(item => item.property);
 }

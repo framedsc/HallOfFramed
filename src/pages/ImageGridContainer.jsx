@@ -1,16 +1,18 @@
 import React, { useCallback, useContext, useEffect, useReducer, useState } from 'react';
 import { useHistory } from "react-router-dom";
-import FramedModal from '../components/FramedModal/FramedModal';
+import FramedModal from '../components/FramedModal';
 import ImageGrid from '../components/ImageGrid';
 import ImageNav from '../components/ImageNav';
 import ImageViewer from '../components/ImageViewer';
 import { ModalContext, SiteDataContext } from '../utils/context';
-import { getQueryParam, scrolledToBottom, useScrollPosition } from '../utils/utils';
+import { useScrollPosition } from '../utils/hooks';
+import { getOperator, getSearchDataByType, getSearchKey, scrolledToBottom } from '../utils/utils';
+//import { getQueryParam, scrolledToBottom } from '../utils/utils';
 
 const sortOptions = [
   {
     label: 'Date',
-    key: 'epochTime',
+    key: 'epochtime',
   },
   {
     label: 'Popularity',
@@ -21,14 +23,15 @@ const sortOptions = [
 let timer;
 
 const ImageGridContainer = ({ pageSize, setBgImage, imageId }) => {
-  const searchQuery = getQueryParam('search');
+  //const searchQuery = getQueryParam('search');
 
   // component state
   const initialState = {
     images: [],
     sortOption: sortOptions[0],
     format: 'all',
-    searchTerm: searchQuery || '',
+    searchText: '',
+    filters: [],
     showViewer: false,
     viewerSrc: null,
     isReverse: false,
@@ -43,7 +46,8 @@ const ImageGridContainer = ({ pageSize, setBgImage, imageId }) => {
           ...state, 
           sortOption:sortOptions[0], 
           format: 'all',
-          searchTerm: '',
+          filters: [],
+          searchText: '',
           showViewer: false,
           viewerSrc: null,
           isReverse: false,
@@ -59,8 +63,10 @@ const ImageGridContainer = ({ pageSize, setBgImage, imageId }) => {
         return { ...state, page: 1, waiting: true, ...action };
       case 'close':
         return { ...state, viewerSrc: null, showViewer: false };
-      case 'setSearchTerm':
-        return { ...state, searchTerm: action.searchTerm };
+      case 'setSearchText':
+          return { ...state, searchText: action.text };  
+      case 'setSearchFilters':
+        return { ...state, filters: action.filters };
       case 'setImages':
         return { ...state, images: action.images };
       case 'selectImage':
@@ -81,7 +87,7 @@ const ImageGridContainer = ({ pageSize, setBgImage, imageId }) => {
   };
 
   const [
-    { images, sortOption, format, searchTerm, showViewer, viewerSrc, isReverse, waiting, page },
+    { images, sortOption, format, filters, searchText, showViewer, viewerSrc, isReverse, waiting, page },
     dispatch,
   ] = useReducer(reducer, {
     ...initialState,
@@ -97,14 +103,21 @@ const ImageGridContainer = ({ pageSize, setBgImage, imageId }) => {
   const siteData = useContext(SiteDataContext);
 
   // component variables
-  const { imageData } = siteData || [];
+  const { imageData, searchData } = siteData;
+
   const moreImagesToLoad = page * pageSize <= images.length;
   const isBottom = useScrollPosition(moreImagesToLoad);
   const history = useHistory();
+  const searchOptions = React.useMemo(()=>{
+    return {
+      strings : getSearchDataByType('string'),
+      numbers : getSearchDataByType('number')
+    }
+  }, []);
 
   // component methods
   const loadImageFromQueryString = useCallback(() => {
-    const imageIndex = imageData.findIndex((e) => e.epochTime === imageId);
+    const imageIndex = imageData.findIndex((e) => e.epochtime === imageId);
     const image = imageData[imageIndex];
     dispatch({type: 'selectImage', image, showViewer: true})
   }, [imageData, imageId]);
@@ -138,8 +151,14 @@ const ImageGridContainer = ({ pageSize, setBgImage, imageId }) => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const handleSearchChange = (keyword) => {
-    dispatch({ type: 'setSearchTerm', searchTerm: keyword });
+  const handleSearchChange = (text) => {
+    dispatch({ type: 'setSearchText', text });
+  };
+
+  const handleFilterChange = (newFilters) => {
+    const filterFunc = (item, pos) => newFilters.indexOf(item) === pos;
+    const uniqueFilters = newFilters.filter(filterFunc);
+    dispatch({ type: 'setSearchFilters', filters:uniqueFilters });
   };
 
   const updateImageParam = (id) => {
@@ -150,63 +169,73 @@ const ImageGridContainer = ({ pageSize, setBgImage, imageId }) => {
       params.append("imageId", id)
     } 
     history.push({search: params.toString()})
-
   }
 
   const handleImageClick = (image) => {
-    updateImageParam(image.epochTime);
+    updateImageParam(image.epochtime);
 
     dispatch({ type: 'selectImage', image });
   };
 
-  const searchData = useCallback((data) => {
-      const searchOptionStrings = ['author', 'game'];
-      const searchOptionNumbers = ['height', 'score', 'width'];
+  const parseNumberTerm = (type, term) => {
+    let termToParse = term.indexOf('<') !== -1
+    ? term.substr(term.indexOf('<') + 1)
+    : term.substr(term.indexOf('>') + 1);
 
-      if (searchTerm?.length < 3) {
-        return data;
-      }
-      dispatch({ type: 'setPage', page: 1 });
+    if (type === 'epochtime') {
+      termToParse = +new Date(termToParse)/1000;
+    }
+    
+    return parseInt(termToParse, 10);
+  }
 
-      let searchOption = searchTerm.substring(0, searchTerm.indexOf(':')).toLowerCase();
-      let newSearchTerm = searchTerm.substring(searchTerm.indexOf(':') + 1).replace(/\s+/g, '');
+  const applyFilter = useCallback((filter, dataToSearch) => {
+    const filterText = filter.trimStart();
+    if (filterText?.length < 3) {
+      return dataToSearch;
+    }
+    const delimiterIndex = filterText.indexOf(':');
+    let searchOption = filterText.substring(0, delimiterIndex).toLowerCase();
+    let newSearchTerm = filterText.substring(delimiterIndex + 1).replace(/\s+/g, '');;
 
-      if (searchOptionStrings.includes(searchOption)) {
-        const results = data.filter((obj) => {
-          // if more than 1 char, search for the tag after lowercasing and removing spaces, else return data (nothing)
-          return newSearchTerm?.length >= 3
-            ? obj[searchOption]
-                .toLowerCase()
-                .replace(/\s+/g, '')
-                .indexOf(newSearchTerm.toLowerCase()) !== -1
-            : data;
-        });
-        return results;
-      } else if (searchOptionNumbers.includes(searchOption)) {
-        const results = data.filter((obj) => {
-          // i may have been a little crazy here
-          return newSearchTerm?.length >= 3
-            ? /* if there is a '<', search for all item lower than the searched number, else it search for item upper, '>' or not */
-              newSearchTerm.indexOf('<') !== -1
-              ? obj[searchOption] <=
-                parseInt(newSearchTerm.substr(newSearchTerm.indexOf('<') + 1), 10)
-              : obj[searchOption] >=
-                parseInt(newSearchTerm.substr(newSearchTerm.indexOf('>') + 1), 10)
-            : data;
-        });
-        return results;
-      }
+    // ugly logic, will fix later
+    const searchKeyResult = getSearchKey(searchOption);
+    const newSearchOption = searchKeyResult ? searchKeyResult : searchOption;
 
-      const results = data.filter((obj) => {
-        return Object.keys(obj).reduce((acc, curr) => {
-          return acc || obj[curr].toString().toLowerCase().includes(searchTerm.toLowerCase());
-        }, false);
+    if (searchOptions.strings.includes(newSearchOption)) {
+      return dataToSearch.filter((imageData) => {
+        // if more than 1 char, search for the tag after lowercasing and removing spaces, else return data (nothing)
+        return newSearchTerm?.length >= 3
+          ? imageData[newSearchOption].replace(/\s+/g, '').toLowerCase().includes(newSearchTerm.toLowerCase())
+          : dataToSearch;
       });
+    } else if (searchOptions.numbers.includes(newSearchOption)) {
+      const operator = getOperator(searchOption);
+      let parsedNumberTerm = parseNumberTerm(newSearchOption, newSearchTerm);
 
-      return results;
-    },
-    [searchTerm],
-  );
+      return dataToSearch.filter((obj) => {
+        return operator === '<' || newSearchTerm.indexOf('<') > -1
+            ? obj[newSearchOption] <= parsedNumberTerm
+            : obj[newSearchOption] >= parsedNumberTerm
+      });
+    } 
+    // simple text search
+    return dataToSearch.filter((imageData) => {
+      return Object.keys(imageData).reduce((acc, curr) => {
+        return acc || imageData[curr].toString().toLowerCase().includes(filterText.toLowerCase());
+      }, false);
+    });
+  }, [searchOptions])
+
+  const search = useCallback((data) => {
+    let results = data.slice();
+
+    for (const filter of filters) {
+      results = applyFilter(filter, results)
+    }
+
+    return results;
+  }, [applyFilter, filters]);
 
   const loadMore = () => {
     if (scrolledToBottom(document.body, 50)) {
@@ -242,30 +271,29 @@ const ImageGridContainer = ({ pageSize, setBgImage, imageId }) => {
       } else if (format === 'Portrait') {
         results = results.filter((item) => item.width <= item.height);
       }
-
-      return searchData(results);
+      return filters.length ? search(results) : results;
     },
-    [isReverse, searchData, sortOption, format],
+    [isReverse, search, sortOption, format, filters.length],
   );
 
   const selectPreviousImage = () => {
-    const index = images.findIndex((e) => e.epochTime === viewerSrc.epochTime);
+    const index = images.findIndex((e) => e.epochtime === viewerSrc.epochtime);
     if (index - 1 >= 0) {
-      updateImageParam(images[index - 1].epochTime);
+      updateImageParam(images[index - 1].epochtime);
       dispatch({ type: 'selectImage', image: images[index - 1] });
     }
   };
 
   const selectNextImage = () => {
-    const index = images.findIndex((e) => e.epochTime === viewerSrc.epochTime);
+    const index = images.findIndex((e) => e.epochtime === viewerSrc.epochtime);
     if (index + 1 <= images.length) {
-      updateImageParam(images[index + 1].epochTime);
+      updateImageParam(images[index + 1].epochtime);
       dispatch({ type: 'selectImage', image: images[index + 1] });
     }
   };
 
   const noSearchResults = () => {
-    return searchTerm.length >= 3 && !images.length ? (
+    return filters.length > 0 && !images.length ? (
       <div className="no-search-results">There are no images matching your search criteria</div>
     ) : null;
   };
@@ -287,7 +315,6 @@ const ImageGridContainer = ({ pageSize, setBgImage, imageId }) => {
     imageData,
     sortOption,
     format,
-    searchTerm,
     isReverse,
     filterImages,
     showViewer,
@@ -312,9 +339,14 @@ const ImageGridContainer = ({ pageSize, setBgImage, imageId }) => {
           reverseSort={isReverse}
           updateSort={handleSortChange}
           updateFormat={handleFormatChange}
-          updateSearch={handleSearchChange}
-          defaultSearch={searchQuery}
           onLogoClick={()=> dispatch({type:'reset'})}
+          searchProps={{
+            searchData,
+            updateSearch: handleSearchChange,
+            updateFilters: handleFilterChange,
+            searchText,
+            filters
+          }}
         />
         {imageData && (
           <ImageGrid
@@ -345,4 +377,4 @@ const ImageGridContainer = ({ pageSize, setBgImage, imageId }) => {
     </div>
   );
 };
-export default ImageGridContainer;
+export default React.memo(ImageGridContainer);

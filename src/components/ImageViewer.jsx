@@ -3,9 +3,9 @@ import React, { useContext, useEffect, useReducer } from 'react';
 import { useSwipeable } from 'react-swipeable';
 import { Cancel, ExitFullscreen, Fullscreen, NextArrow } from '../assets/svgIcons';
 import SocialLinks from '../components/SocialLinks';
-import Spinner from '../components/Spinner/Spinner';
 import { ModalContext, SiteDataContext } from '../utils/context';
-import { useFullscreenStatus } from '../utils/utils';
+import { useFullscreenStatus } from '../utils/hooks';
+import Spinner from './Spinner';
 
 const initialState = {
   initialized: false, 

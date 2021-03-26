@@ -210,6 +210,14 @@ button > svg {
   line-height: initial;
   margin-right: 40px;
   padding: 0;
+  width: 205px;
+  overflow: hidden;
+  transition: all 200ms;
+}
+
+.image-nav .image-types.hidden {
+  width: 0;
+  margin: 0;
 }
 
 .image-nav .image-types [type='radio'] {
@@ -243,84 +251,6 @@ button > svg {
 
 .image-nav .image-types label:hover {
   background: var(--inactive-hover-bg);
-}
-
-.image-nav .search {
-  display: flex;
-  align-items: center;
-  position: relative;
-}
-
-.image-nav .search .search-input {
-  background: var(--search-bg);
-  border-radius: var(--border-radius);
-  color: hsla(0, 0%, 100%, 0.4);
-  font-size: inherit;
-  outline: 0;
-  padding: 5px 10px;
-  transition: var(--header-transition);
-  border: 0;
-  -webkit-appearance: none;
-}
-
-.image-nav .search svg.search,
-.image-nav .search button.cancel {
-  display: inline-block;
-  color: rgba(0, 0, 0, 0.87);
-  fill: rgb(158, 158, 158);
-  height: 24px;
-  width: 24px;
-  user-select: none;
-  transition: opacity 200ms cubic-bezier(0.4, 0, 0.2, 1) 0s;
-  opacity: 1;
-  position: absolute;
-  right: 10px;
-}
-
-.image-nav .search input:focus + svg {
-  fill: #ccc;
-}
-
-.image-nav .search svg.search {
-  opacity: 1;
-  right: calc(var(--mobile-header-margin-sides) - 3px);
-  pointer-events: none;
-}
-
-.image-nav .search button.cancel {
-  padding: 0;
-  width: 20px;
-  pointer-events: none;
-}
-
-.image-nav .search button.cancel svg {
-  opacity: 0;
-  width: 20px;
-}
-
-.image-nav .search.active svg.search {
-  opacity: 0;
-}
-
-.image-nav .search.active .cancel {
-  pointer-events: all;
-}
-
-.image-nav .search.active .cancel svg {
-  opacity: 1;
-  fill: #ccc;
-}
-
-/* Targets field's placeholder text */
-.image-nav .search .search-input::placeholder {
-  color: inherit;
-  opacity: 1;
-}
-
-.image-nav .search .search-input:focus,
-.mobile-menu .mobile-menu-content .search .search-input:focus {
-  background-color: hsla(0, 0%, 100%, 0.3);
-  color: inherit;
 }
 
 .image-nav--mobile {
@@ -1026,6 +956,10 @@ button > svg {
     transition: right 200ms;
   }
 
+  .mobile-menu .image-types {
+    width: auto;
+  }
+
   .mobile-menu.show .about-icon {
     right: calc(var(--mobile-header-margin-sides)); /* centered to hamburger icon */
   }
@@ -1044,18 +978,6 @@ button > svg {
     position: absolute;
     top: 9px;
     right: 80px;
-  }
-
-  .image-nav .search svg.search,
-  .image-nav .search button.cancel {
-    height: 30px;
-    width: 30px;
-    top: 8px;
-  }
-
-  .image-nav .search button.cancel svg {
-    width: 30px;
-    height: 30px;
   }
 }
 

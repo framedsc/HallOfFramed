@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import React, { useContext } from 'react';
-import { Cancel } from '../../assets/svgIcons';
-import { ModalContext } from '../../utils/context';
+import { Cancel } from '../assets/svgIcons';
+import { ModalContext } from '../utils/context';
 
 const FramedModal = ({show, className, component, onClose }) => {
   const visibleClass = show ? 'is-visible' : undefined;
