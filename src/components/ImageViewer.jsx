@@ -44,7 +44,7 @@ const ImageViewer = ({ image = {}, show, onClose, data, onPrev, onNext, setBgIma
   });
 
   const { modal } = useContext(ModalContext);
-  const siteData = useContext(SiteDataContext);
+  const { siteData } = useContext(SiteDataContext);
   const { authorData } = siteData;
 
   let isFullscreen, setIsFullscreen;

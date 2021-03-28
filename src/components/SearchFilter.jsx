@@ -35,8 +35,8 @@ class SearchFilter extends PureComponent {
         className={classNames(className, normalClass)} 
         onClick={onClick}
       >
-        <span class="filter-text">{text}</span> 
-        <span class="cancel-button"><Cancel /></span>
+        <span className="filter-text">{text}</span> 
+        <span className="cancel-button"><Cancel /></span>
       </button>
     )
   }

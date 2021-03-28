@@ -6,7 +6,7 @@ import ImageNav from '../components/ImageNav';
 import ImageViewer from '../components/ImageViewer';
 import { ModalContext, SiteDataContext } from '../utils/context';
 import { useScrollPosition } from '../utils/hooks';
-import { getOperator, getSearchDataByType, getSearchKey, scrolledToBottom } from '../utils/utils';
+import { arrayUnique, getOperator, getSearchDataByType, getSearchKey, scrolledToBottom } from '../utils/utils';
 //import { getQueryParam, scrolledToBottom } from '../utils/utils';
 
 const sortOptions = [
@@ -22,69 +22,74 @@ const sortOptions = [
 
 let timer;
 
-const ImageGridContainer = ({ pageSize, setBgImage, imageId }) => {
+// component state
+const initialState = {
+  images: [],
+  sortOption: sortOptions[0],
+  format: 'all',
+  searchText: '',
+  filters: [],
+  showViewer: false,
+  viewerSrc: null,
+  isReverse: false,
+  waiting: false,
+  page: 1,
+};
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case 'reset':
+      return { 
+        ...state, 
+        sortOption:sortOptions[0], 
+        format: 'all',
+        filters: [],
+        searchText: '',
+        showViewer: false,
+        viewerSrc: null,
+        isReverse: false,
+        page: 1
+      };
+    case 'loadMoreImages':
+      return { ...state, waiting: true, page: action.page };
+    case 'doneWaiting':
+      return { ...state, waiting: false };
+    case 'setPage':
+      return { ...state, waiting: true, page: action.page };
+    case 'changeFormat':
+      return { ...state, page: 1, waiting: true, ...action };
+    case 'close':
+      return { ...state, viewerSrc: null, showViewer: false };
+    case 'setSearchData':
+      return {...state, searchData: action.data};
+    case 'setSearchText':
+        return { ...state, searchText: action.text };  
+    case 'setSearchFilters':
+      return { ...state, filters: action.filters };
+    case 'setImages':
+      return { ...state, images: action.images };
+    case 'selectImage':
+      return { ...state, viewerSrc: action.image, showViewer: true };
+    case 'loadImage':
+      return { initialized: true, loadedState: true, showImage: true };
+    case 'changeSort':
+      return {
+        ...state,
+        page: 1,
+        waiting: true,
+        sortOption: action.sortOption,
+        isReverse: action.isReverse,
+      };
+    default:
+      return state;
+  }
+};
+
+const ImageGridContainer = ({ pageSize, setBgImage, imageId, searchData }) => {
   //const searchQuery = getQueryParam('search');
+  const { siteData } = useContext(SiteDataContext);
+  const { imageData } = siteData;
 
-  // component state
-  const initialState = {
-    images: [],
-    sortOption: sortOptions[0],
-    format: 'all',
-    searchText: '',
-    filters: [],
-    showViewer: false,
-    viewerSrc: null,
-    isReverse: false,
-    waiting: false,
-    page: 1,
-  };
-
-  const reducer = (state, action) => {
-    switch (action.type) {
-      case 'reset':
-        return { 
-          ...state, 
-          sortOption:sortOptions[0], 
-          format: 'all',
-          filters: [],
-          searchText: '',
-          showViewer: false,
-          viewerSrc: null,
-          isReverse: false,
-          page: 1
-        };
-      case 'loadMoreImages':
-        return { ...state, waiting: true, page: action.page };
-      case 'doneWaiting':
-        return { ...state, waiting: false };
-      case 'setPage':
-        return { ...state, waiting: true, page: action.page };
-      case 'changeFormat':
-        return { ...state, page: 1, waiting: true, ...action };
-      case 'close':
-        return { ...state, viewerSrc: null, showViewer: false };
-      case 'setSearchText':
-          return { ...state, searchText: action.text };  
-      case 'setSearchFilters':
-        return { ...state, filters: action.filters };
-      case 'setImages':
-        return { ...state, images: action.images };
-      case 'selectImage':
-        return { ...state, viewerSrc: action.image, showViewer: true };
-      case 'loadImage':
-        return { initialized: true, loadedState: true, showImage: true };
-      case 'changeSort':
-        return {
-          ...state,
-          page: 1,
-          waiting: true,
-          sortOption: action.sortOption,
-          isReverse: action.isReverse,
-        };
-      default:
-        return state;
-    }
-  };
 
   const [
     { images, sortOption, format, filters, searchText, showViewer, viewerSrc, isReverse, waiting, page },
@@ -100,10 +105,7 @@ const ImageGridContainer = ({ pageSize, setBgImage, imageId }) => {
     className: '',
     withClose: true,
   });
-  const siteData = useContext(SiteDataContext);
-
   // component variables
-  const { imageData, searchData } = siteData;
 
   const moreImagesToLoad = page * pageSize <= images.length;
   const isBottom = useScrollPosition(moreImagesToLoad);
@@ -122,11 +124,39 @@ const ImageGridContainer = ({ pageSize, setBgImage, imageId }) => {
     dispatch({type: 'selectImage', image, showViewer: true})
   }, [imageData, imageId]);
 
+  const updateImageParam = (id) => {
+    const searchQuery = window.location.search;
+    const params = new URLSearchParams(searchQuery);
+    params.delete("imageId");
+    if (id) {
+      params.append("imageId", id)
+    } 
+    history.push({search: params.toString()})
+  }
+
   const checkLoadMore = () => {
     if (isBottom && !waiting) {
       loadMore();
     }
   };
+
+  const loadMore = () => {
+    if (scrolledToBottom(document.body, 50)) {
+      dispatch({ type: 'loadMoreImages', page: page + 1 });
+    }
+  };
+
+  const paginate = useCallback(
+    (filteredImages) => {
+      const totalImagesToLoad = pageSize * page;
+      if (totalImagesToLoad > filteredImages.length) {
+        return filteredImages;
+      } else {
+        return filteredImages.slice(0, totalImagesToLoad);
+      }
+    },
+    [page, pageSize],
+  );
 
   const handleClose = () => {
     updateImageParam();
@@ -161,26 +191,127 @@ const ImageGridContainer = ({ pageSize, setBgImage, imageId }) => {
     dispatch({ type: 'setSearchFilters', filters:uniqueFilters });
   };
 
-  const updateImageParam = (id) => {
-    const search = window.location.search;
-    const params = new URLSearchParams(search);
-    params.delete("imageId");
-    if (id) {
-      params.append("imageId", id)
-    } 
-    history.push({search: params.toString()})
-  }
-
   const handleImageClick = (image) => {
     updateImageParam(image.epochtime);
 
     dispatch({ type: 'selectImage', image });
   };
 
+  const buildFilters = useCallback((filterArray) => {
+    const filterObjects = [];
+    for (const filter of filterArray) {
+      const searchOption = getFilterOption(filter);
+      if (!getSearchKey(searchOption)) {
+        filterObjects.push({searchTerm: filter})
+      } else {
+        const filterOptionIndex = filterObjects.findIndex(e => e.searchOption === searchOption);
+        if (filterOptionIndex > -1) {
+          filterObjects[filterOptionIndex].searchTerms.push(getFilterTerm(filter));
+        } else {
+          filterObjects.push({
+            searchOption,
+            searchTerms: [getFilterTerm(filter)]
+          })
+        }
+      }
+    }
+    return filterObjects;
+  }, [])
+
+  const applyFilter = useCallback((filter, dataToSearch) => {
+    if (filter.hasOwnProperty('searchOption')) {
+      let searchOption = filter.searchOption;
+      const searchTerms = filter.searchTerms;
+      let results = [];
+
+      const searchKeyResult = getSearchKey(searchOption);
+      const newSearchOption = searchKeyResult ? searchKeyResult : searchOption;
+
+      for (const term of searchTerms) {
+        const newSearchTerm = term.replace(/\s+/g, '');
+        let newResults = [];
+        if (searchOptions.strings.includes(newSearchOption)) {
+          newResults = dataToSearch.filter((imageData) => {
+            // if more than 1 char, search for the tag after lowercasing and removing spaces, else return data (nothing)
+            return newSearchTerm?.length >= 3
+              ? imageData[newSearchOption].replace(/\s+/g, '').toLowerCase().includes(newSearchTerm.toLowerCase())
+              : dataToSearch;
+          });
+        } else if (searchOptions.numbers.includes(newSearchOption)) {
+          const operator = getOperator(searchOption);
+          let parsedNumberTerm = parseNumberTerm(newSearchOption, newSearchTerm);
+    
+          newResults = dataToSearch.filter((obj) => {
+            if (operator === '=' || newSearchTerm.indexOf('=') > -1) {
+              return obj[newSearchOption] === parsedNumberTerm;
+            }
+            return operator === '<' || newSearchTerm.indexOf('<') > -1
+                ? obj[newSearchOption] <= parsedNumberTerm
+                : obj[newSearchOption] >= parsedNumberTerm
+          });
+        } 
+        results = arrayUnique(results.concat(newResults));
+        //results = results.concat(newResults);
+      }
+      return results;
+    } 
+    const filterText = filter.searchTerm;
+    if (filterText.length < 3) {
+      return dataToSearch;
+    }
+    return dataToSearch.filter((imageData) => {
+      return Object.keys(imageData).reduce((acc, curr) => {
+        return acc || imageData[curr].toString().toLowerCase().includes(filterText.toLowerCase());
+      }, false);
+    });
+  }, [searchOptions]);
+
+  const search = useCallback((data) => {
+    let results = data.slice();
+    const filterObjects = buildFilters(filters);
+
+    for (const filter of filterObjects) {
+      results = applyFilter(filter, results)
+    }
+
+    return results;
+  }, [applyFilter, filters, buildFilters]);
+
+  const filterImages = useCallback(
+    (images) => {
+      let results = images;
+      const key = sortOption.key;
+
+      if (format === 'Wide') {
+        results = results.filter((item) => item.width > item.height);
+      } else if (format === 'Portrait') {
+        results = results.filter((item) => item.width <= item.height);
+      }
+
+      let filteredResults = filters.length ? search(results) : results;
+      let sortMethod = (a, b) => (a[key] < b[key] ? 1 : b[key] < a[key] ? -1 : 0);
+      if (isReverse) {
+        sortMethod = (a, b) => (a[key] > b[key] ? 1 : b[key] > a[key] ? -1 : 0);
+      }
+      filteredResults = filteredResults.sort(sortMethod);
+
+      //dispatch({type: 'setSearchData', data: generateSearchData(imageData)});
+    
+      return filteredResults;
+    },
+    [isReverse, search, sortOption, format, filters.length],
+  );
+
   const parseNumberTerm = (type, term) => {
-    let termToParse = term.indexOf('<') !== -1
-    ? term.substr(term.indexOf('<') + 1)
-    : term.substr(term.indexOf('>') + 1);
+    let termToParse;
+
+    if (term.indexOf('<') !== -1) {
+      termToParse = term.substr(term.indexOf('<') + 1);
+    } else if (term.indexOf('>') !== -1) {
+      termToParse = term.substr(term.indexOf('>') + 1);
+    } else {
+      termToParse = term.substr(term.indexOf('=') + 1);
+    }
 
     if (type === 'epochtime') {
       termToParse = +new Date(termToParse)/1000;
@@ -189,92 +320,21 @@ const ImageGridContainer = ({ pageSize, setBgImage, imageId }) => {
     return parseInt(termToParse, 10);
   }
 
-  const applyFilter = useCallback((filter, dataToSearch) => {
-    const filterText = filter.trimStart();
-    if (filterText?.length < 3) {
-      return dataToSearch;
+  const getFilterOption = (text) => {
+    const delimiterIndex = text.indexOf(':');
+    if (delimiterIndex === -1) {
+      return false;
     }
-    const delimiterIndex = filterText.indexOf(':');
-    let searchOption = filterText.substring(0, delimiterIndex).toLowerCase();
-    let newSearchTerm = filterText.substring(delimiterIndex + 1).replace(/\s+/g, '');;
+    return text.substring(0, delimiterIndex);
+  }
 
-    // ugly logic, will fix later
-    const searchKeyResult = getSearchKey(searchOption);
-    const newSearchOption = searchKeyResult ? searchKeyResult : searchOption;
-
-    if (searchOptions.strings.includes(newSearchOption)) {
-      return dataToSearch.filter((imageData) => {
-        // if more than 1 char, search for the tag after lowercasing and removing spaces, else return data (nothing)
-        return newSearchTerm?.length >= 3
-          ? imageData[newSearchOption].replace(/\s+/g, '').toLowerCase().includes(newSearchTerm.toLowerCase())
-          : dataToSearch;
-      });
-    } else if (searchOptions.numbers.includes(newSearchOption)) {
-      const operator = getOperator(searchOption);
-      let parsedNumberTerm = parseNumberTerm(newSearchOption, newSearchTerm);
-
-      return dataToSearch.filter((obj) => {
-        return operator === '<' || newSearchTerm.indexOf('<') > -1
-            ? obj[newSearchOption] <= parsedNumberTerm
-            : obj[newSearchOption] >= parsedNumberTerm
-      });
-    } 
-    // simple text search
-    return dataToSearch.filter((imageData) => {
-      return Object.keys(imageData).reduce((acc, curr) => {
-        return acc || imageData[curr].toString().toLowerCase().includes(filterText.toLowerCase());
-      }, false);
-    });
-  }, [searchOptions])
-
-  const search = useCallback((data) => {
-    let results = data.slice();
-
-    for (const filter of filters) {
-      results = applyFilter(filter, results)
+  const getFilterTerm = (text) => {
+    const delimiterIndex = text.indexOf(':');
+    if (delimiterIndex === -1) {
+      return false;
     }
-
-    return results;
-  }, [applyFilter, filters]);
-
-  const loadMore = () => {
-    if (scrolledToBottom(document.body, 50)) {
-      dispatch({ type: 'loadMoreImages', page: page + 1 });
-    }
-  };
-
-  const paginate = useCallback(
-    (filteredImages) => {
-      const totalImagesToLoad = pageSize * page;
-      if (totalImagesToLoad > filteredImages.length) {
-        return filteredImages;
-      } else {
-        return filteredImages.slice(0, totalImagesToLoad);
-      }
-    },
-    [page, pageSize],
-  );
-
-  const filterImages = useCallback(
-    (images) => {
-      let results = images;
-      const key = sortOption.key;
-
-      let sortMethod = (a, b) => (a[key] < b[key] ? 1 : b[key] < a[key] ? -1 : 0);
-      if (isReverse) {
-        sortMethod = (a, b) => (a[key] > b[key] ? 1 : b[key] > a[key] ? -1 : 0);
-      }
-      results = images.sort(sortMethod);
-
-      if (format === 'Wide') {
-        results = results.filter((item) => item.width > item.height);
-      } else if (format === 'Portrait') {
-        results = results.filter((item) => item.width <= item.height);
-      }
-      return filters.length ? search(results) : results;
-    },
-    [isReverse, search, sortOption, format, filters.length],
-  );
+    return text.substring(delimiterIndex + 1).trimStart();
+  }
 
   const selectPreviousImage = () => {
     const index = images.findIndex((e) => e.epochtime === viewerSrc.epochtime);
@@ -292,7 +352,7 @@ const ImageGridContainer = ({ pageSize, setBgImage, imageId }) => {
     }
   };
 
-  const noSearchResults = () => {
+  const renderNoSearchResults = () => {
     return filters.length > 0 && !images.length ? (
       <div className="no-search-results">There are no images matching your search criteria</div>
     ) : null;
@@ -357,7 +417,7 @@ const ImageGridContainer = ({ pageSize, setBgImage, imageId }) => {
             borderOffset={7}
           />
         )}
-        {noSearchResults()}
+        {renderNoSearchResults()}
         <ImageViewer
           image={viewerSrc}
           show={showViewer}

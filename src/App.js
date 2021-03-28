@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import ImageGridContainer from '../src/pages/ImageGridContainer';
 import { SiteDataContext } from '../src/utils/context';
 import { getAuthors, getImages } from './api/request';
@@ -26,7 +26,8 @@ function normalizeData(data) {
 }
 
 function App() {
-  const [siteData, setSiteData] = useState({ imageData: [], authorData: [], searchData:{} });
+  const [siteData, setSiteData] = useState({ imageData: [], authorData: [] });
+  const contextProvider = useMemo( ()=> ({siteData, setSiteData}), [siteData, setSiteData]);
   const [initialized, setInitialized] = useState(false);
   const [bgImageContainer, setBgImageContainer] = useState(null);
 
@@ -60,18 +61,15 @@ function App() {
       normalizedImages[i].epochtime = normalizedImages[i].epochTime;
     }
 
-    const populatedSearchData = generateSearchData(normalizedImages);
-
-    setSiteData({ imageData: normalizedImages, authorData: normalizedAuthors, searchData: populatedSearchData });
+    setSiteData({ imageData: normalizedImages, authorData: normalizedAuthors});
   };
 
   useEffect(() => {
     const { imageData } = siteData;
 
     !initialized && getData();
-    imageData.length &&
-      !bgImageContainer &&
-      setBgImageContainer(document.querySelector('.bg-blur'));
+
+    imageData.length && !bgImageContainer && setBgImageContainer(document.querySelector('.bg-blur'));
     if (imageData.length && bgImageContainer) {
       const randomImageIndex = imageId
         ? imageData.findIndex((e) => e.epochtime === imageId)
@@ -83,10 +81,14 @@ function App() {
   return (
     <div className="image-grid">
       {siteData.imageData.length > 0 && 
-      siteData.authorData.length > 0 && 
-      siteData.searchData.hasOwnProperty('searchOptions') && (
-        <SiteDataContext.Provider value={siteData}>
-          <ImageGridContainer imageId={imageId} pageSize={200} setBgImage={setBackground} />
+      siteData.authorData.length > 0 && (
+        <SiteDataContext.Provider value={contextProvider}>
+          <ImageGridContainer 
+            imageId={imageId} 
+            pageSize={200} 
+            setBgImage={setBackground} 
+            searchData={generateSearchData(siteData.imageData)}
+          />
         </SiteDataContext.Provider>
       )}
     </div>

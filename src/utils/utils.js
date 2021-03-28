@@ -4,6 +4,7 @@ const baseSearchData = {
   numberHelpers: [
     { label: 'greater than', hint: '>=', operator: '>'},
     { label: 'less than', hint: '<=', operator: '<'},
+    { label: 'equal to', hint: '=', operator: '='}
   ],
   searchOptions: [
     {
@@ -68,6 +69,16 @@ const baseSearchData = {
       type: 'number',
       helpers:true, 
       range: []
+    },
+    {
+      label: 'id',
+      property: 'epochTime',
+      hint: '',
+      helperText: ":",
+      type: 'number',
+      helpers:true, 
+      hide: true,
+      range: []
     }
   ]
 }
@@ -116,18 +127,28 @@ export const getQueryParam = (param) => {
 }
 
 const getRange = (key, data) => {
+  if (!data.length) {
+    return [0,0];
+  }
   const sortMethod = (a, b) => (a[key] > b[key] ? 1 : b[key] > a[key] ? -1 : 0);
   const sortedData = data.sort(sortMethod);
   return [sortedData[0][key], sortedData[data.length-1][key]];
 }
 
 export const generateSearchData = (data) => {
-  const searchData = baseSearchData;
+  const searchData = Object.assign(baseSearchData);
+  const imageData = data.slice();
   const searchWithEntries = searchData.searchOptions.filter((item) => {
     return item.hasOwnProperty('entries')
   })
 
-  for (let item of data) {
+  // reset entries for some reason? shouldnt be necessary
+  for (let searchOption of searchWithEntries) {
+    searchOption.entries = [];
+  }
+ 
+  // populate entries for autocomplete
+  for (let item of imageData) {
     for (let searchOption of searchWithEntries) {
       const property = searchOption.property;
       const entries = searchOption.entries;
@@ -136,17 +157,18 @@ export const generateSearchData = (data) => {
       }
     }
   }
-
+  
   // get min-max ranges
   for (let item of searchData.searchOptions) {
     if (item.hasOwnProperty('range')) {
-      item.range=getRange(item.property, data);
+      item.range=getRange(item.property, imageData);
     }
   }
-
+  
   for (let item of searchWithEntries) {
     item.entries.sort();
   }
+
   return (searchData);
 }
 
@@ -165,4 +187,16 @@ export const getOperator = (searchOption) => {
 export const getSearchDataByType = (type) => {
   const itemsByType = baseSearchData.searchOptions.filter((item) => item.type === type);
   return itemsByType.map(item => item.property);
+}
+
+export function arrayUnique(array) {
+  var a = array.concat();
+  for(var i=0; i<a.length; ++i) {
+      for(var j=i+1; j<a.length; ++j) {
+          if(a[i].epochtime === a[j].epochtime)
+              a.splice(j--, 1);
+      }
+  }
+
+  return a;
 }

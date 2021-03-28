@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import React, { useCallback, useRef } from 'react';
 import DatePicker from 'react-date-picker';
-import { Cancel } from '../assets/svgIcons';
+import { Cancel, Search } from '../assets/svgIcons';
 import { useOutsideAlerter } from '../utils/hooks';
 import { getSearchKey } from '../utils/utils';
 import SearchFilter from './SearchFilter';
@@ -42,9 +42,13 @@ const AdvancedSearch = ({
   const handleSearchChange = (event) => {
     const inputValue = event.target.value;
     if (isMobile) {
-      const newFilters = inputValue.split(delimiter).map(e => e.trimStart());
+      if (inputValue === '') {
+        updateFilters([]);
+      } else {
+        const newFilters = inputValue.split(delimiter).map(e => e.trimStart());
+        updateFilters(newFilters);
+      }
       updateSearch(inputValue);
-      updateFilters(newFilters);
     } else {
       processSearchInput(inputValue);
     }
@@ -138,7 +142,7 @@ const AdvancedSearch = ({
       <>
         <div className="search-header">Search Options:</div>
         {validSearchOptions.map((item) => {
-          return (
+          return !item.hide ? (
             <div 
               className="search-option" 
               key={`searchoption-${item.label}`}
@@ -147,7 +151,7 @@ const AdvancedSearch = ({
               <span>{item.label}:</span>
               <span className="search-hint">{` ${item.hint}`}</span>
             </div>
-          )
+          ) : null;
         })}
       </>
     )
@@ -211,7 +215,8 @@ const AdvancedSearch = ({
     const searchOptions = searchData.searchOptions;
     const searchOptionIndex = searchOptions.findIndex(e => e.label === searchOption);
     const searchOptionData = searchOptions[searchOptionIndex];
-    const showOperators = searchText.indexOf('>') === -1 && searchText.indexOf('<') === -1;
+    const operators = ['<', '>', '='];
+    const showOperators = operators.every(item => searchText.indexOf(item) === -1);
     if (searchOptionData.helpers && searchOptionData.entries?.length) {
       return renderEntries(searchOptionData.entries)
     } else if (searchOptionData.type === 'number' && showOperators) {
@@ -294,7 +299,7 @@ const AdvancedSearch = ({
         onFocus={handleFocus}
         ref={searchInputRef}
       />
-      {/* <Search className="search" /> */}
+      {isMobile && (<Search className="search" />)}
       {focused && (<button className="cancel" onClick={clearSearch}>
         <Cancel />
       </button>)}
