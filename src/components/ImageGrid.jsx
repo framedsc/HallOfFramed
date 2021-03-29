@@ -135,8 +135,10 @@ const ImageGrid = ({
                     key={`thumbnail-container-${image.id}`}
                   >
                     <img
+                      className={image.spoiler ? 'spoiler' : false}
                       alt={image.gameName}
                       key={imageIndex}
+                      id={`img-${image.epochtime}`}
                       src={image.thumbnailUrl}
                       style={{
                         width: Math.ceil(image.width),
@@ -150,9 +152,11 @@ const ImageGrid = ({
                         className="spoiler"
                         onClick={(event) => {
                           event.target.style.display = 'none';
+                          const imageElement=document.getElementById(`img-${image.epochtime}`);
+                          imageElement.classList.remove('spoiler');
                         }}
                       >
-                        <span>SPOILER</span>
+                        <span>Sensitive Content</span>
                       </div>
                     )}
                     <div className="image-info">

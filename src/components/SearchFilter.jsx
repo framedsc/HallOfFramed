@@ -19,7 +19,7 @@ class SearchFilter extends PureComponent {
   }
 
   componentDidMount() {
-    this.timeoutId = setTimeout(function () {
+    setTimeout(function () {
       this.setState({startAnimate: true});
     }.bind(this), 1);
   }
