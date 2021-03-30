@@ -201,11 +201,12 @@ const ImageGridContainer = ({ pageSize, setBgImage, imageId, searchData }) => {
     const filterObjects = [];
     for (const filter of filterArray) {
       const searchOption = getFilterOption(filter);
-      if (!getSearchKey(searchOption)) {
+      const searchKey = getSearchKey(searchOption);
+      if (!searchKey) {
         filterObjects.push({searchTerm: filter})
       } else {
         const filterOptionIndex = filterObjects.findIndex(e => e.searchOption === searchOption);
-        if (filterOptionIndex > -1) {
+        if (filterOptionIndex > -1 && searchOptions.strings.includes(searchKey)) {
           filterObjects[filterOptionIndex].searchTerms.push(getFilterTerm(filter));
         } else {
           filterObjects.push({
