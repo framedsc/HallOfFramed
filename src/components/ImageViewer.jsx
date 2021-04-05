@@ -224,6 +224,8 @@ const ImageViewer = ({ image = {}, show, onClose, data, onPrev, onNext, setBgIma
             {initialized && !isFullscreen && (
               <div
                 className={authorExpanded ? 'shot-info expanded' : 'shot-info'}
+                onMouseOver={()=>dispatch({ type: 'expandSocials' })}
+                onMouseOut={()=>dispatch({ type: 'closeSocials' })}
                 onClick={(event) => {
                   event.stopPropagation();
                 }}

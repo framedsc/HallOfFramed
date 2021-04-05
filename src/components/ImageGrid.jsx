@@ -135,7 +135,7 @@ const ImageGrid = ({
                     key={`thumbnail-container-${image.id}`}
                   >
                     <img
-                      className={image.spoiler ? 'spoiler' : false}
+                      className={image.spoiler ? 'spoiler' : undefined}
                       alt={image.gameName}
                       key={imageIndex}
                       id={`img-${image.epochtime}`}

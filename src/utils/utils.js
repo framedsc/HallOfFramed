@@ -1,6 +1,6 @@
 const baseSearchData = {
   minDate:new Date('2019-02-17'),
-  maxDate:new Date(),
+  maxDate:new Date(86400000 + +new Date()),
   numberHelpers: [
     { label: 'greater than', hint: '>=', operator: '>'},
     { label: 'less than', hint: '<=', operator: '<'},
@@ -73,6 +73,16 @@ const baseSearchData = {
     {
       label: 'id',
       property: 'epochTime',
+      hint: '',
+      helperText: ":",
+      type: 'number',
+      helpers:true, 
+      hide: true,
+      range: []
+    },
+    {
+      label: 'date',
+      property: 'epochtime',
       hint: '',
       helperText: ":",
       type: 'number',
@@ -188,7 +198,6 @@ export const getSearchDataByType = (type) => {
   const itemsByType = baseSearchData.searchOptions.filter((item) => item.type === type);
   return itemsByType.map(item => item.property);
 }
-
 export function arrayUnique(array) {
   var a = array.concat();
   for(var i=0; i<a.length; ++i) {
@@ -199,4 +208,10 @@ export function arrayUnique(array) {
   }
 
   return a;
+}
+
+export function stripLeadingZerosDate(dateStr){
+  return dateStr.split('-').reduce(function(date, datePart){
+      return `${date}${parseInt(datePart)}-`;
+  }, '').slice(0, -1);
 }

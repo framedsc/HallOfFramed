@@ -85,7 +85,7 @@ function App() {
         <SiteDataContext.Provider value={contextProvider}>
           <ImageGridContainer 
             imageId={imageId} 
-            pageSize={200} 
+            pageSize={100} 
             setBgImage={setBackground} 
             searchData={generateSearchData(siteData.imageData)}
           />

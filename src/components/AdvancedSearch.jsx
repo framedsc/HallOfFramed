@@ -103,6 +103,7 @@ const AdvancedSearch = ({
     const newFilters=filters.slice();
     newFilters.splice(index, 1);
     updateFilters(newFilters);
+    searchInputRef?.current?.focus();
   }
 
   const addDate = (value) => {

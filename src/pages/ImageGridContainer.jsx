@@ -6,7 +6,14 @@ import ImageNav from '../components/ImageNav';
 import ImageViewer from '../components/ImageViewer';
 import { ModalContext, SiteDataContext } from '../utils/context';
 import { useScrollPosition } from '../utils/hooks';
-import { arrayUnique, getOperator, getSearchDataByType, getSearchKey, scrolledToBottom } from '../utils/utils';
+import {
+  arrayUnique,
+  getOperator,
+  getSearchDataByType,
+  getSearchKey,
+  scrolledToBottom,
+  stripLeadingZerosDate
+} from '../utils/utils';
 //import { getQueryParam, scrolledToBottom } from '../utils/utils';
 
 const sortOptions = [
@@ -217,7 +224,7 @@ const ImageGridContainer = ({ pageSize, setBgImage, imageId, searchData }) => {
       }
     }
     return filterObjects;
-  }, [])
+  }, [searchOptions.strings])
 
   const applyFilter = useCallback((filter, dataToSearch) => {
     if (filter.hasOwnProperty('searchOption')) {
@@ -238,9 +245,20 @@ const ImageGridContainer = ({ pageSize, setBgImage, imageId, searchData }) => {
               ? imageData[newSearchOption].replace(/\s+/g, '').toLowerCase().includes(newSearchTerm.toLowerCase())
               : dataToSearch;
           });
+        } else if (searchOption === 'date') {
+          const dateEpoch = parseNumberTerm(newSearchOption, newSearchTerm);
+          let dateValue = new Date(dateEpoch*1000);
+          dateValue.setDate(dateValue.getDate()+1);
+          const nextDate = Date.parse(dateValue)/1000;
+          
+          newResults = dataToSearch.filter((obj) => {
+            return obj[newSearchOption] >= dateEpoch && obj[newSearchOption] <= nextDate;
+          });
         } else if (searchOptions.numbers.includes(newSearchOption)) {
           const operator = getOperator(searchOption);
-          let parsedNumberTerm = parseNumberTerm(newSearchOption, newSearchTerm);
+          const parsedNumberTerm = parseNumberTerm(newSearchOption, newSearchTerm);
+
+          console.log('search', parsedNumberTerm);
     
           newResults = dataToSearch.filter((obj) => {
             if (operator === '=' || newSearchTerm.indexOf('=') > -1) {
@@ -253,7 +271,7 @@ const ImageGridContainer = ({ pageSize, setBgImage, imageId, searchData }) => {
         } 
         results = arrayUnique(results.concat(newResults));
         //results = results.concat(newResults);
-      }
+      } 
       return results;
     } 
     const filterText = filter.searchTerm;
@@ -315,7 +333,9 @@ const ImageGridContainer = ({ pageSize, setBgImage, imageId, searchData }) => {
     }
 
     if (type === 'epochtime') {
-      termToParse = +new Date(termToParse)/1000;
+      const strippedDate = stripLeadingZerosDate(termToParse);
+      const dateValue = new Date(strippedDate);
+      termToParse = Date.parse(dateValue)/1000;
     }
     
     return parseInt(termToParse, 10);
