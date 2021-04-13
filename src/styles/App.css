@@ -677,10 +677,6 @@ button > svg {
   fill: #fff;
 }
 
-.image-viewer-content .image-viewer-controls {
-  display: flex;
-}
-
 .image-viewer-content .fullscreen-button,
 .image-viewer-content .download-button {
   height: 30px;
@@ -688,6 +684,7 @@ button > svg {
   fill: #fff;
   cursor: pointer;
   opacity: 0.85;
+  align-self: flex-end;
 }
 
 .image-viewer-content .fullscreen-button:hover,

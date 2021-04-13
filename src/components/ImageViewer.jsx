@@ -243,13 +243,11 @@ const ImageViewer = ({ image = {}, show, onClose, data, onPrev, onNext, setBgIma
                   <span className="title">{image.game}</span>
                   <SocialLinks data={socialData} />
                 </div>
-                <div className="image-viewer-controls">
-                  {!isFullscreen && !fullScreenError && (
-                    <button className="fullscreen-button" onClick={setIsFullscreen}>
-                      <Fullscreen />
-                    </button>
-                  )}
-                </div>
+                {!isFullscreen && !fullScreenError && (
+                  <button className="fullscreen-button" onClick={setIsFullscreen}>
+                    <Fullscreen />
+                  </button>
+                )}
               </div>
             )}
             {isFullscreen ? (
