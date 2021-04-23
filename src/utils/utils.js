@@ -26,6 +26,15 @@ const baseSearchData = {
       helpers:true
     },
     {
+      label: 'on',
+      property: 'epochtime',
+      hint: 'specific date',
+      helperText: ":",
+      type: 'number',
+      helpers:true, 
+      range: []
+    },
+    {
       label: 'before',
       property: 'epochtime',
       hint: 'specific date',
@@ -73,16 +82,6 @@ const baseSearchData = {
     {
       label: 'id',
       property: 'epochTime',
-      hint: '',
-      helperText: ":",
-      type: 'number',
-      helpers:true, 
-      hide: true,
-      range: []
-    },
-    {
-      label: 'date',
-      property: 'epochtime',
       hint: '',
       helperText: ":",
       type: 'number',
@@ -208,10 +207,4 @@ export function arrayUnique(array) {
   }
 
   return a;
-}
-
-export function stripLeadingZerosDate(dateStr){
-  return dateStr.split('-').reduce(function(date, datePart){
-      return `${date}${parseInt(datePart)}-`;
-  }, '').slice(0, -1);
 }

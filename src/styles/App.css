@@ -105,7 +105,7 @@ button > svg {
   position: fixed;
   text-shadow: var(--text-shadow-1), var(--text-shadow-2);
   width: 100%;
-  z-index: 5;
+  z-index: 30;
   padding-left: 10px;
 }
 

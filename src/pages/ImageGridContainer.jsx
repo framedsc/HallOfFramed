@@ -12,7 +12,6 @@ import {
   getSearchDataByType,
   getSearchKey,
   scrolledToBottom,
-  stripLeadingZerosDate
 } from '../utils/utils';
 //import { getQueryParam, scrolledToBottom } from '../utils/utils';
 
@@ -245,7 +244,7 @@ const ImageGridContainer = ({ pageSize, setBgImage, imageId, searchData }) => {
               ? imageData[newSearchOption].replace(/\s+/g, '').toLowerCase().includes(newSearchTerm.toLowerCase())
               : dataToSearch;
           });
-        } else if (searchOption === 'date') {
+        } else if (searchOption === 'on') {
           const dateEpoch = parseNumberTerm(newSearchOption, newSearchTerm);
           let dateValue = new Date(dateEpoch*1000);
           dateValue.setDate(dateValue.getDate()+1);
@@ -333,8 +332,7 @@ const ImageGridContainer = ({ pageSize, setBgImage, imageId, searchData }) => {
     }
 
     if (type === 'epochtime') {
-      const strippedDate = stripLeadingZerosDate(termToParse);
-      const dateValue = new Date(strippedDate);
+      const dateValue = new Date(termToParse);
       termToParse = Date.parse(dateValue)/1000;
     }
     
