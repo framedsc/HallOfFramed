@@ -370,6 +370,7 @@ button > svg {
   display: inline-block;
   position: relative;
   overflow: hidden;
+  animation: imageAppear 300ms forwards;
 }
 
 .image-row .image-info {
@@ -916,6 +917,29 @@ button > svg {
   100% {
     opacity: 0;
     z-index: -99;
+  }
+}
+
+@keyframes imageAppear {
+  0% {
+    opacity: 0;
+    transform: translateY(1rem);
+  }
+
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+@-webkit-keyframes imageAppear {
+  0% {
+    opacity: 0;
+    transform: translateY(1rem);
+  }
+
+  100% {
+    transform: translateY(0);
+    opacity: 1;
   }
 }
 
