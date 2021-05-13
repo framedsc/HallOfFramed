@@ -370,7 +370,7 @@ button > svg {
   display: inline-block;
   position: relative;
   overflow: hidden;
-  animation: imageAppear 300ms forwards;
+  animation: imageAppear 300ms forwards cubic-bezier(.22,.61,.36,1);
 }
 
 .image-row .image-info {
@@ -447,6 +447,7 @@ button > svg {
   text-align: center;
   background: var(--translucent-bg);
   cursor: zoom-out;
+  animation: modalAppear 200ms forwards cubic-bezier(.22,.61,.36,1);
 }
 
 .framed-modal.is-visible {
@@ -927,8 +928,8 @@ button > svg {
   }
 
   100% {
-    transform: translateY(0);
     opacity: 1;
+    transform: translateY(0);
   }
 }
 @-webkit-keyframes imageAppear {
@@ -938,7 +939,26 @@ button > svg {
   }
 
   100% {
+    opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes modalAppear {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+@-webkit-keyframes modalAppear {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
     opacity: 1;
   }
 }
