@@ -179,7 +179,7 @@ const ImageGridContainer = ({ pageSize, setBgImage, imageId, searchData }) => {
     } else {
       dispatch({ type: 'changeSort', isReverse: false, sortOption: option });
     }
-    window.scrollTo({ top: 0 });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleFormatChange = (format) => {
