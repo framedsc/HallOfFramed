@@ -34,6 +34,7 @@ html {
 body {
   background: grey no-repeat fixed center;
   font-size: 14px;
+  overflow-x: hidden;
   min-height: 100vh;
   min-height: -webkit-fill-available;
 }
@@ -43,7 +44,7 @@ body::before {
   content: '';
   display: block;
   position: absolute;
-  animation: splashScreen 2s ease-out forwards;
+  animation: splashScreen .3s 1s cubic-bezier(.22,.61,.36,1) forwards;
   top: 0;
   right: 0;
   bottom: 0;
@@ -370,7 +371,10 @@ button > svg {
   display: inline-block;
   position: relative;
   overflow: hidden;
-  animation: imageAppear 300ms forwards cubic-bezier(.22,.61,.36,1);
+  background-image: linear-gradient(to right, #33333380, #929292 50%, #33333380);
+  background-size: 300%;
+  animation: imageAppear 300ms forwards cubic-bezier(.22,.61,.36,1),
+             gradientAnim 2s ease infinite;
 }
 
 .image-row .image-info {
@@ -891,33 +895,20 @@ button > svg {
 /* ----------------------------- Animations ----------------------------- */
 
 @keyframes splashScreen {
-  0%,
-  80% {
-    opacity: 1;
-    z-index: 99;
-  }
-  99.9% {
-    opacity: 0;
-    z-index: 99;
-  }
   100% {
-    opacity: 0;
-    z-index: -99;
+    transform: translateY(-100vh);
   }
 }
-@-webkit-keyframes splashScreen {
-  0%,
-  80% {
-    opacity: 1;
-    z-index: 99;
+
+@keyframes gradientAnim {
+  0% {
+    background-position: 0 50%;
   }
-  99.9% {
-    opacity: 0;
-    z-index: 99;
+  50% {
+      background-position: 100% 50%;
   }
   100% {
-    opacity: 0;
-    z-index: -99;
+      background-position: 0 50%;
   }
 }
 
