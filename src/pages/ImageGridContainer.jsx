@@ -224,7 +224,7 @@ const ImageGridContainer = ({ pageSize, setBgImage, imageId, searchData }) => {
       }
     }
     return filterObjects;
-  }, [searchOptions.strings])
+  }, [])
 
   const applyFilter = useCallback((filter, dataToSearch) => {
     if (filter.hasOwnProperty('searchOption')) {
