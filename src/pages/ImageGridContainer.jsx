@@ -212,7 +212,8 @@ const ImageGridContainer = ({ pageSize, setBgImage, imageId, searchData }) => {
         filterObjects.push({searchTerm: filter})
       } else {
         const filterOptionIndex = filterObjects.findIndex(e => e.searchOption === searchOption);
-        if (filterOptionIndex > -1 && searchOptions.strings.includes(searchKey)) {
+        //if (filterOptionIndex > -1 && searchOptions.strings.includes(searchKey)) {
+        if (filterOptionIndex > -1) {
           filterObjects[filterOptionIndex].searchTerms.push(getFilterTerm(filter));
         } else {
           filterObjects.push({
