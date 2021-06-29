@@ -11,10 +11,9 @@ const AboutModalContent = () => {
             screenshots. It has since become so full of incredible images that we’ve run out of pins
             to highlight them all. To fix that we created a Discord bot that curates the most
             popular shots within the server, displays them within a dedicated channel and uploads
-            to this site. Posted shots can be voted on in the Discord server. Our clever bot will
-            publish entries into the Hall of Framed based on popularity, which has allowed us to put
-            the power to curate the best shots into the hands of our community, helping to showcase
-            the depth and variety of creativity within this space.
+            to this site. Our clever bot will publish entries into the Hall of Framed based on popularity, 
+            which has allowed us to put the power to curate the best shots into the hands of our community, 
+            helping to showcase the depth and variety of creativity within this space.
           </p>
           <p>
             We hope that this can serve as a showcase for what talented screenshotters can achieve.
