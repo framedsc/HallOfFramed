@@ -78,7 +78,7 @@ const AdvancedSearch = ({
 
   const handleScroll = React.useCallback(() => {
     handleSearchBlur();
-  },[]);
+  },[handleSearchBlur]);
 
   const handleClickOutside = () => {
     if (isMobile) {
