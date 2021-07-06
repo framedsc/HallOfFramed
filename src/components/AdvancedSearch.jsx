@@ -76,6 +76,10 @@ const AdvancedSearch = ({
     [focused, processSearchInput, searchText],
   );
 
+  const handleScroll = React.useCallback(() => {
+    handleSearchBlur();
+  },[]);
+
   const handleClickOutside = () => {
     if (isMobile) {
       return;
@@ -277,6 +281,7 @@ const AdvancedSearch = ({
 
   React.useEffect(() => {
     window.addEventListener('keyup', handleKeyboard);
+    window.addEventListener('scroll', handleScroll);
 
     if (isMobile && filters.length > 0 && !searchText) {
       updateSearch(filters);
@@ -284,8 +289,9 @@ const AdvancedSearch = ({
 
     return () => {
       window.removeEventListener('keyup', handleKeyboard);
+      window.removeEventListener('scroll', handleScroll);
     };
-  }, [handleKeyboard, filters, updateSearch, isMobile, searchText]);
+  }, [handleKeyboard, handleScroll, filters, updateSearch, isMobile, searchText]);
 
   return (
     <div className={classNames('search', activeClass, focusedClass)} ref={advancedSearchRef}>
@@ -297,6 +303,7 @@ const AdvancedSearch = ({
         onChange={handleSearchChange}
         placeholder={`Search${filterPlaceholder}`}
         autoComplete='off'
+        onClick={handleFocus}
         onFocus={handleFocus}
         ref={searchInputRef}
       />

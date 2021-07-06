@@ -296,6 +296,7 @@ abbr[title] {
 
 .react-date-picker {
   display: block;
+  min-height: 240px;
 }
 
 .react-date-picker__wrapper {
