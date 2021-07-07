@@ -127,11 +127,15 @@ const ImageNav = ({ className, options, reverseSort, updateSort, updateFormat, o
     );
   };
 
+  const handleMobileMenuButton = () => {
+    setShowMenu((current) => !current);
+  }
+
   const renderMobile = () => {
     const mobileMenuClass = showMenu ? 'show' : false;
     return (
       <div className={classNames('mobile-menu', mobileMenuClass)} ref={mobileMenuRef}>
-        <button className="menu-button" onClick={() => setShowMenu((current) => !current)}>
+        <button className="menu-button" onClick={handleMobileMenuButton}>
           <Menu />
         </button>
         {showMenu && (
@@ -152,6 +156,10 @@ const ImageNav = ({ className, options, reverseSort, updateSort, updateFormat, o
     setShowMenu(false);
   };
 
+  const handleScroll = React.useCallback(() => {
+    setShowMenu(false);
+  },[]);
+
   const [showMenu, setShowMenu] = useState(false);
   const { width } = useViewport();
   const isMobile = width <= breakpoints.mobile;
@@ -164,7 +172,13 @@ const ImageNav = ({ className, options, reverseSort, updateSort, updateFormat, o
     if (!isMobile) {
       setShowMenu(false);
     }
-  }, [isMobile, history]);
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [isMobile, history, handleScroll]);
 
   return (
     <div className={`image-nav ${viewportClass} ${className}`}>

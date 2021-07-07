@@ -306,6 +306,7 @@ const AdvancedSearch = ({
         onClick={handleFocus}
         onFocus={handleFocus}
         ref={searchInputRef}
+        autoFocus={isMobile ? true : false}
       />
       {isMobile && (<Search className="search" />)}
       {focused && (<button className="cancel" onClick={clearSearch}>
