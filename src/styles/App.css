@@ -387,10 +387,15 @@ button > svg {
   position: absolute;
   bottom: 0;
   transition: height 100ms linear;
+  z-index: 11;
 }
 
 .image-row .thumbnail-container:hover .image-info {
-  height: 30px;
+  height: 50px;
+}
+
+.image-row .thumbnail-container:hover .image-info div {
+  height: 20px;
 }
 
 .image-row .image-info .author {

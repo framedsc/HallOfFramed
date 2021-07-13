@@ -156,12 +156,15 @@ const ImageGrid = ({
                           imageElement.classList.remove('spoiler');
                         }}
                       >
-                        <span>Sensitive Content</span>
+                        <span>NSFW / Spoiler</span>
                       </div>
                     )}
                     <div className="image-info">
-                      <span className="by">by</span>{' '}
-                      <span className="author">{image.author}</span>
+                      <div>{image.game}</div>
+                      <div>
+                        <span className="by">by</span>{' '}
+                        <span className="author">{image.author}</span>
+                      </div>
                     </div>
                   </div>
                 );
