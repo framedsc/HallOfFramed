@@ -21,6 +21,8 @@
   --text-shadow-4: 0 1px 0px hsla(0, 100%, 100%, 0.76);
   --translucent-bg: hsla(0, 0%, 18%, 0.6);
   --translucent-bg-fallback: hsla(0, 0%, 28%, 0.95);
+
+  --mobile-breakpoint--large: 860px;
 }
 
 * {
@@ -443,6 +445,30 @@ button > svg {
   font-size: 24px;
   text-shadow: var(--text-shadow-1), var(--text-shadow-2);
 }
+
+.load-more-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 0;
+}
+
+.load-more-container button {
+  cursor: pointer;
+  text-transform: capitalize;
+  background-color: #ddd;
+  padding: 15px 25px;
+  text-shadow: rgb(0 0 0 / 20%) 0px 1px 4px;
+  text-align: center;
+  color: var(--active-fg);
+  font-weight: 700;
+  box-shadow: 0 5px 10px rgb(0 0 0 / 20%);
+  transition: all 250ms;
+}
+
+.load-more-container button:hover {
+  background-color: #fff;
+}
 /* ------------------------- Modal Window ------------------------- */
 
 .framed-modal {
@@ -725,11 +751,25 @@ button > svg {
 
 .about-icon {
   fill: #fff;
-  opacity: 0.6;
+  opacity: 0.75;
   transition: opacity 200ms;
   cursor: pointer;
   margin-left: auto;
   margin-right: 5px;
+}
+
+.about-icon.desktop {
+  margin-left: auto;
+  margin-right: 10px;
+  color: inherit;
+  cursor: pointer;
+  height: auto;
+  line-height: 20px;
+  padding: 5px 10px;
+  vertical-align: top;
+  border-radius: 0;
+  box-shadow: 0 3px 5px rgb(0 0 0 / 30%);
+  border-radius: 16px;
 }
 
 .about-icon:hover {
@@ -994,7 +1034,7 @@ button > svg {
 }
 
 /* ---------------------------- Breakpoints ---------------------------- */
-@media only screen and (max-width: 840px) {
+@media only screen and (max-width: 860px) {
   .mobile-menu .about-icon {
     align-items: center;
     display: flex;
@@ -1034,12 +1074,18 @@ button > svg {
 }
 
 @media only screen and (max-width: 760px) {
-  .image-row .image-info .author {
-    font-size: 12px;
+  .image-row .thumbnail-container:hover .image-info {
+    height: 40px;
+    padding: 5px 0;
   }
-
-  .image-row .image-info .by {
-    display: none;
+  .image-row .thumbnail-container:hover .image-info div {
+    height: 15px;
+    line-height: 15px;
+  }
+  .image-row .image-info .author,
+  .image-row .image-info .game
+  {
+    font-size: 12px;
   }
 
   body::before {

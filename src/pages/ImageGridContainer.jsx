@@ -437,6 +437,15 @@ const ImageGridContainer = ({ pageSize, setBgImage, imageId, searchData }) => {
             borderOffset={7}
           />
         )}
+        {moreImagesToLoad && (
+          <div className="load-more-container">
+            <button 
+              onClick={() => dispatch({ type: 'loadMoreImages', page: page + 1 })}
+            >
+              Load more images
+            </button>
+          </div>
+        )}
         {renderNoSearchResults()}
         <ImageViewer
           image={viewerSrc}

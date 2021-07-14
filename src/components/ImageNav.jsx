@@ -15,6 +15,11 @@ const ImageNav = ({ className, options, reverseSort, updateSort, updateFormat, o
   const { setModal } = useContext(ModalContext);
   const history = useHistory();
 
+  const [showMenu, setShowMenu] = useState(false);
+  const { width } = useViewport();
+  const isMobile = width <= breakpoints.mobile;
+  const viewportClass = isMobile ? 'image-nav--mobile' : 'image-nav--desktop';
+
   const handleOptionChange = (selection) => {
     setActive(selection);
     updateSort(selection);
@@ -110,9 +115,12 @@ const ImageNav = ({ className, options, reverseSort, updateSort, updateFormat, o
     )
   }
 
+  const aboutButtonContent = isMobile ? <About /> : "About";
+  const aboutClass = isMobile ? "mobile" : "desktop";
+
   const aboutIconButton = (
-    <button className="about-icon" onClick={showAbout}>
-      <About />
+    <button className={classNames("about-icon", aboutClass)} onClick={showAbout}>
+      {aboutButtonContent}
     </button>
   );
 
@@ -159,11 +167,6 @@ const ImageNav = ({ className, options, reverseSort, updateSort, updateFormat, o
   const handleScroll = React.useCallback(() => {
     setShowMenu(false);
   },[]);
-
-  const [showMenu, setShowMenu] = useState(false);
-  const { width } = useViewport();
-  const isMobile = width <= breakpoints.mobile;
-  const viewportClass = isMobile ? 'image-nav--mobile' : 'image-nav--desktop';
 
   const mobileMenuRef = useRef(null);
   useOutsideAlerter(mobileMenuRef, handleClickOutside);

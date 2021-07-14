@@ -160,7 +160,7 @@ const ImageGrid = ({
                       </div>
                     )}
                     <div className="image-info">
-                      <div>{image.game}</div>
+                      <div className="game">{image.game}</div>
                       <div>
                         <span className="by">by</span>{' '}
                         <span className="author">{image.author}</span>

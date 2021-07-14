@@ -97,7 +97,7 @@ export const scrolledToBottom = (el, buffer) => {
 }
 
 export const breakpoints = {
-  mobile: 820,
+  mobile: 840,
 };
 
 export const getBrowserFullscreenElementProp = () => {
