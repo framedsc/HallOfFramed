@@ -366,6 +366,15 @@ abbr[title] {
   border: 1px solid #ddd;
 }
 
+/* Color Picker */
+.image-nav .search .search-filters .filter-options .color-block{
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  margin: 2px;
+  cursor: pointer;
+}
+
 /* Breakpoints */
 @media only screen and (max-width: 840px) {
   .image-nav .search svg.search,

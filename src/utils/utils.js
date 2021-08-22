@@ -88,6 +88,15 @@ const baseSearchData = {
       helpers:true, 
       hide: true,
       range: []
+    },
+    {
+      label: 'color',
+      property: 'colorName',
+      hint: 'shot color',
+      helperText: ":",
+      type: 'string',
+      helpers: true,
+      entries: []
     }
   ]
 }
