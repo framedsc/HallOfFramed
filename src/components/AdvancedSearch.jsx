@@ -176,6 +176,24 @@ const AdvancedSearch = ({
       </>
     )
   }
+  
+  const renderColorPicker = (searchOption, searchOptionData) => {
+    return (
+      <>
+        <span className="search-header">Search {searchOption}: {` `}</span>
+        {searchOptionData.entries.map((item, index) => {
+          return (
+            <span
+              key={`color-picker-${index}`} 
+              className="color-block" 
+              style={{backgroundColor: item}} 
+              onClick={()=>addHelper(item)} 
+            ></span>
+          )
+        })}
+      </>
+    )
+  }
 
   const renderEntries = (entries) => {
     const delimiterIndex = searchText.indexOf(':');
@@ -222,6 +240,11 @@ const AdvancedSearch = ({
     const searchOptionData = searchOptions[searchOptionIndex];
     const operators = ['<', '>', '='];
     const showOperators = operators.every(item => searchText.indexOf(item) === -1);
+
+    if (searchKey === 'colorName') {
+      return renderColorPicker(searchOption, searchOptionData);
+    }
+
     if (searchOptionData.helpers && searchOptionData.entries?.length) {
       return renderEntries(searchOptionData.entries)
     } else if (searchOptionData.type === 'number' && showOperators) {
