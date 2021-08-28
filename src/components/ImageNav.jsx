@@ -80,7 +80,7 @@ const ImageNav = ({ className, options, reverseSort, updateSort, updateFormat, o
               key={item.label}
             >
               {item.label}
-              {isActive && icon}
+              {isActive && active.key!== 'random' && icon}
             </button>
           </li>
         );

@@ -21,8 +21,8 @@ const sortOptions = [
     key: 'epochtime',
   },
   {
-    label: 'Popularity',
-    key: 'score',
+    label: 'Shuffle',
+    key: 'random',
   },
 ];
 
@@ -91,7 +91,7 @@ const reducer = (state, action) => {
   }
 };
 
-const ImageGridContainer = ({ pageSize, setBgImage, imageId, searchData }) => {
+const ImageGridContainer = ({ pageSize, setBgImage, imageId, onShuffle, searchData }) => {
   //const searchQuery = getQueryParam('search');
   const { siteData } = useContext(SiteDataContext);
   const { imageData } = siteData;
@@ -180,6 +180,10 @@ const ImageGridContainer = ({ pageSize, setBgImage, imageId, searchData }) => {
       dispatch({ type: 'changeSort', isReverse: false, sortOption: option });
     }
     window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    if (option.key ==='random') {
+      onShuffle();
+    }
   };
 
   const handleFormatChange = (format) => {
@@ -257,8 +261,6 @@ const ImageGridContainer = ({ pageSize, setBgImage, imageId, searchData }) => {
         } else if (searchOptions.numbers.includes(newSearchOption)) {
           const operator = getOperator(searchOption);
           const parsedNumberTerm = parseNumberTerm(newSearchOption, newSearchTerm);
-
-          console.log('search', parsedNumberTerm);
     
           newResults = dataToSearch.filter((obj) => {
             if (operator === '=' || newSearchTerm.indexOf('=') > -1) {
@@ -278,6 +280,7 @@ const ImageGridContainer = ({ pageSize, setBgImage, imageId, searchData }) => {
     if (filterText.length < 3) {
       return dataToSearch;
     }
+
     return dataToSearch.filter((imageData) => {
       return Object.keys(imageData).reduce((acc, curr) => {
         return acc || imageData[curr].toString().toLowerCase().includes(filterText.toLowerCase());
@@ -308,11 +311,14 @@ const ImageGridContainer = ({ pageSize, setBgImage, imageId, searchData }) => {
       }
 
       let filteredResults = filters.length ? search(results) : results;
-      let sortMethod = (a, b) => (a[key] < b[key] ? 1 : b[key] < a[key] ? -1 : 0);
-      if (isReverse) {
-        sortMethod = (a, b) => (a[key] > b[key] ? 1 : b[key] > a[key] ? -1 : 0);
+
+      if (sortOption.key !== 'random') {
+        let sortMethod = (a, b) => (a[key] < b[key] ? 1 : b[key] < a[key] ? -1 : 0);
+        if (isReverse) {
+          sortMethod = (a, b) => (a[key] > b[key] ? 1 : b[key] > a[key] ? -1 : 0);
+        }
+        filteredResults = filteredResults.sort(sortMethod);
       }
-      filteredResults = filteredResults.sort(sortMethod);
 
       //dispatch({type: 'setSearchData', data: generateSearchData(imageData)});
     

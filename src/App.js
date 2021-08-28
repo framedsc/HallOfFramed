@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import ImageGridContainer from '../src/pages/ImageGridContainer';
+import { addProperties, normalizeData } from '../src/utils/utils';
 import { SiteDataContext } from '../src/utils/context';
 import { getAuthors, getImages } from './api/request';
 import './assets/fonts/stylesheet.css';
@@ -9,21 +10,7 @@ import './styles/App.css';
 import './styles/FramedModalContent.css';
 import './styles/reset.css';
 import './styles/Spinner.css';
-import { generateSearchData, getQueryParam } from './utils/utils';
-
-function normalizeData(data) {
-  let noramlizedData = [];
-
-  const entries = Object.entries(data._default);
-
-  entries.forEach((item) => {
-    const id = item[0];
-    let attributes = item[1];
-    noramlizedData.push({ id, ...attributes });
-  });
-
-  return noramlizedData;
-}
+import { generateSearchData, getQueryParam, shuffle } from './utils/utils';
 
 function App() {
   const [siteData, setSiteData] = useState({ imageData: [], authorData: [] });
@@ -31,6 +18,7 @@ function App() {
   const [initialized, setInitialized] = useState(false);
   const [bgImageContainer, setBgImageContainer] = useState(null);
 
+  // get image ID from URL if there is one
   const imageIdParam = getQueryParam('imageId');
   const imageId = imageIdParam && parseInt(imageIdParam);
 
@@ -48,46 +36,49 @@ function App() {
     setInitialized(true);
     const imagesResponse = await getImages({});
     const authorsResponse = await getAuthors({});
-    const normalizedImages = normalizeData(imagesResponse.data);
-    const normalizedAuthors = normalizeData(authorsResponse.data);
+    const normalizedImages = normalizeData(imagesResponse.data._default);
+    const normalizedAuthors = normalizeData(authorsResponse.data._default);
+    const formattedImages = addProperties(normalizedImages, normalizedAuthors);
 
-    for (let i = 0; i < normalizedImages.length; i++) {
-      normalizedImages[i].authorid = normalizedImages[i].author;
-      const authorName = normalizedAuthors.find(
-        (author) => author.authorid === normalizedImages[i].authorid,
-      ).authorNick;
-      normalizedImages[i].author = authorName;
-      normalizedImages[i].game = normalizedImages[i].gameName;
-      normalizedImages[i].epochtime = normalizedImages[i].epochTime;
-    }
-
-    setSiteData({ imageData: normalizedImages, authorData: normalizedAuthors});
+    setSiteData({ imageData: formattedImages, authorData: normalizedAuthors});
   };
+
+  const shuffleImages = () => {
+    const { imageData, authorData } = siteData; 
+    const preShuffledImages = imageData.slice();
+    const shuffledImages = shuffle(preShuffledImages);
+    setSiteData({ imageData: shuffledImages, authorData});
+  }
 
   useEffect(() => {
     const { imageData } = siteData;
 
     !initialized && getData();
 
-    imageData.length && !bgImageContainer && setBgImageContainer(document.querySelector('.bg-blur'));
+    // get element for applying the blurry background image
+    !bgImageContainer && setBgImageContainer(document.querySelector('.bg-blur'));
+
+    // apply random image to background image container
     if (imageData.length && bgImageContainer) {
-      const randomImageIndex = imageId
+      const imageIndex = imageId
         ? imageData.findIndex((e) => e.epochtime === imageId)
         : Math.floor(Math.random() * Math.floor(imageData.length - 1));
-      setBackground(imageData[randomImageIndex]);
+      setBackground(imageData[imageIndex]);
     }
   }, [bgImageContainer, siteData, initialized, setBackground, imageId]);
 
+  const dataAvailable = siteData.imageData.length > 0 && siteData.authorData.length;
+
   return (
     <div className="image-grid">
-      {siteData.imageData.length > 0 && 
-      siteData.authorData.length > 0 && (
+      {dataAvailable && (
         <SiteDataContext.Provider value={contextProvider}>
           <ImageGridContainer 
             imageId={imageId} 
             pageSize={100} 
             setBgImage={setBackground} 
             searchData={generateSearchData(siteData.imageData)}
+            onShuffle={shuffleImages}
           />
         </SiteDataContext.Provider>
       )}
