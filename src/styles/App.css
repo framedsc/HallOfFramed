@@ -52,9 +52,9 @@ body::before {
   bottom: 0;
   left: 0;
   background: #333
-    url('https://cdn.discordapp.com/attachments/552552070876758032/802277763263627267/hof.png')
+    url('https://cdn.discordapp.com/attachments/877962007524044810/927287125282529340/Wallpaper-1.png')
     no-repeat fixed center;
-  background-size: 700px;
+  background-size: cover;
   z-index: 99;
 }
 
@@ -1086,10 +1086,6 @@ button > svg {
   .image-row .image-info .game
   {
     font-size: 12px;
-  }
-
-  body::before {
-    background-size: 450px;
   }
 }
 
