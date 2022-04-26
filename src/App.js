@@ -44,10 +44,10 @@ function App() {
   };
 
   const shuffleImages = () => {
-    const { imageData, authorData } = siteData; 
+    const { imageData } = siteData; 
     const preShuffledImages = imageData.slice();
     const shuffledImages = shuffle(preShuffledImages);
-    setSiteData({ imageData: shuffledImages, authorData});
+    setSiteData({ ...siteData, imageData: shuffledImages});
   }
 
   useEffect(() => {

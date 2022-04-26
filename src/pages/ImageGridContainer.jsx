@@ -310,7 +310,8 @@ const ImageGridContainer = ({ pageSize, setBgImage, imageId, onShuffle, searchDa
         results = results.filter((item) => item.width <= item.height);
       }
 
-      let filteredResults = filters.length ? search(results) : results;
+      //let filteredResults = filters.length ? search(results) : results;
+      let filteredResults = results;
 
       if (sortOption.key !== 'random') {
         let sortMethod = (a, b) => (a[key] < b[key] ? 1 : b[key] < a[key] ? -1 : 0);
