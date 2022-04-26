@@ -325,7 +325,7 @@ const ImageGridContainer = ({ pageSize, setBgImage, imageId, onShuffle, searchDa
     
       return filteredResults;
     },
-    [isReverse, search, sortOption, format, filters.length],
+    [isReverse, sortOption, format],
   );
 
   const parseNumberTerm = (type, term) => {
