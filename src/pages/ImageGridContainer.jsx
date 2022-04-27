@@ -7,6 +7,10 @@ import ImageViewer from '../components/ImageViewer';
 import { ModalContext, SiteDataContext } from '../utils/context';
 import { useScrollPosition } from '../utils/hooks';
 import {
+  arrayUnique,
+  getOperator,
+  getSearchDataByType,
+  getSearchKey,
   scrolledToBottom,
 } from '../utils/utils';
 //import { getQueryParam, scrolledToBottom } from '../utils/utils';
@@ -112,12 +116,12 @@ const ImageGridContainer = ({ pageSize, setBgImage, imageId, onShuffle, searchDa
   const moreImagesToLoad = page * pageSize <= images.length;
   const isBottom = useScrollPosition(moreImagesToLoad);
   const history = useHistory();
-  /*const searchOptions = React.useMemo(()=>{
+  const searchOptions = React.useMemo(()=>{
     return {
       strings : getSearchDataByType('string'),
       numbers : getSearchDataByType('number')
     }
-  }, []);*/
+  }, []);
 
   // component methods
   const loadImageFromQueryString = useCallback(() => {
@@ -203,7 +207,7 @@ const ImageGridContainer = ({ pageSize, setBgImage, imageId, onShuffle, searchDa
     dispatch({ type: 'selectImage', image });
   };
 
-  /*const buildFilters = useCallback((filterArray) => {
+  const buildFilters = useCallback((filterArray) => {
     const filterObjects = [];
     for (const filter of filterArray) {
       const searchOption = getFilterOption(filter);
@@ -224,9 +228,9 @@ const ImageGridContainer = ({ pageSize, setBgImage, imageId, onShuffle, searchDa
       }
     }
     return filterObjects;
-  }, [])*/
+  }, [])
 
-  /*const applyFilter = useCallback((filter, dataToSearch) => {
+  const applyFilter = useCallback((filter, dataToSearch) => {
     if (filter.hasOwnProperty('searchOption')) {
       let searchOption = filter.searchOption;
       const searchTerms = filter.searchTerms;
@@ -283,9 +287,8 @@ const ImageGridContainer = ({ pageSize, setBgImage, imageId, onShuffle, searchDa
       }, false);
     });
   }, [searchOptions]);
-  */
 
-  /*const search = useCallback((data) => {
+  const search = useCallback((data) => {
     let results = data.slice();
     const filterObjects = buildFilters(filters);
 
@@ -294,7 +297,7 @@ const ImageGridContainer = ({ pageSize, setBgImage, imageId, onShuffle, searchDa
     }
 
     return results;
-  }, [applyFilter, filters, buildFilters]);*/
+  }, [applyFilter, filters, buildFilters]);
 
   const filterImages = useCallback(
     (images) => {
@@ -307,8 +310,7 @@ const ImageGridContainer = ({ pageSize, setBgImage, imageId, onShuffle, searchDa
         results = results.filter((item) => item.width <= item.height);
       }
 
-      //let filteredResults = filters.length ? search(results) : results;
-      let filteredResults = results;
+      let filteredResults = filters.length ? search(results) : results;
 
       if (sortOption.key !== 'random') {
         let sortMethod = (a, b) => (a[key] < b[key] ? 1 : b[key] < a[key] ? -1 : 0);
@@ -322,10 +324,10 @@ const ImageGridContainer = ({ pageSize, setBgImage, imageId, onShuffle, searchDa
     
       return filteredResults;
     },
-    [isReverse, sortOption, format],
+    [isReverse, search, sortOption, format, filters.length],
   );
 
-  /*const parseNumberTerm = (type, term) => {
+  const parseNumberTerm = (type, term) => {
     let termToParse;
 
     if (term.indexOf('<') !== -1) {
@@ -342,23 +344,23 @@ const ImageGridContainer = ({ pageSize, setBgImage, imageId, onShuffle, searchDa
     }
     
     return parseInt(termToParse, 10);
-  }*/
+  }
 
-  /*const getFilterOption = (text) => {
+  const getFilterOption = (text) => {
     const delimiterIndex = text.indexOf(':');
     if (delimiterIndex === -1) {
       return false;
     }
     return text.substring(0, delimiterIndex);
-  }*/
+  }
 
-  /*const getFilterTerm = (text) => {
+  const getFilterTerm = (text) => {
     const delimiterIndex = text.indexOf(':');
     if (delimiterIndex === -1) {
       return false;
     }
     return text.substring(delimiterIndex + 1).trimStart();
-  }*/
+  }
 
   const selectPreviousImage = () => {
     const index = images.findIndex((e) => e.epochtime === viewerSrc.epochtime);
