@@ -10,10 +10,8 @@ import {
   arrayUnique,
   getOperator,
   getSearchDataByType,
-  getSearchKey,
-  scrolledToBottom,
+  getSearchKey
 } from '../utils/utils';
-//import { getQueryParam, scrolledToBottom } from '../utils/utils';
 
 const sortOptions = [
   {
@@ -142,15 +140,11 @@ const ImageGridContainer = ({ pageSize, setBgImage, imageId, onShuffle, searchDa
 
   const checkLoadMore = () => {
     if (isBottom && !waiting) {
-      loadMore();
-    }
-  };
-
-  const loadMore = () => {
-    if (scrolledToBottom(document.body, 50)) {
       dispatch({ type: 'loadMoreImages', page: page + 1 });
     }
   };
+
+
 
   const paginate = useCallback(
     (filteredImages) => {

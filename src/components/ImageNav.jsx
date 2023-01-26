@@ -95,7 +95,7 @@ const ImageNav = ({ className, options, reverseSort, updateSort, updateFormat, o
       <div className={classNames('image-types', hiddenClass)}>
         {formats.map((item) => {
           return (
-            <>
+            <React.Fragment key={`${item}-filter`}>
               <input
                 id={`${item}-label`}
                 onChange={() => handleFormatChange(item)}
@@ -103,12 +103,11 @@ const ImageNav = ({ className, options, reverseSort, updateSort, updateFormat, o
                 type="radio"
                 value={item}
                 name="type"
-                key={`${item}-input`}
               />
-              <label key={`${item}-label`} htmlFor={`${item}-label`}>
+              <label htmlFor={`${item}-label`}>
                 {item}
               </label>
-            </>
+            </React.Fragment>
           );
         })}
       </div>
