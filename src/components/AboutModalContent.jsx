@@ -65,17 +65,15 @@ const AboutModalContent = () => {
           <h4>Contact</h4>
           <p>
             For general inquiries, or if you want to get an invite to the Discord server you can
-            contact either Jim2Point0 or Otis_Inf via the below links
+            contact the Framed admins via the below links
           </p>
 
+          
           <p>
-            Tweet @Jim2Point0 on <a href="https://twitter.com/jim2point0">Twitter</a>
-          </p>
-
-          <p>
-            Tweet @FransBouma on <a href="https://twitter.com/FransBouma">Twitter</a>
-            <br />
-            Or contact him through his <a href="https://fransbouma.com/contact">Website</a>
+            {/* Tweet @Originalnicodr on <a href="https://twitter.com/originalnicodr">Twitter</a><br/> */}
+            {/* Tweet @EchoSmoker on <a href="https://twitter.com/EchoSmoker">Twitter</a><br/> */}
+            Tweet @Jim2Point0 on <a href="https://twitter.com/jim2point0">Twitter</a><br/>
+            Tweet @FransBouma on <a href="https://twitter.com/FransBouma">Twitter</a> or contact him through his <a href="https://fransbouma.com/contact">Website</a>
           </p>
         </section>
       </div>
