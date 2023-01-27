@@ -78,6 +78,7 @@ const ImageNav = ({ className, options, reverseSort, updateSort, updateFormat, o
               className={classNames('filter', buttonClass)}
               onClick={() => handleOptionChange(item)}
               key={item.label}
+              tabIndex={index}
             >
               {item.label}
               {isActive && active.key!== 'random' && icon}
@@ -93,7 +94,7 @@ const ImageNav = ({ className, options, reverseSort, updateSort, updateFormat, o
     
     return (
       <div className={classNames('image-types', hiddenClass)}>
-        {formats.map((item) => {
+        {formats.map((item, index) => {
           return (
             <React.Fragment key={`${item}-filter`}>
               <input
@@ -103,8 +104,9 @@ const ImageNav = ({ className, options, reverseSort, updateSort, updateFormat, o
                 type="radio"
                 value={item}
                 name="type"
+                tabIndex={options.length+index}
               />
-              <label htmlFor={`${item}-label`}>
+              <label htmlFor={`${item}-label`} tabIndex={options.length+index}>
                 {item}
               </label>
             </React.Fragment>

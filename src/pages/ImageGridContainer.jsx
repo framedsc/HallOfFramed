@@ -144,8 +144,6 @@ const ImageGridContainer = ({ pageSize, setBgImage, imageId, onShuffle, searchDa
     }
   };
 
-
-
   const paginate = useCallback(
     (filteredImages) => {
       const totalImagesToLoad = pageSize * page;
@@ -441,6 +439,7 @@ const ImageGridContainer = ({ pageSize, setBgImage, imageId, onShuffle, searchDa
           <div className="load-more-container">
             <button 
               onClick={() => dispatch({ type: 'loadMoreImages', page: page + 1 })}
+              tabindex={-1}
             >
               Load more images
             </button>

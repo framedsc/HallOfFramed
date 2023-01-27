@@ -192,7 +192,8 @@ button > svg {
   height: 100%;
 }
 
-.image-nav .filter:hover {
+.image-nav .filter:hover,
+.image-nav .filter:focus {
   background: var(--inactive-hover-bg);
 }
 
@@ -235,7 +236,8 @@ button > svg {
   text-shadow: none;
 }
 
-.image-nav .image-types [type='radio']:checked + label:hover {
+.image-nav .image-types [type='radio']:checked + label:hover,
+.image-nav .image-types [type='radio']:checked + label:focus {
   background: var(--active-hover-bg);
 }
 
@@ -252,8 +254,11 @@ button > svg {
   vertical-align: top;
 }
 
-.image-nav .image-types label:hover {
+.image-nav .image-types label:hover,
+.image-nav .image-types label:focus,
+.image-nav .image-types label:focus-visible {
   background: var(--inactive-hover-bg);
+  outline: 0;
 }
 
 .image-nav--mobile {

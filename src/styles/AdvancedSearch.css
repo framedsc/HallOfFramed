@@ -131,6 +131,11 @@
   padding: 4px 5px 4px 0;
   transition: all 200ms;
   background: transparent;
+  text-align: left;
+  font-family: 'GalanoGrotesqueAlt';
+  color: var(--text-main);
+  font-size: 14px;
+  line-height: 14px;
 }
 
 .image-nav .focused .search-option span {
@@ -147,7 +152,7 @@
   color: #dedede;
 }
 
-.image-nav .focused .search-hint {
+.image-nav .focused span.search-hint {
   color: #888;
   margin-left: 3px;
 }
@@ -173,7 +178,8 @@
   color: #ccc;
 }
 
-.image-nav .focused .search-option:hover {
+.image-nav .focused .search-option:hover,
+.image-nav .focused .search-option:focus {
   background: #333;
   padding-left: 5px;
 }

@@ -58,23 +58,20 @@ const AdvancedSearch = ({
     updateSearch('');
   };
 
-  const handleKeyboard = React.useCallback(
-    (event) => {
-      const { key } = event;
+  const handleKeyboard = React.useCallback((event) => {
+    const { key } = event;
 
-      if (!focused) {
+    if (!focused) {
+      return;
+    }
+
+    switch (key) {
+      case 'Enter':
+        return processSearchInput(`${searchText}${delimiter}`);
+      default:
         return false;
-      }
-
-      switch (key) {
-        case 'Enter':
-          return processSearchInput(`${searchText}${delimiter}`);
-        default:
-          return false;
-      }
-    },
-    [focused, processSearchInput, searchText],
-  );
+    }
+  },[focused, processSearchInput, searchText]);
 
   const handleScroll = React.useCallback(() => {
     handleSearchBlur();
@@ -146,16 +143,17 @@ const AdvancedSearch = ({
     return (
       <>
         <div className="search-header">Search Options:</div>
-        {validSearchOptions.map((item) => {
+        {validSearchOptions.map((item, index) => {
           return !item.hide ? (
-            <div 
+            <button 
               className="search-option" 
               key={`searchoption-${item.label}`}
               onClick={() => addSearchOption(item)} 
+              tabIndex={6+index}
             >
               <span>{item.label}:</span>
               <span className="search-hint">{` ${item.hint}`}</span>
-            </div>
+            </button>
           ) : null;
         })}
       </>
@@ -248,16 +246,17 @@ const AdvancedSearch = ({
     if (searchOptionData.helpers && searchOptionData.entries?.length) {
       return renderEntries(searchOptionData.entries)
     } else if (searchOptionData.type === 'number' && showOperators) {
-      return searchData.numberHelpers.map((item) => {
+      return searchData.numberHelpers.map((item, index) => {
         return (
-          <div 
+          <button 
             className="search-option" 
             key={`operator-${item.label}`}
             onClick={() => addOperator(item)}
+            tabIndex={6+index}
           >
             <span>{item.label}:</span>
             <span className="search-hint operator">{item.hint}</span>
-          </div>
+          </button>
         )
       })
     } else if (searchOptionData.type === 'number' && !showOperators) {
@@ -330,6 +329,7 @@ const AdvancedSearch = ({
         onFocus={handleFocus}
         ref={searchInputRef}
         autoFocus={isMobile ? true : false}
+        tabIndex={5}
       />
       {isMobile && (<Search className="search" />)}
       {focused && (<button className="cancel" onClick={clearSearch}>
