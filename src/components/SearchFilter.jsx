@@ -7,7 +7,8 @@ class SearchFilter extends PureComponent {
   static propTypes = {
     className: PropTypes.string,
     text: PropTypes.string,
-    onClick: PropTypes.func
+    onClick: PropTypes.func,
+    index: PropTypes.number
   };
 
   constructor(props) {
@@ -25,7 +26,7 @@ class SearchFilter extends PureComponent {
   }
 
   render() {
-    const { className, onClick, text } = this.props;
+    const { className, onClick, text, index } = this.props;
     const {startAnimate} = this.state;
     const normalClass = startAnimate ? 'normal' : false;
 
@@ -34,6 +35,7 @@ class SearchFilter extends PureComponent {
         key={`filter-${text}`} 
         className={classNames(className, normalClass)} 
         onClick={onClick}
+        tabIndex={15+index}
       >
         <span className="filter-text">{text}</span> 
         <span className="cancel-button"><Cancel /></span>

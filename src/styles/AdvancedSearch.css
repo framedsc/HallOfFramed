@@ -275,7 +275,8 @@
   background-color: #333;
 }
 
-.image-nav .search-filters .search-filter:hover {
+.image-nav .search-filters .search-filter:hover,
+.image-nav .search-filters .search-filter:focus {
   background: #ccc;
   color: #333;
   padding-left: 3px;

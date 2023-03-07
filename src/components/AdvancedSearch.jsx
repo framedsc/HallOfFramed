@@ -207,13 +207,14 @@ const AdvancedSearch = ({
         <div className="search-header">{searchTermText} possibilities:</div>
         {limitEntries.map((item, index) => {
           return (
-            <div 
+            <button 
               key={`search-helper${index}`} 
               className={classNames('search-option')}
               onClick={()=>addHelper(item)}
+              tabIndex={6+index}
             >
               <span className='result'>{item}</span>
-            </div>
+            </button>
           )
         })}
       </>
@@ -286,6 +287,7 @@ const AdvancedSearch = ({
               className='search-filter' 
               text={item}
               onClick={()=>removeFilter(item)}
+              index={index}
             />
           );
         })}

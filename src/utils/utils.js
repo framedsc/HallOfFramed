@@ -90,6 +90,26 @@ const baseSearchData = {
       range: []
     },
     {
+      label: 'from',
+      property: 'author',
+      hint: '',
+      helperText: ":",
+      type: 'string',
+      helpers:true, 
+      hide: true,
+      entries: []
+    },
+    {
+      label: 'game',
+      property: 'game',
+      hint: '',
+      helperText: ":",
+      type: 'string',
+      helpers:true, 
+      hide: true,
+      entries: []
+    },
+    {
       label: 'color',
       property: 'colorName',
       hint: 'shot color',
