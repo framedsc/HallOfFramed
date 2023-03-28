@@ -168,7 +168,7 @@ export const addProperties = (images, authors) => {
     images[i].authorid = images[i].author;
     const authorName = authors.find(
       (author) => author.authorid === images[i].authorid,
-    ).authorNick;
+    )?.authorNick ?? "Name not found";
     images[i].author = authorName;
     images[i].game = images[i].gameName;
     images[i].epochtime = images[i].epochTime;
