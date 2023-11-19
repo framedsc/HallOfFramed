@@ -42,6 +42,7 @@ const AdvancedSearch = ({
   const handleSearchChange = (event) => {
     const inputValue = event.target.value;
     if (isMobile) {
+      window.scrollTo({ top: 0 });
       if (inputValue === '') {
         updateFilters([]);
       } else {
@@ -85,13 +86,13 @@ const AdvancedSearch = ({
   };
 
   const handleFocus = () => {
+    handleSearchFocus();
     if (isMobile) {
       return;
     }
     const text = searchText;
     updateSearch('');
     updateSearch(text);
-    handleSearchFocus();
   }
 
   const getSearchOptionText = () => {

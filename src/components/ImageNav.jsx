@@ -166,8 +166,10 @@ const ImageNav = ({ className, options, reverseSort, updateSort, updateFormat, o
   };
 
   const handleScroll = React.useCallback(() => {
-    setShowMenu(false);
-  },[]);
+    if(!searchFocused) {
+      setShowMenu(false);
+    }
+  },[searchFocused]);
 
   const mobileMenuRef = useRef(null);
   useOutsideAlerter(mobileMenuRef, handleClickOutside);
