@@ -51,9 +51,7 @@ body::before {
   right: 0;
   bottom: 0;
   left: 0;
-  background: #333
-    url('https://cdn.discordapp.com/attachments/877962007524044810/927287125282529340/Wallpaper-1.png')
-    no-repeat fixed center;
+  background: #333 url('../assets/Wallpaper-1.png') no-repeat fixed center;
   background-size: cover;
   z-index: 99;
 }
