@@ -28,25 +28,28 @@ function App() {
     const width = getQueryParam('width');
     const height = getQueryParam('height');
     const color = getQueryParam('color');
+    
+    function formatQueryParam(filter, queryParam) {
+      if (queryParam.length === 0) return [];
+      return queryParam.map(entry => `${filter}: ${entry}`)
+    }
 
-    const queryFilters = [
-      author != null ? `author: ${author}` : null,
-      title != null ? `title: ${title}` : null,
-      on != null ? `on: ${on}` : null,
-      before != null ? `before: ${before}` : null,
-      after != null ? `after: ${after}` : null,
-      score != null ? `score: ${score}` : null,
-      width != null ? `width: ${width}` : null,
-      height != null ? `height: ${height}` : null,
-      color != null ? `color: ${color}` : null,
-    ]
-
-    return queryFilters.filter(filter => { return filter !== null });
+    return [
+      formatQueryParam("author", author),
+      formatQueryParam("title", title),
+      formatQueryParam("on", on),
+      formatQueryParam("before", before),
+      formatQueryParam("after", after),
+      formatQueryParam("score", score),
+      formatQueryParam("width", width),
+      formatQueryParam("height", height),
+      formatQueryParam("color", color),
+    ].flat();
   }
 
   // get image ID from URL if there is one
   const imageIdParam = getQueryParam('imageId');
-  const imageId = imageIdParam && parseInt(imageIdParam);
+  const imageId = imageIdParam.length === 0 ? null : parseInt(imageIdParam[0]);
 
   const setBackground = useCallback((imageObject) => {
       if (!imageObject) {

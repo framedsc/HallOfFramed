@@ -10,7 +10,8 @@ import {
   arrayUnique,
   getOperator,
   getSearchDataByType,
-  getSearchKey
+  getSearchKey,
+  updateQueryParam
 } from '../utils/utils';
 
 const sortOptions = [
@@ -189,6 +190,7 @@ const ImageGridContainer = ({ pageSize, setBgImage, imageId, queryParams, onShuf
   const handleFilterChange = (newFilters) => {
     const filterFunc = (item, pos) => newFilters.indexOf(item) === pos;
     const uniqueFilters = newFilters.filter(filterFunc);
+    updateQueryParam(uniqueFilters, history);
     dispatch({ type: 'setSearchFilters', filters:uniqueFilters });
   };
 

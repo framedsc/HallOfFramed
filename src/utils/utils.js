@@ -210,7 +210,7 @@ export const getQueryParam = (param) => {
   const search = window.location.search;
   const params = new URLSearchParams(search);
 
-  return params.get(param);
+  return params.getAll(param);
 }
 
 // get a min and max for a number property in the data
@@ -287,4 +287,23 @@ export function arrayUnique(array) {
   }
 
   return a;
+}
+
+export const updateQueryParam = (newFilters, history) => {
+  const searchQuery = window.location.search;
+  const params = new URLSearchParams(searchQuery);
+
+  // It was not iterating over the last element for some reason, had to make an array out of the iterator
+  for (const queryParam of Array.from(params.entries())) {
+    params.delete(queryParam[0], queryParam[1]);
+  }
+
+  const paresedFilters = newFilters.map( filter => { return {name: filter.split(": ", 2)[0], value: filter.split(": ", 2)[1]}});
+  for (const filter of paresedFilters) {
+    params.append(filter.name, filter.value);
+  }
+
+  if (history) {
+    history.push({search: params.toString()});
+  }
 }

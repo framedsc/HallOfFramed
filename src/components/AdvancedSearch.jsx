@@ -3,7 +3,7 @@ import React, { useCallback, useRef } from 'react';
 import DatePicker from 'react-date-picker';
 import { Cancel, Search } from '../assets/svgIcons';
 import { useOutsideAlerter } from '../utils/hooks';
-import { getSearchKey } from '../utils/utils';
+import { getSearchKey, updateQueryParam } from '../utils/utils';
 import SearchFilter from './SearchFilter';
 
 const AdvancedSearch = ({ 
@@ -105,6 +105,7 @@ const AdvancedSearch = ({
     const newFilters=filters.slice();
     newFilters.splice(index, 1);
     updateFilters(newFilters);
+    updateQueryParam(newFilters);
     searchInputRef?.current?.focus();
   }
 
