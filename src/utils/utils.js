@@ -300,6 +300,8 @@ export const updateQueryParam = (newFilters, history) => {
 
   const paresedFilters = newFilters.map( filter => { return {name: filter.split(": ", 2)[0], value: filter.split(": ", 2)[1]}});
   for (const filter of paresedFilters) {
+    // If the filter is just pure text and doesn't use the standardized filter classes we ignore it
+    if (filter.value === undefined) continue;
     params.append(filter.name, filter.value);
   }
 
