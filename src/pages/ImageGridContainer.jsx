@@ -26,20 +26,6 @@ const sortOptions = [
 
 let timer;
 
-// component state
-const initialState = {
-  images: [],
-  sortOption: sortOptions[0],
-  format: 'all',
-  searchText: '',
-  filters: [],
-  showViewer: false,
-  viewerSrc: null,
-  isReverse: false,
-  waiting: false,
-  page: 1,
-};
-
 const reducer = (state, action) => {
   switch (action.type) {
     case 'reset':
@@ -89,11 +75,24 @@ const reducer = (state, action) => {
   }
 };
 
-const ImageGridContainer = ({ pageSize, setBgImage, imageId, onShuffle, searchData }) => {
+const ImageGridContainer = ({ pageSize, setBgImage, imageId, queryParams, onShuffle, searchData }) => {
   //const searchQuery = getQueryParam('search');
   const { siteData } = useContext(SiteDataContext);
   const { imageData } = siteData;
 
+  // component state
+  const initialState = {
+    images: [],
+    sortOption: sortOptions[0],
+    format: 'all',
+    searchText: '',
+    filters: queryParams,
+    showViewer: false,
+    viewerSrc: null,
+    isReverse: false,
+    waiting: false,
+    page: 1,
+  };
 
   const [
     { images, sortOption, format, filters, searchText, showViewer, viewerSrc, isReverse, waiting, page },

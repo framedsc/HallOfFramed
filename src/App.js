@@ -18,6 +18,32 @@ function App() {
   const [initialized, setInitialized] = useState(false);
   const [bgImageContainer, setBgImageContainer] = useState(null);
 
+  function queryParams() {
+    const author = getQueryParam('author');
+    const title = getQueryParam('title');
+    const on = getQueryParam('on');
+    const before = getQueryParam('before');
+    const after = getQueryParam('after');
+    const score = getQueryParam('score');
+    const width = getQueryParam('width');
+    const height = getQueryParam('height');
+    const color = getQueryParam('color');
+
+    const queryFilters = [
+      author != null ? `author: ${author}` : null,
+      title != null ? `title: ${title}` : null,
+      on != null ? `on: ${on}` : null,
+      before != null ? `before: ${before}` : null,
+      after != null ? `after: ${after}` : null,
+      score != null ? `score: ${score}` : null,
+      width != null ? `width: ${width}` : null,
+      height != null ? `height: ${height}` : null,
+      color != null ? `color: ${color}` : null,
+    ]
+
+    return queryFilters.filter(filter => { return filter !== null });
+  }
+
   // get image ID from URL if there is one
   const imageIdParam = getQueryParam('imageId');
   const imageId = imageIdParam && parseInt(imageIdParam);
@@ -75,6 +101,7 @@ function App() {
         <SiteDataContext.Provider value={contextProvider}>
           <ImageGridContainer 
             imageId={imageId} 
+            queryParams={queryParams()}
             pageSize={100} 
             setBgImage={setBackground} 
             searchData={generateSearchData(siteData.imageData)}
