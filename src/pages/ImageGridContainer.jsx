@@ -440,7 +440,7 @@ const ImageGridContainer = ({ pageSize, setBgImage, imageId, queryParams, onShuf
           <div className="load-more-container">
             <button 
               onClick={() => dispatch({ type: 'loadMoreImages', page: page + 1 })}
-              tabindex={-1}
+              tabIndex={-1}
             >
               Load more images
             </button>
