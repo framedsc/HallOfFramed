@@ -1,77 +1,85 @@
-import { extractTopLevelDomain } from '../utils/utils';
-import { Icon } from './Icon';
+import { Icon } from './Icon'
 
-export const SocialLinks = ({ data = null }) => {
-  if (!data) {
-    return null;
-  }
+/**
+ * @param {string[]} links
+ */
+export const SocialLinks = ({ links = null }) => {
+  if (!links) return null
 
-  /**
-   * `icon` maps to the symbol id in the SVG sprite.
-   */
-  const KNOWN_SOCIALS = {
-    'artstation': { icon: 'artstation', label: 'Artstation' },
-    'bsky': { icon: 'bluesky', label: 'Bluesky' },
-    'flickr': { icon: 'flickr', label: 'Flickr' }, 
-    'instagram': { icon: 'instagram', label: 'Instagram' }, 
-    'picashot': { icon: 'picashot', label: 'Picashot' },
-    'steam': { icon: 'steam', label: 'Steam' }, 
-    'tumblr': { icon: 'tumblr', label: 'Tumblr' },
-    'twitter': { icon: 'twitter', label: 'Twitter' },
-    'x.com': { icon: 'xdotcom', label: 'X' },
-    'youtube': { icon: 'youtube', label: 'YouTube' },
-  }
-
-  const renderSocials = (linkList) => {
-    return (
-      <>
-        {linkList.map((social, index) => {
-          const socialText = social.label ? social.label : extractTopLevelDomain(social.link);
-
-          return (
-            <li className="author-link" key={index}>
-              <a
-                className="social-link"
-                rel="noreferrer"
-                target="_blank"
-                href={social.link}
-                onClick={(event) => event.stopPropagation()}
-              >
-                <Icon icon={social.icon} className="social-link-icon" />
-                <span>{socialText}</span>
-              </a>
-            </li>
-          );
-        })}
-      </>
-    );
-  };
-
-  let authorSocials = [];
-  let otherSocials = [];
-
-  Object.entries(KNOWN_SOCIALS).forEach(([key, social]) => {
-    if (data[key]) {
-      authorSocials.push({
-        label: social.label,
-        icon: social.icon,
-        link: data[key],
-      });
-    }
-  });
-
-  for (let i = 0; i < data.othersocials.length; i++) {
-    otherSocials.push({ icon: 'globe', link: data.othersocials[i] });
-  }
-
-  return !authorSocials.length && !otherSocials.length ? (
-    <p className="author-links-list">This author has not listed their socials on Framed</p>
-  ) : (
+  return links.length > 0 ? (
     <ul className="author-links-list">
-      {authorSocials.length > 0 && renderSocials(authorSocials)}
-      {otherSocials.length > 0 && renderSocials(otherSocials)}
+      {links.map((link, index) => <SocialLink key={index} link={link} />)}
     </ul>
-  );
-};
+  ) : (
+    <p className="author-links-list">This author has not listed their socials on Framed</p>
+  )
+}
 
-export default SocialLinks;
+export default SocialLinks
+
+/**
+ * Returns the icon and label for a given link based on its hostname.
+ * 
+ * @param {string} link 
+ * @returns {{icon: string, label: string}}
+ */
+function getLinkIconAndLabel(link) {
+  const hostname = new URL(link).hostname.replace('www.', '')
+
+  switch (hostname) {
+    case hostname.includes('artstation.com'):
+      return { icon: 'artstation', label: 'Artstation' }
+
+    case hostname.includes('bsky.app'):
+      return { icon: 'bluesky', label: 'Bluesky' }
+
+    case hostname.includes('flickr.com'):
+    case hostname.includes('flic.kr'):
+      return { icon: 'flickr', label: 'Flickr' }
+
+    case hostname.includes('instagram.com'):
+    case hostname.includes('instagr.am'):
+      return { icon: 'instagram', label: 'Instagram' }
+
+    case hostname.includes('picashot.co'):
+      return { icon: 'picashot', label: 'Picashot' }
+
+    case hostname.includes('steamcommunity.com'):
+      return { icon: 'steam', label: 'Steam' }
+
+    case hostname.includes('tumblr.com'):
+      return { icon: 'tumblr', label: 'Tumblr' }
+
+    case hostname.includes('twitter.com'):
+      return { icon: 'twitter', label: 'Twitter' }
+
+    case hostname.includes('x.com'):
+      return { icon: 'xdotcom', label: 'X' }
+
+    case hostname.includes('youtube.com'):
+    case hostname.includes('youtu.be'):
+      return { icon: 'youtube', label: 'YouTube' }
+
+    default:
+      return { icon: 'globe', label: hostname }
+  }
+}
+
+function SocialLink({ link, ...props }) {
+  const { icon, label } = getLinkIconAndLabel(link)
+
+  return (
+    <li className="author-link" {...props}>
+      <a
+        className="social-link"
+        rel="noreferrer"
+        target="_blank"
+        href={link}
+        onClick={(event) => event.stopPropagation()}
+      >
+        <Icon icon={icon} className="social-link-icon" />
+        <span>{label}</span>
+      </a>
+    </li>
+  )
+}
