@@ -352,5 +352,9 @@ MigrationBackup/
 .ionide/
 .eslintcache
 
+# OS files
+.DS_Store
+Thumbs.db
+
 build/asset-manifest.json
 build/index.html
