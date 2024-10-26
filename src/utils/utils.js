@@ -192,20 +192,6 @@ export const getBrowserFullscreenElementProp = () => {
   }
 }
 
-export const extractTopLevelDomain = (url) => {
-  if (!url.indexOf('//')) {
-    return url;
-  }
-  const start = url.indexOf('//') + 2;
-  const newURL = url.slice(start);
-  if (newURL.indexOf('/') < 0) {
-    return newURL;
-  }
-  const end = newURL.indexOf('/');
-
-  return newURL.slice(0, end);
-}
-
 export const getQueryParam = (param) => {
   const search = window.location.search;
   const params = new URLSearchParams(search);

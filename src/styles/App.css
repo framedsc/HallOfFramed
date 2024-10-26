@@ -675,10 +675,6 @@ button > svg {
   text-shadow: none;
 }
 
-.image-viewer-content .info.clickable:hover svg {
-  filter: drop-shadow(var(--text-shadow-3)) drop-shadow(var(--text-shadow-4));
-}
-
 .image-viewer-content .info img {
   border-radius: 50%;
   max-width: 40px;
@@ -850,47 +846,25 @@ button > svg {
   text-shadow: 0px 0px 4px #fff;
 }
 
-.author-link a::before {
-  background-image: url('../assets/social-icons.svg#global');
-  background-position: center;
-  content: '';
+.social-link {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.social-link-icon {
   display: inline-flex;
-  height: 22px;
+  color: #fff;
   opacity: 0.8;
-  margin-right: 5px;
+}
+
+.social-link-icon svg {
   width: 20px;
+  height: 20px;
 }
 
-.author-link a:hover::before {
+.social-link:hover .social-link-icon {
   opacity: 0.9;
-}
-
-.author-link a[href*='behance.com']::before {
-  background-image: url('../assets/social-icons.svg#behance');
-}
-
-.author-link a[href*='flickr.com']::before {
-  background-image: url('../assets/social-icons.svg#flickr');
-}
-
-.author-link a[href*='github.com']::before {
-  background-image: url('../assets/social-icons.svg#github');
-}
-
-.author-link a[href*='instagram.com']::before {
-  background-image: url('../assets/social-icons.svg#instagram');
-}
-
-.author-link a[href*='patreon.com']::before {
-  background-image: url('../assets/social-icons.svg#patreon');
-}
-
-.author-link a[href*='twitter.com']::before {
-  background-image: url('../assets/social-icons.svg#twitter');
-}
-
-.author-link a[href*='steamcommunity.com']:before {
-  background-image: url('../assets/social-icons.svg#steam');
 }
 
 /* Toggle arrow */

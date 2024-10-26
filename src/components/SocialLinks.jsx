@@ -1,67 +1,72 @@
-import { Flickr, Globe, Instagram, Steam, Twitter } from '../assets/svgIcons';
-import { extractTopLevelDomain } from '../utils/utils';
+import { Icon } from './Icon'
 
-export const SocialLinks = ({ data = null }) => {
-  if (!data) {
-    return null;
-  }
+/**
+ * @param {string[]} links
+ */
+export const SocialLinks = ({ links = null }) => {
+  if (!links) return null
 
-  const renderSocials = (linkList) => {
-    return (
-      <>
-        {linkList.map((social, index) => {
-          const socialText = social.label ? social.label : extractTopLevelDomain(social.link);
-          return (
-            <li className="author-link" key={`social-button-${index}`}>
-              <a
-                className="social-link"
-                key={`social-link-${index}`}
-                rel="noreferrer"
-                target="_blank"
-                href={social.link}
-                title={social.link}
-                onClick={(event) => event.stopPropagation()}
-              >
-                <span>{socialText}</span>
-              </a>
-            </li>
-          );
-        })}
-      </>
-    );
-  };
-
-  const socials = [
-    { key: 'twitter', icon: <Twitter />, label: 'Twitter' },
-    { key: 'steam', icon: <Steam />, label: 'Steam' },
-    { key: 'flickr', icon: <Flickr />, label: 'Flickr' },
-    { key: 'instagram', icon: <Instagram />, label: 'Instagram' },
-  ];
-  let authorSocials = [];
-  let otherSocials = [];
-  for (const social of socials) {
-    if (data[social.key].length) {
-      authorSocials.push({
-        label: social.label,
-        key: social.key,
-        icon: social.icon,
-        link: data[social.key],
-      });
-    }
-  }
-
-  for (let i = 0; i < data.othersocials.length; i++) {
-    otherSocials.push({ key: 'other', icon: <Globe />, link: data.othersocials[i] });
-  }
-
-  return !authorSocials.length && !otherSocials.length ? (
-    <p className="author-links-list">This author has not listed their socials on Framed</p>
-  ) : (
+  return links.length > 0 ? (
     <ul className="author-links-list">
-      {authorSocials.length > 0 && renderSocials(authorSocials)}
-      {otherSocials.length > 0 && renderSocials(otherSocials)}
+      {links.map((link, index) => <SocialLink key={index} link={link} />)}
     </ul>
-  );
-};
+  ) : (
+    <p className="author-links-list">This author has not listed their socials on Framed</p>
+  )
+}
 
-export default SocialLinks;
+export default SocialLinks
+
+/**
+ * Returns the icon and label for a given link based on its hostname.
+ * 
+ * @param {string} link 
+ * @returns {{icon: string, label: string}}
+ */
+function getLinkIconAndLabel(link) {
+  const hostname = new URL(link).hostname.replace('www.', '')
+
+  if (hostname.includes('artstation.com')) return { icon: 'artstation', label: 'Artstation' }
+  if (hostname.includes('bsky.app')) return { icon: 'bluesky', label: 'Bluesky' }
+
+  if (hostname.includes('flickr.com') || hostname.includes('flic.kr')) {
+    return { icon: 'flickr', label: 'Flickr' }
+  }
+
+  if (hostname.includes('instagram.com') || hostname.includes('instagr.am')) {
+    return { icon: 'instagram', label: 'Instagram' }
+  }
+
+  if (hostname.includes('picashot.co')) return { icon: 'picashot', label: 'Picashot' }
+  if (hostname.includes('steamcommunity.com')) return { icon: 'steam', label: 'Steam' }
+  if (hostname.includes('tumblr.com')) return { icon: 'tumblr', label: 'Tumblr' }
+  
+  if (hostname.includes('twitter.com') || hostname.includes('x.com')) {
+    return { icon: 'twitter', label: 'Twitter' }
+  }
+
+  if (hostname.includes('youtube.com') || hostname.includes('youtu.be')) {
+    return { icon: 'youtube', label: 'YouTube' }
+  }
+
+  return { icon: 'globe', label: hostname }
+}
+
+function SocialLink({ link, ...props }) {
+  const { icon, label } = getLinkIconAndLabel(link)
+
+  return (
+    <li className="author-link" {...props}>
+      <a
+        className="social-link"
+        rel="noreferrer"
+        target="_blank"
+        href={link}
+        onClick={(event) => event.stopPropagation()}
+      >
+        <Icon icon={icon} className="social-link-icon" />
+        <span>{label}</span>
+      </a>
+    </li>
+  )
+}
