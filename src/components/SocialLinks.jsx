@@ -26,43 +26,30 @@ export default SocialLinks
 function getLinkIconAndLabel(link) {
   const hostname = new URL(link).hostname.replace('www.', '')
 
-  switch (hostname) {
-    case hostname.includes('artstation.com'):
-      return { icon: 'artstation', label: 'Artstation' }
+  if (hostname.includes('artstation.com')) return { icon: 'artstation', label: 'Artstation' }
+  if (hostname.includes('bsky.app')) return { icon: 'bluesky', label: 'Bluesky' }
 
-    case hostname.includes('bsky.app'):
-      return { icon: 'bluesky', label: 'Bluesky' }
-
-    case hostname.includes('flickr.com'):
-    case hostname.includes('flic.kr'):
-      return { icon: 'flickr', label: 'Flickr' }
-
-    case hostname.includes('instagram.com'):
-    case hostname.includes('instagr.am'):
-      return { icon: 'instagram', label: 'Instagram' }
-
-    case hostname.includes('picashot.co'):
-      return { icon: 'picashot', label: 'Picashot' }
-
-    case hostname.includes('steamcommunity.com'):
-      return { icon: 'steam', label: 'Steam' }
-
-    case hostname.includes('tumblr.com'):
-      return { icon: 'tumblr', label: 'Tumblr' }
-
-    case hostname.includes('twitter.com'):
-      return { icon: 'twitter', label: 'Twitter' }
-
-    case hostname.includes('x.com'):
-      return { icon: 'xdotcom', label: 'X' }
-
-    case hostname.includes('youtube.com'):
-    case hostname.includes('youtu.be'):
-      return { icon: 'youtube', label: 'YouTube' }
-
-    default:
-      return { icon: 'globe', label: hostname }
+  if (hostname.includes('flickr.com') || hostname.includes('flic.kr')) {
+    return { icon: 'flickr', label: 'Flickr' }
   }
+
+  if (hostname.includes('instagram.com') || hostname.includes('instagr.am')) {
+    return { icon: 'instagram', label: 'Instagram' }
+  }
+
+  if (hostname.includes('picashot.co')) return { icon: 'picashot', label: 'Picashot' }
+  if (hostname.includes('steamcommunity.com')) return { icon: 'steam', label: 'Steam' }
+  if (hostname.includes('tumblr.com')) return { icon: 'tumblr', label: 'Tumblr' }
+  
+  if (hostname.includes('twitter.com') || hostname.includes('x.com')) {
+    return { icon: 'twitter', label: 'Twitter' }
+  }
+
+  if (hostname.includes('youtube.com') || hostname.includes('youtu.be')) {
+    return { icon: 'youtube', label: 'YouTube' }
+  }
+
+  return { icon: 'globe', label: hostname }
 }
 
 function SocialLink({ link, ...props }) {

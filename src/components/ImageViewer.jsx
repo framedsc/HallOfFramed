@@ -241,7 +241,7 @@ const ImageViewer = ({ image = {}, show, onClose, data, onPrev, onNext, setBgIma
                   <span className="by">{`by `}</span>
                   <span className="author">{image.author}</span>
                   <span className="title">{image.game}</span>
-                  <SocialLinks links={socialData} />
+                  <SocialLinks links={socialData.socials} />
                 </div>
                 {!isFullscreen && !fullScreenError && (
                   <button className="fullscreen-button" onClick={setIsFullscreen}>
