@@ -1,27 +1,28 @@
 {
   "files": {
-    "main.css": "./static/css/main.c9d6c6a6.chunk.css",
-    "main.js": "./static/js/main.5a9c1226.chunk.js",
-    "main.js.map": "./static/js/main.5a9c1226.chunk.js.map",
-    "runtime-main.js": "./static/js/runtime-main.bf1b9330.js",
-    "runtime-main.js.map": "./static/js/runtime-main.bf1b9330.js.map",
+    "main.css": "./static/css/main.6e289837.chunk.css",
+    "main.js": "./static/js/main.99c2b84a.chunk.js",
+    "main.js.map": "./static/js/main.99c2b84a.chunk.js.map",
+    "runtime-main.js": "./static/js/runtime-main.0b741058.js",
+    "runtime-main.js.map": "./static/js/runtime-main.0b741058.js.map",
     "static/css/2.9c6b934b.chunk.css": "./static/css/2.9c6b934b.chunk.css",
-    "static/js/2.fc0ddba9.chunk.js": "./static/js/2.fc0ddba9.chunk.js",
-    "static/js/2.fc0ddba9.chunk.js.map": "./static/js/2.fc0ddba9.chunk.js.map",
-    "static/js/3.90ec4b0a.chunk.js": "./static/js/3.90ec4b0a.chunk.js",
-    "static/js/3.90ec4b0a.chunk.js.map": "./static/js/3.90ec4b0a.chunk.js.map",
+    "static/js/2.f63a1670.chunk.js": "./static/js/2.f63a1670.chunk.js",
+    "static/js/2.f63a1670.chunk.js.map": "./static/js/2.f63a1670.chunk.js.map",
+    "static/js/3.91d495d5.chunk.js": "./static/js/3.91d495d5.chunk.js",
+    "static/js/3.91d495d5.chunk.js.map": "./static/js/3.91d495d5.chunk.js.map",
     "index.html": "./index.html",
     "static/css/2.9c6b934b.chunk.css.map": "./static/css/2.9c6b934b.chunk.css.map",
-    "static/css/main.c9d6c6a6.chunk.css.map": "./static/css/main.c9d6c6a6.chunk.css.map",
-    "static/js/2.fc0ddba9.chunk.js.LICENSE.txt": "./static/js/2.fc0ddba9.chunk.js.LICENSE.txt",
+    "static/css/main.6e289837.chunk.css.map": "./static/css/main.6e289837.chunk.css.map",
+    "static/js/2.f63a1670.chunk.js.LICENSE.txt": "./static/js/2.f63a1670.chunk.js.LICENSE.txt",
     "static/media/stylesheet.css": "./static/media/GalanoGrotesqueAlt-Regular.d302862d.woff",
-    "static/media/App.css": "./static/media/social-icons.10a16408.svg"
+    "static/media/App.css": "./static/media/Wallpaper-1.35bf202a.png",
+    "static/media/icon-sprite.acf31cf4.svg": "./static/media/icon-sprite.acf31cf4.svg"
   },
   "entrypoints": [
-    "static/js/runtime-main.bf1b9330.js",
+    "static/js/runtime-main.0b741058.js",
     "static/css/2.9c6b934b.chunk.css",
-    "static/js/2.fc0ddba9.chunk.js",
-    "static/css/main.c9d6c6a6.chunk.css",
-    "static/js/main.5a9c1226.chunk.js"
+    "static/js/2.f63a1670.chunk.js",
+    "static/css/main.6e289837.chunk.css",
+    "static/js/main.99c2b84a.chunk.js"
   ]
 }
