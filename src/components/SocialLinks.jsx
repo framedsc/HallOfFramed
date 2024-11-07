@@ -53,6 +53,11 @@ function getLinkIconAndLabel(link) {
 }
 
 function SocialLink({ link, ...props }) {
+  // Assume all sites are https if it's not explicitly included.
+  if (!link.startsWith("http")) {
+    link = `https://${link}`
+  }
+
   const { icon, label } = getLinkIconAndLabel(link)
 
   return (
