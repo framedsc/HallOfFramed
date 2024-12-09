@@ -23,7 +23,7 @@ export default SocialLinks
  * @param {string} link 
  * @returns {{icon: string, label: string}}
  */
-function getLinkIconAndLabel(link) {
+export function getLinkIconAndLabel(link) {
   const hostname = new URL(link).hostname.replace('www.', '')
 
   if (hostname.includes('artstation.com')) return { icon: 'artstation', label: 'Artstation' }

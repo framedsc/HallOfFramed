@@ -6,6 +6,7 @@ const ImageGrid = ({
   images,
   rowTargetHeight = 400,
   borderOffset = 5,
+  profileMode = false,
   onClick,
 }) => {
   const { width } = useViewport();
@@ -118,7 +119,7 @@ const ImageGrid = ({
         className={className}
         style={{
           paddingLeft: borderOffset,
-          paddingTop: 50 + borderOffset,
+          paddingTop: profileMode ? borderOffset : 50 + borderOffset,
         }}
       >
         {rows.map((row, index) => {

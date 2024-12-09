@@ -4,6 +4,7 @@ import FramedModal from '../components/FramedModal';
 import ImageGrid from '../components/ImageGrid';
 import ImageNav from '../components/ImageNav';
 import ImageViewer from '../components/ImageViewer';
+import ProfileBanner from '../components/ProfileBanner'
 import { ModalContext, SiteDataContext } from '../utils/context';
 import { useScrollPosition } from '../utils/hooks';
 import {
@@ -76,10 +77,20 @@ const reducer = (state, action) => {
   }
 };
 
+function getProfileName(queryParams) {
+  const filteredAuthors = queryParams.filter(item => item.startsWith("author: "));
+  if (filteredAuthors.length !== 1) {
+    return "";
+  }
+  return filteredAuthors[0].slice(8);
+}
+
 const ImageGridContainer = ({ pageSize, setBgImage, imageId, queryParams, onShuffle, searchData }) => {
   //const searchQuery = getQueryParam('search');
   const { siteData } = useContext(SiteDataContext);
   const { imageData } = siteData;
+  const { authorData } = siteData;
+  const [profileData, setProfileData] = useState(authorData.find((item) => getProfileName(queryParams) === item.authorNick));
 
   // component state
   const initialState = {
@@ -191,6 +202,7 @@ const ImageGridContainer = ({ pageSize, setBgImage, imageId, queryParams, onShuf
     const filterFunc = (item, pos) => newFilters.indexOf(item) === pos;
     const uniqueFilters = newFilters.filter(filterFunc);
     updateQueryParam(uniqueFilters, history);
+    setProfileData(authorData.find((item) => getProfileName(uniqueFilters) === item.authorNick));
     dispatch({ type: 'setSearchFilters', filters:uniqueFilters });
   };
 
@@ -427,6 +439,9 @@ const ImageGridContainer = ({ pageSize, setBgImage, imageId, queryParams, onShuf
             filters
           }}
         />
+        <ProfileBanner
+          profileData={profileData}
+        />
         {imageData && (
           <ImageGrid
             className="image-rows"
@@ -434,6 +449,7 @@ const ImageGridContainer = ({ pageSize, setBgImage, imageId, queryParams, onShuf
             rowTargetHeight={400}
             onClick={handleImageClick}
             borderOffset={7}
+            profileMode={profileData !== undefined}
           />
         )}
         {moreImagesToLoad && (
