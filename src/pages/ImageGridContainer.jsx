@@ -377,6 +377,12 @@ const ImageGridContainer = ({ pageSize, setBgImage, imageId, queryParams, onShuf
     ) : null;
   };
 
+  const handleLogoClick = () => {
+    dispatch({type: 'reset'})
+    updateQueryParam([], history);
+    setProfileData(undefined);
+  };
+
   useEffect(() => {
     if (imageData.length) {
       const filteredImages = filterImages(imageData.slice());
@@ -418,7 +424,7 @@ const ImageGridContainer = ({ pageSize, setBgImage, imageId, queryParams, onShuf
           reverseSort={isReverse}
           updateSort={handleSortChange}
           updateFormat={handleFormatChange}
-          onLogoClick={()=> dispatch({type:'reset'})}
+          onLogoClick={handleLogoClick}
           searchProps={{
             searchData,
             updateSearch: handleSearchChange,
