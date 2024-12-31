@@ -421,6 +421,12 @@ const ImageGridContainer = ({ pageSize, setBgImage, imageId, queryParams, onShuf
 
   moreImagesToLoad && checkLoadMore();
 
+  const handleLogoClick = () => {
+    dispatch({type: 'reset'})
+    updateQueryParam([], history);
+    setProfileData(undefined);
+  };
+
   return (
     <div className="home">
       <ModalContext.Provider value={{ modal, setModal }}>
@@ -430,7 +436,7 @@ const ImageGridContainer = ({ pageSize, setBgImage, imageId, queryParams, onShuf
           reverseSort={isReverse}
           updateSort={handleSortChange}
           updateFormat={handleFormatChange}
-          onLogoClick={()=> dispatch({type:'reset'})}
+          onLogoClick={handleLogoClick}
           searchProps={{
             searchData,
             updateSearch: handleSearchChange,
