@@ -2,23 +2,24 @@ const AboutModalContent = () => {
   return (
     <div className="about-modal-content">
       {/* <img alt="Welcome to Framed" src={framedBanner}></img> */}
-      <h2>About the Hall of Framed</h2>
+      <h2>About the Hall of FRAMED</h2>
       <div className='about-modal-columns'>
         <section>
           <p>
-            The <a href="https://framedsc.github.io/">Framed Screenshot Community</a> Discord server
-            started in 2019 as a place to discuss and collaborate in the space of video game
-            screenshots. It has since become so full of incredible images that we’ve run out of pins
-            to highlight them all. To fix that we created a Discord bot that curates the most
-            popular shots within the server, displays them within a dedicated channel and uploads
-            to this site. Our clever bot will publish entries into the Hall of Framed based on popularity, 
-            which has allowed us to put the power to curate the best shots into the hands of our community, 
-            helping to showcase the depth and variety of creativity within this space.
+            The Hall of FRAMED is a gallery that curates and celebrates the most popular shots that we've
+            have taken and shared over the years. In 2019, the <a href="https://framedsc.github.io/">FRAMED Screenshot Community</a> began
+            as a place to collate and discuss all we knew about screenshotting. It soon overflowed
+            with so many incredible screenshots that we decided it was time to create a gallery to highlight
+            the ones we loved the most. And so, in 2021, the Hall of FRAMED was born. 
           </p>
           <p>
-            We hope that this can serve as a showcase for what talented screenshotters can achieve.
-            Maybe you'll find it useful as inspiration, or as a nice source of background images for
-            your PC or phone.
+            This page continuously updates on its own, thanks to an automated curation system that
+            publishes entries to the Hall based on popular vote.
+          </p>
+          <p>
+            We hope this gallery serves as an exhibition of the depth and variety of creativity within this space,
+            showcasing what's possible in the field of virtual photography. Maybe you'll find it useful as inspiration,
+            or just as a <a href="https://framedsc.com/HOFWallpaper/">nice source of wallpapers</a> for your PC and phone. 
           </p>
         </section>
         <section>
@@ -64,16 +65,12 @@ const AboutModalContent = () => {
         <section>
           <h4>Contact</h4>
           <p>
-            For general inquiries, or if you want to get an invite to the Discord server you can
-            contact the Framed admins via the below links
+            <a href="https://x.com/framedsc">X, formerly Twitter</a><br/>
+            <a href="https://bsky.app/profile/framedsc.com">Bluesky</a>
           </p>
 
-          
           <p>
-            {/* Tweet @Originalnicodr on <a href="https://twitter.com/originalnicodr">Twitter</a><br/> */}
-            {/* Tweet @EchoSmoker on <a href="https://twitter.com/EchoSmoker">Twitter</a><br/> */}
-            Tweet @Jim2Point0 on <a href="https://twitter.com/jim2point0">Twitter</a><br/>
-            Tweet @FransBouma on <a href="https://twitter.com/FransBouma">Twitter</a> or contact him through his <a href="https://fransbouma.com/contact">Website</a>
+            <a href="https://framedsc.com/joinus.htm">Interested in joining FRAMED?</a>
           </p>
         </section>
       </div>

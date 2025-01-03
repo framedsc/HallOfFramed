@@ -11,7 +11,7 @@ export const SocialLinks = ({ links = null }) => {
       {links.map((link, index) => <SocialLink key={index} link={link} />)}
     </ul>
   ) : (
-    <p className="author-links-list">This author has not listed their socials on Framed</p>
+    <p className="author-links-list">This author has not listed their socials on FRAMED</p>
   )
 }
 
