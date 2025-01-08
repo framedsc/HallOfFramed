@@ -64,7 +64,14 @@ const ProfileBanner = ({ profileData }) => {
     boxSizing: 'border-box',
   };
 
-  const socialIconAndLabels = shouldDisplay ? profileData.socials.map((item) => getLinkIconAndLabel(item)) : [];
+  const socialIconAndLabels = shouldDisplay ? profileData.socials.map((item) => {
+    if (!item.startsWith("http")) {
+      item = `https://${item}`;
+    }
+
+    return getLinkIconAndLabel(item);
+  }
+) : [];
 
   const socialsSectionStyle = {
     flexDirection: 'row',
