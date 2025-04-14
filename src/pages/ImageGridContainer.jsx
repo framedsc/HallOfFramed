@@ -268,9 +268,6 @@ const ImageGridContainer = ({ pageSize, setBgImage, imageId, queryParams, onShuf
             return obj[newSearchOption] >= dateEpoch && obj[newSearchOption] <= nextDate;
           });
 
-          console.log('dateEpoch', dateEpoch)
-          console.log('dateValue', dateValue)
-          console.log('newResults', newResults)
         } else if (searchOptions.numbers.includes(newSearchOption)) {
           const operator = getOperator(searchOption);
           const parsedNumberTerm = parseNumberTerm(newSearchOption, newSearchTerm);
@@ -332,7 +329,6 @@ const ImageGridContainer = ({ pageSize, setBgImage, imageId, queryParams, onShuf
         }
         filteredResults = filteredResults.sort(sortMethod);
       }
-      console.log(filteredResults)
 
       //dispatch({type: 'setSearchData', data: generateSearchData(imageData)});
     
