@@ -172,6 +172,7 @@ export const addProperties = (images, authors) => {
     images[i].author = authorName;
     images[i].game = images[i].gameName;
     images[i].epochtime = images[i].epochTime;
+    images[i].aspectRatio = images[i].width/images[i].height;
   }
 
   return images;

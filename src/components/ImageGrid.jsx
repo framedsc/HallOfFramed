@@ -33,6 +33,7 @@ const ImageGrid = ({
         thumbnailUrl: images[i].thumbnailUrl,
         width: width,
         height: rowTargetHeight,
+        aspectRatio: images[i].width/images[i].height,
       };
 
       processedImages.push(image);
