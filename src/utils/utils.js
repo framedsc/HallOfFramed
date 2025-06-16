@@ -164,18 +164,20 @@ export const normalizeData = (data) => {
 
 // add some properties to the image data that we'll need later
 export const addProperties = (images, authors) => {
-  for (let i = 0; i < images.length; i++) {
-    images[i].authorid = images[i].author;
+  let newImages = [...images]
+  for (let i = 0; i < newImages.length; i++) {
+    newImages[i].authorid = images[i].author;
     const authorName = authors.find(
       (author) => author.authorid === images[i].authorid,
     ).authorNick;
-    images[i].author = authorName;
-    images[i].game = images[i].gameName;
-    images[i].epochtime = images[i].epochTime;
-    images[i].aspectRatio = images[i].width/images[i].height;
+    newImages[i].author = authorName;
+    newImages[i].game = images[i].gameName;
+    newImages[i].epochtime = images[i].epochTime;
+    newImages[i].aspectRatio = images[i].width/images[i].height;
+    newImages[i].colorName = images[i].colorName || ""
   }
 
-  return images;
+  return newImages;
 }
 
 // check if fullscreen support is available
