@@ -196,9 +196,10 @@ const AdvancedSearch = ({
   }
 
   const renderEntries = (entries) => {
-    const delimiterIndex = searchText.indexOf(':');
-    const searchTermText = searchText.substr(0, delimiterIndex);
-    const searchOptionText = searchText.substr(delimiterIndex + 1, searchText.length).toLowerCase().trimStart();
+    const trimmedSearchText = searchText.trim()
+    const delimiterIndex = trimmedSearchText.indexOf(':');
+    const searchTermText = trimmedSearchText.substr(0, delimiterIndex);
+    const searchOptionText = trimmedSearchText.substr(delimiterIndex + 1, trimmedSearchText.length).toLowerCase().trimStart();
     if (!searchOptionText.length > 0) {
       return <div>Type to narrow list...</div>
     }

@@ -230,8 +230,8 @@ export const generateSearchData = (data) => {
     for (let searchOption of searchWithEntries) {
       const property = searchOption.property;
       const entries = searchOption.entries;
-      if (!entries.includes(item[property])) {
-        entries.push(item[property])
+      if (!entries.includes(item[property].trim())) {
+        entries.push(item[property].trim())
       }
     }
   }
